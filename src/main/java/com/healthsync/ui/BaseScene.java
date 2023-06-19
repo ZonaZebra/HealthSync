@@ -1,13 +1,16 @@
 package com.healthsync.ui;
 
+import com.healthsync.app.App;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 public class BaseScene extends Scene {
 
@@ -43,6 +46,16 @@ public class BaseScene extends Scene {
         officeNameContainer.setAlignment(Pos.CENTER);
         HBox.setHgrow(officeNameContainer, Priority.ALWAYS);
         header.getChildren().add(officeNameContainer);
+
+        // Adding Home Button
+        Button homeButton = new Button("Home");
+        homeButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 10 20 10 20;");
+        homeButton.setOnAction(event -> {
+            Stage stage = (Stage) root.getScene().getWindow();
+            stage.setScene(new LoginScene(stage));
+            stage.setTitle("HealthSync Application");
+        });
+        header.getChildren().add(homeButton);
 
         // Adding the header and content to the root
         root.getChildren().add(header);

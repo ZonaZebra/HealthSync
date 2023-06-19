@@ -4,20 +4,22 @@ import com.healthsync.entities.User;
 import com.healthsync.service.UserService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 public class LoginScene extends BaseScene {
 
     private static final UserService userService = new UserService();
 
-    public LoginScene() {
-        super(createContent());
+    public LoginScene(Stage stage) {
+        super(createContent(stage));
     }
 
-    private static VBox createContent() {
+    private static VBox createContent(Stage stage) {
         VBox content = new VBox();
         content.setAlignment(Pos.CENTER);
         content.setSpacing(30);
@@ -65,6 +67,12 @@ public class LoginScene extends BaseScene {
 
         Button registerButton = new Button("Register");
         registerButton.setStyle("-fx-background-radius: 15; -fx-padding: 10 20 10 20;");
+        registerButton.setOnAction(e -> {
+            RegistrationScene registrationScene = new RegistrationScene();
+            stage.setScene(registrationScene);
+            stage.setTitle("HealthSync - Registration");
+        });
+
         HBox buttonBox = new HBox(loginButton, registerButton);
         buttonBox.setSpacing(20);
         buttonBox.setAlignment(Pos.CENTER);

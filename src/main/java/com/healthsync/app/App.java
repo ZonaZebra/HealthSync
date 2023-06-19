@@ -16,7 +16,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         // Set up the main scene
-        LoginScene loginScene = new LoginScene();
+        LoginScene loginScene = new LoginScene(primaryStage);
         primaryStage.setScene(loginScene);
         primaryStage.setTitle("HealthSync Application");
         primaryStage.show();

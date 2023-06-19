@@ -2,20 +2,19 @@ package com.healthsync.service;
 
 import com.healthsync.dao.UserDao;
 import com.healthsync.entities.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UserService {
 
     private final UserDao userDao = new UserDao();
 
     public User createUser(String firstName, String lastName, String password, String role) {
-        // Generate a unique User ID
         String userId = generateUserId(firstName, lastName);
+        String hashedPassword = hashPassword(password);
 
-        User user = new User(userId, firstName, lastName, password, role);
+        User user = new User(userId, firstName, lastName, hashedPassword, role);
 
-        // Use UserDao to interact with the database
         boolean isCreated = userDao.createUser(user);
-
         if (isCreated) {
             return user;
         } else {
@@ -28,7 +27,10 @@ public class UserService {
     }
 
     public boolean updateUser(String userId, String firstName, String lastName, String password, String role) {
-        User user = new User(userId, firstName, lastName, password, role);
+        // Hash the new password
+        String hashedPassword = hashPassword(password);
+
+        User user = new User(userId, firstName, lastName, hashedPassword, role);
 
         return userDao.updateUser(user);
     }
@@ -38,11 +40,19 @@ public class UserService {
     }
 
     private String generateUserId(String firstName, String lastName) {
-        return firstName + lastName + String.format("%05d", (int)(Math.random() * 100000));
+        return firstName + lastName + String.format("%05d", (int) (Math.random() * 100000));
     }
 
     public boolean authenticate(String userId, String password) {
         User user = userDao.getUserById(userId);
-        return user != null && user.getPassword().equals(password);
+        return user != null && checkPassword(password, user.getPassword());
+    }
+
+    private String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    private boolean checkPassword(String password, String hashedPassword) {
+        return BCrypt.checkpw(password, hashedPassword);
     }
 }
