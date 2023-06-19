@@ -33,11 +33,11 @@ To run the HealthSync application, follow these steps:
    - JavaFX: Ensure that the JavaFX libraries are available in the classpath.
    - PostgreSQL: Install PostgreSQL and configure the database connection details (`DB_URL`, `USER`, `PASSWORD`) in the `DBConnection` class.
        - By default there set to:
-       -```
-    DB_URL = "jdbc:postgresql://localhost:5434/postgres";
-    USER = "postgres";
-    PASSWORD = "password";
-         ```
+       ```
+       DB_URL = "jdbc:postgresql://localhost:5434/postgres";
+      USER = "postgres";
+      PASSWORD = "password";
+       ```
    - JBCrypt: Include the JBCrypt library in the classpath for password hashing.
 
 2. Build the application using Maven: Run the Maven build command to compile and package the application. The resulting JAR file will contain all the necessary dependencies.
