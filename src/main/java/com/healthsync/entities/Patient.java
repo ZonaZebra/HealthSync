@@ -46,6 +46,10 @@ public class Patient extends User {
         return pharmacyInformation;
     }
 
+    public void setPharmacyInformation(String pharmacyInformation) {
+        this.pharmacyInformation = pharmacyInformation;
+    }
+
     @Override
     public String toString() {
         return "Patient{" +
