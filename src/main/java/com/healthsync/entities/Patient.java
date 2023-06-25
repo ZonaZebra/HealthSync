@@ -1,24 +1,21 @@
 package com.healthsync.entities;
 
 import java.util.Date;
-import java.util.List;
 
 public class Patient extends User {
     private Date birthday;
     private String contactInformation;
     private String insuranceInformation;
     private String pharmacyInformation;
-    private List<String> prescriptions;
 
     public Patient(String userID, String firstName, String lastName, String password,
                    Date birthday, String contactInformation, String insuranceInformation,
-                   String pharmacyInformation, List<String> prescriptions) {
+                   String pharmacyInformation) {
         super(userID, firstName, lastName, password, "Patient");
         this.birthday = birthday;
         this.contactInformation = contactInformation;
         this.insuranceInformation = insuranceInformation;
         this.pharmacyInformation = pharmacyInformation;
-        this.prescriptions = prescriptions;
     }
 
     public Date getBirthday() {
@@ -49,18 +46,6 @@ public class Patient extends User {
         return pharmacyInformation;
     }
 
-    public void setPharmacyInformation(String pharmacyInformation) {
-        this.pharmacyInformation = pharmacyInformation;
-    }
-
-    public List<String> getPrescriptions() {
-        return prescriptions;
-    }
-
-    public void setPrescriptions(List<String> prescriptions) {
-        this.prescriptions = prescriptions;
-    }
-
     @Override
     public String toString() {
         return "Patient{" +
@@ -73,7 +58,7 @@ public class Patient extends User {
                 ", contactInformation='" + contactInformation + '\'' +
                 ", insuranceInformation='" + insuranceInformation + '\'' +
                 ", pharmacyInformation='" + pharmacyInformation + '\'' +
-                ", prescriptions=" + prescriptions +
+//                ", prescriptions=" + prescriptions +
                 '}';
     }
 }

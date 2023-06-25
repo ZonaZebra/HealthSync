@@ -8,6 +8,7 @@ public class UserService {
 
     private final UserDao userDao = new UserDao();
 
+    // These will be used when executing Staff fxns probably, otherwise I'll remove them later
     public User createUser(String firstName, String lastName, String password, String role) {
         String userId = generateUserId(firstName, lastName);
         String hashedPassword = hashPassword(password);
@@ -39,17 +40,19 @@ public class UserService {
         return userDao.deleteUser(userId);
     }
 
-    private String generateUserId(String firstName, String lastName) {
-        return firstName + lastName + String.format("%05d", (int) (Math.random() * 100000));
+    String generateUserId(String firstName, String lastName) {
+        return firstName.substring(0, Math.min(firstName.length(), 5)) +
+                lastName.substring(0, Math.min(lastName.length(), 5)) +
+                String.format("%05d", (int) (Math.random() * 100000));
+    }
+
+    String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     public boolean authenticate(String userId, String password) {
         User user = userDao.getUserById(userId);
         return user != null && checkPassword(password, user.getPassword());
-    }
-
-    private String hashPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     private boolean checkPassword(String password, String hashedPassword) {

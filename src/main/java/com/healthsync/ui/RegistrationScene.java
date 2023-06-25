@@ -99,19 +99,19 @@ public class RegistrationScene extends BaseScene {
                     firstName, lastName, password, birthday,
                     contactInformation, insuranceInformation, pharmacyInformation);
 
+            Alert alert;
             if (patient != null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
                 alert.setHeaderText(null);
                 alert.setContentText("Patient registered successfully!");
-                alert.showAndWait();
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Registration failed. Please try again.");
-                alert.showAndWait();
             }
+            alert.showAndWait();
         });
         content.getChildren().add(registerButton);
 

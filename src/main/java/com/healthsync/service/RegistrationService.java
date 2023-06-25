@@ -2,9 +2,8 @@ package com.healthsync.service;
 
 import com.healthsync.dao.PatientDao;
 import com.healthsync.entities.Patient;
-import com.healthsync.util.UserUtils;
 
-public class RegistrationService {
+public class RegistrationService extends UserService {
 
     private final PatientDao patientDao = new PatientDao();
 
@@ -13,10 +12,10 @@ public class RegistrationService {
                                    String insuranceInformation, String pharmacyInformation) {
 
         // Generate unique user ID
-        String userId = UserUtils.generateUserId(firstName, lastName);
+        String userId = generateUserId(firstName, lastName);
 
         // Hash the password
-        String hashedPassword = UserUtils.hashPassword(password);
+        String hashedPassword = hashPassword(password);
 
         // Create Patient object
         Patient patient = new Patient(
@@ -27,8 +26,7 @@ public class RegistrationService {
                 birthday,
                 contactInformation,
                 insuranceInformation,
-                pharmacyInformation,
-                null // Assuming that no prescriptions are added during registration
+                pharmacyInformation
         );
 
         // Call the createPatient method from PatientDao

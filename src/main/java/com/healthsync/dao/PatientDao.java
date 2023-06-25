@@ -7,9 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class PatientDao {
 
@@ -74,8 +72,6 @@ public class PatientDao {
                 String contactInformation = rs.getString("phone_number") + "," + rs.getString("email");
                 String insuranceInformation = rs.getString("insurance_provider") + "," + rs.getString("insurance_policy_number");
                 String pharmacyInformation = rs.getString("pharmacy_name") + "," + rs.getString("pharmacy_location");
-                // prescriptions should be fetched separately or handled differently
-                List<String> prescriptions = new ArrayList<>();
 
                 return new Patient(
                         rs.getString("user_id"),
@@ -85,8 +81,7 @@ public class PatientDao {
                         birthday,
                         contactInformation,
                         insuranceInformation,
-                        pharmacyInformation,
-                        prescriptions
+                        pharmacyInformation
                 );
             }
         } catch (SQLException e) {
@@ -95,91 +90,5 @@ public class PatientDao {
         return null;
     }
 
-    public boolean addPrescription(String userId, String prescription) {
-        try (Connection conn = DBConnection.getConnection()) {
-            if (conn == null) {
-                System.err.println("Failed to establish database connection.");
-                return false;
-            }
 
-            String sql = "INSERT INTO prescriptions (user_id, prescription) VALUES (?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, userId);
-            stmt.setString(2, prescription);
-
-            int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    // Get prescriptions for a patient
-    public List<String> getPrescriptions(String userId) {
-        List<String> prescriptions = new ArrayList<>();
-        try (Connection conn = DBConnection.getConnection()) {
-            if (conn == null) {
-                System.err.println("Failed to establish database connection.");
-                return prescriptions;
-            }
-
-            String sql = "SELECT prescription FROM prescriptions WHERE user_id = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, userId);
-
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                prescriptions.add(rs.getString("prescription"));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return prescriptions;
-    }
-
-    // Update prescription for a patient
-    public boolean updatePrescription(int prescriptionId, String newPrescription) {
-        try (Connection conn = DBConnection.getConnection()) {
-            if (conn == null) {
-                System.err.println("Failed to establish database connection.");
-                return false;
-            }
-
-            String sql = "UPDATE prescriptions SET prescription = ? WHERE prescription_id = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, newPrescription);
-            stmt.setInt(2, prescriptionId);
-
-            int rowsUpdated = stmt.executeUpdate();
-            return rowsUpdated > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    // Delete prescription for a patient
-    public boolean deletePrescription(int prescriptionId) {
-        try (Connection conn = DBConnection.getConnection()) {
-            if (conn == null) {
-                System.err.println("Failed to establish database connection.");
-                return false;
-            }
-
-            String sql = "DELETE FROM prescriptions WHERE prescription_id = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, prescriptionId);
-
-            int rowsDeleted = stmt.executeUpdate();
-            return rowsDeleted > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 }

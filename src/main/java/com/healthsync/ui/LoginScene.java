@@ -1,14 +1,13 @@
 package com.healthsync.ui;
 
-import com.healthsync.entities.User;
 import com.healthsync.service.UserService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class LoginScene extends BaseScene {
