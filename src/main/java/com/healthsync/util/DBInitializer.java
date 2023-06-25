@@ -35,14 +35,6 @@ public class DBInitializer {
                     ")";
             stmt.execute(createPatientTable);
 
-            // Creating the prescriptions table
-            String createPrescriptionsTable = "CREATE TABLE IF NOT EXISTS prescriptions (" +
-                    "prescription_id SERIAL PRIMARY KEY, " +
-                    "user_id VARCHAR REFERENCES patients(user_id), " +
-                    "prescription VARCHAR NOT NULL" +
-                    ")";
-            stmt.execute(createPrescriptionsTable);
-
             // Creating the staff table
             String createStaffTable = "CREATE TABLE IF NOT EXISTS staff (" +
                     "user_id VARCHAR PRIMARY KEY REFERENCES users(user_id), " +
