@@ -62,7 +62,6 @@ public class Patient extends User {
                 ", contactInformation='" + contactInformation + '\'' +
                 ", insuranceInformation='" + insuranceInformation + '\'' +
                 ", pharmacyInformation='" + pharmacyInformation + '\'' +
-//                ", prescriptions=" + prescriptions +
                 '}';
     }
 }
