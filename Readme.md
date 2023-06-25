@@ -34,9 +34,10 @@ To run the HealthSync application, follow these steps:
    - PostgreSQL: Install PostgreSQL and configure the database connection details (`DB_URL`, `USER`, `PASSWORD`) in the `DBConnection` class.
        - By default there set to:
        ```
-       DB_URL = "jdbc:postgresql://localhost:5434/postgres";
+       DB_URL = "jdbc:postgresql://localhost:5432/postgres";
       USER = "postgres";
       PASSWORD = "password";
+     PORT = "5432";
        ```
    - JBCrypt: Include the JBCrypt library in the classpath for password hashing.
 
