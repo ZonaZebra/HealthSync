@@ -5,6 +5,8 @@ import java.sql.Statement;
 
 public class DBInitializer {
 
+    // If you need to add/remove/update a table, just add on to this method don't remove stuff, EVER...
+
     public static void initializeDatabase() {
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
@@ -52,6 +54,82 @@ public class DBInitializer {
                     "message TEXT NOT NULL" +
                     ")";
             stmt.execute(createMessagesTable);
+
+            // Update messages table
+            String updateMessagesTable = "DROP TABLE IF EXISTS messages; " +
+                    "CREATE TABLE messages (" +
+                    "message_id INT PRIMARY KEY, " +
+                    "sender_id VARCHAR REFERENCES users(user_id), " +
+                    "receiver_id VARCHAR REFERENCES users(user_id), " +
+                    "date_sent TIMESTAMP NOT NULL, " +
+                    "subject VARCHAR NOT NULL, " +
+                    "message TEXT NOT NULL" +
+                    ")";
+            stmt.execute(updateMessagesTable);
+
+            // Appointments table
+            String createAppointmentsTable = "CREATE TABLE IF NOT EXISTS appointments (" +
+                    "appointment_id INT PRIMARY KEY, " +
+                    "patient_id VARCHAR REFERENCES users(user_id), " +
+                    "doctor_id VARCHAR REFERENCES users(user_id), " +
+                    "appointment_date TIMESTAMP NOT NULL, " +
+                    "questionnaire_id INT, " +
+                    "vitals_results_id INT, " +
+                    "physical_test_id INT" +
+                    ")";
+            stmt.execute(createAppointmentsTable);
+
+            // Insurance_Info table
+            String createInsuranceInfoTable = "CREATE TABLE IF NOT EXISTS insurance_info (" +
+                    "policy_id INT PRIMARY KEY, " +
+                    "insurance_company VARCHAR NOT NULL, " +
+                    "insurance_policy_number VARCHAR, " +
+                    "insurance_group_number VARCHAR" +
+                    ")";
+            stmt.execute(createInsuranceInfoTable);
+
+            // Physical_Test_Findings table
+            String createPhysicalTestFindingsTable = "CREATE TABLE IF NOT EXISTS physical_test_findings (" +
+                    "physical_test_id INT PRIMARY KEY, " +
+                    "issues VARCHAR, " +
+                    "notes VARCHAR, " +
+                    "administered_by VARCHAR REFERENCES users(user_id)" +
+                    ")";
+            stmt.execute(createPhysicalTestFindingsTable);
+
+            // Prescriptions table
+            String createPrescriptionsTable = "CREATE TABLE IF NOT EXISTS prescriptions (" +
+                    "prescription_id INT PRIMARY KEY, " +
+                    "product VARCHAR NOT NULL, " +
+                    "dosage_in_mg INT NOT NULL, " +
+                    "frequency INT NOT NULL, " +
+                    "instructions VARCHAR, " +
+                    "pharmacy_id INT, " +
+                    "prescribed_by VARCHAR REFERENCES staff(user_id)" +
+                    ")";
+            stmt.execute(createPrescriptionsTable);
+
+            // Questionnaire_Results table
+            String createQuestionnaireResultsTable = "CREATE TABLE IF NOT EXISTS questionnaire_results (" +
+                    "questionnaire_id INT PRIMARY KEY, " +
+                    "name VARCHAR NOT NULL, " +
+                    "date DATE NOT NULL, " +
+                    "sex CHAR(1), " +
+                    "administered_by VARCHAR REFERENCES users(user_id)" +
+                    ")";
+            stmt.execute(createQuestionnaireResultsTable);
+
+            // Vitals_Results table
+            String createVitalsResultsTable = "CREATE TABLE IF NOT EXISTS vitals_results (" +
+                    "vitals_results_id INT PRIMARY KEY, " +
+                    "height FLOAT NOT NULL, " +
+                    "weight FLOAT NOT NULL, " +
+                    "systolic_bp INT NOT NULL, " +
+                    "diastolic_bp INT NOT NULL, " +
+                    "resting_pulse FLOAT NOT NULL, " +
+                    "temperature FLOAT NOT NULL" +
+                    ")";
+            stmt.execute(createVitalsResultsTable);
 
         } catch (Exception e) {
             e.printStackTrace();
