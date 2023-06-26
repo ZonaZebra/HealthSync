@@ -15,8 +15,6 @@ public class Physical_Test_Findings {
         this.administered_by = administered_by;
     }
 
-    // Getters
-
     public int getPhysical_test_id() {
         return physical_test_id;
     }
@@ -32,8 +30,6 @@ public class Physical_Test_Findings {
     public String getNotes() {
         return notes;
     }
-
-    // Setters
 
     public void setNotes(String notes) {
         this.notes = notes;

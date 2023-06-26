@@ -21,8 +21,6 @@ public class Vitals_Results {
         this.temperature = temperature;
     }
 
-    // Getters
-
     public int getVitals_results_id() {
         return vitals_results_id;
     }
@@ -50,8 +48,6 @@ public class Vitals_Results {
     public void setSystolic_bp(int systolic_bp) {
         this.systolic_bp = systolic_bp;
     }
-
-    // Setters
 
     public int getDiastolic_bp() {
         return diastolic_bp;

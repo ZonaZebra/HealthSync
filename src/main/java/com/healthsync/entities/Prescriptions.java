@@ -21,8 +21,6 @@ public class Prescriptions {
         this.prescribed_by = prescribed_by;
     }
 
-    // Getters
-
     public int getPrescription_id() {
         return prescription_id;
     }
@@ -50,8 +48,6 @@ public class Prescriptions {
     public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
-
-    // Setters
 
     public String getInstructions() {
         return instructions;
