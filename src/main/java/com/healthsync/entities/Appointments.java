@@ -22,8 +22,6 @@ public class Appointments {
         this.physical_test_id = physical_test_id;
     }
 
-    // Getters
-
     public int getAppointment_id() {
         return appointment_id;
     }
@@ -51,8 +49,6 @@ public class Appointments {
     public Date getAppointment_date() {
         return appointment_date;
     }
-
-    // Setters
 
     public void setAppointment_date(Date appointment_date) {
         this.appointment_date = appointment_date;

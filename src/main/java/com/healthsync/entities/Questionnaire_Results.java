@@ -19,8 +19,6 @@ public class Questionnaire_Results {
         this.administered_by = administered_by;
     }
 
-    // Getters
-
     public int getQuestionnaire_id() {
         return questionnaire_id;
     }
@@ -40,8 +38,6 @@ public class Questionnaire_Results {
     public void setDate(Date date) {
         this.date = date;
     }
-
-    // Setters
 
     public char getSex() {
         return sex;
