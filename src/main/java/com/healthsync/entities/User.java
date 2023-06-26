@@ -1,7 +1,7 @@
 package com.healthsync.entities;
 
 public class User {
-    private String userID;
+    private final String userID;
     private String firstName;
     private String lastName;
     private String password;
@@ -19,9 +19,7 @@ public class User {
         return userID;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
+    // Set UserID Does Not Exist b/c userId acts as the Primary Key
 
     public String getFirstName() {
         return firstName;
