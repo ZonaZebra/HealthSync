@@ -3,10 +3,10 @@ package com.healthsync.entities;
 import java.util.Date;
 
 public class Messages {
-    private String messageID; // this should be unique
+    private int messageID; // primary key
     private String senderID; // this will reference userID from User table
     private String receiverID; // this will reference userID from User table
-    private Date dateSent;
+    private Date dateSent; // this is the current date
     private String subject;
     private String message;
 
@@ -14,7 +14,7 @@ public class Messages {
     public Messages() {
     }
 
-    public Messages(String messageID, String senderID, String receiverID, Date dateSent, String subject, String message) {
+    public Messages(int messageID, String senderID, String receiverID, Date dateSent, String subject, String message) {
         this.messageID = messageID;
         this.senderID = senderID;
         this.receiverID = receiverID;
@@ -24,7 +24,7 @@ public class Messages {
     }
 
     // Getters
-    public String getMessageID() {
+    public int getMessageID() {
         return messageID;
     }
 
@@ -49,10 +49,6 @@ public class Messages {
     }
 
     // Setters
-    public void setMessageID(String messageID) {
-        this.messageID = messageID;
-    }
-
     public void setSenderID(String senderID) {
         this.senderID = senderID;
     }
