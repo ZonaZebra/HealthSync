@@ -20,7 +20,7 @@ public class MessagesDao {
             }
             String sql = "INSERT INTO messages (message_id, sender_id, receiver_id, date_sent, subject, message) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, message.getMessageID());
+            stmt.setInt(1, message.getMessageID());
             stmt.setString(2, message.getSenderID());
             stmt.setString(3, message.getReceiverID());
             stmt.setTimestamp(4, new java.sql.Timestamp(message.getDateSent().getTime()));
@@ -48,7 +48,7 @@ public class MessagesDao {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Messages(
-                        rs.getString("message_id"),
+                        rs.getInt("message_id"),
                         rs.getString("sender_id"),
                         rs.getString("receiver_id"),
                         rs.getDate("date_sent"),
@@ -75,7 +75,7 @@ public class MessagesDao {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 messages.add(new Messages(
-                        rs.getString("message_id"),
+                        rs.getInt("message_id"),
                         rs.getString("sender_id"),
                         rs.getString("receiver_id"),
                         rs.getDate("date_sent"),
@@ -102,7 +102,7 @@ public class MessagesDao {
             stmt.setObject(3, message.getDateSent());
             stmt.setString(4, message.getSubject());
             stmt.setString(5, message.getMessage());
-            stmt.setString(6, message.getMessageID());
+            stmt.setInt(6, message.getMessageID());
 
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
