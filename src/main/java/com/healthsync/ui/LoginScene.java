@@ -1,5 +1,6 @@
 package com.healthsync.ui;
 
+import com.healthsync.entities.User;
 import com.healthsync.service.UserService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -54,14 +55,35 @@ public class LoginScene extends BaseScene {
         loginButton.setOnAction(e -> {
             String userID = userIDField.getText();
             String password = passwordField.getText();
-            boolean authenticatedUser = userService.authenticate(userID, password);
-            Alert alert;
-            if (authenticatedUser) {
-                alert = new Alert(Alert.AlertType.INFORMATION, "Logged in successfully!", ButtonType.OK);
+            User authenticatedUser = userService.authenticate(userID, password);
+            if (authenticatedUser == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid UserID or Password!", ButtonType.OK);
+                alert.show();
             } else {
-                alert = new Alert(Alert.AlertType.ERROR, "Invalid UserID or Password!", ButtonType.OK);
+                String role = authenticatedUser.getRole();
+                switch (role) {
+                    case "Patient" -> {
+                        PatientScene patientScene = new PatientScene();
+                        stage.setScene(patientScene);
+                        stage.setTitle("HealthSync - Patient");
+                    }
+                    case "Doctor" -> {
+                        DoctorScene doctorScene = new DoctorScene();
+                        stage.setScene(doctorScene);
+                        stage.setTitle("HealthSync - Doctor");
+                    }
+                    case "Nurse" -> {
+                        NurseScene nurseScene = new NurseScene();
+                        stage.setScene(nurseScene);
+                        stage.setTitle("HealthSync - Nurse");
+                    }
+                    case "Admin" -> {
+                        AdminScene adminScene = new AdminScene();
+                        stage.setScene(adminScene);
+                        stage.setTitle("HealthSync - Admin");
+                    }
+                }
             }
-            alert.show();
         });
 
         Button registerButton = new Button("Register");

@@ -1,6 +1,5 @@
 package com.healthsync.ui;
 
-import com.healthsync.app.App;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,6 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class BaseScene extends Scene {
 
@@ -28,7 +29,7 @@ public class BaseScene extends Scene {
         header.setAlignment(Pos.CENTER);
 
         // Adding logo to the header
-        ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/logo.png")));
+        ImageView logo = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/logo.png"))));
         logo.setFitHeight(40);
         logo.setFitWidth(40);
         header.getChildren().add(logo);

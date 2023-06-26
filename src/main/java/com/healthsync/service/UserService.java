@@ -50,9 +50,9 @@ public class UserService {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
-    public boolean authenticate(String userId, String password) {
+    public User authenticate(String userId, String password) {
         User user = userDao.getUserById(userId);
-        return user != null && checkPassword(password, user.getPassword());
+        return user != null && checkPassword(password, user.getPassword()) ? user : null;
     }
 
     private boolean checkPassword(String password, String hashedPassword) {

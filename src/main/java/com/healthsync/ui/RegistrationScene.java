@@ -6,7 +6,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -115,7 +114,6 @@ public class RegistrationScene extends BaseScene {
         });
         content.getChildren().add(registerButton);
 
-        VBox.setVgrow(form, Priority.ALWAYS);
         return content;
     }
 }
