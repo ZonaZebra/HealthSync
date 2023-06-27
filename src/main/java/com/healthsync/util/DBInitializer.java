@@ -13,7 +13,7 @@ public class DBInitializer {
                 throw new Exception("Failed to establish database connection.");
             }
             Statement stmt = conn.createStatement();
-
+            // Ignore
             // Creating the user table
             String createUserTable = "CREATE TABLE IF NOT EXISTS users (" +
                     "user_id VARCHAR PRIMARY KEY, " +
