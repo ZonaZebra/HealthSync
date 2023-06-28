@@ -1,5 +1,6 @@
 package com.healthsync.ui;
 
+import com.healthsync.entities.Patient;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -8,11 +9,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class DoctorScene extends BaseScene {
-    public DoctorScene() {
-        super(createContent());
+    public DoctorScene(Patient patient) {
+        super(createContent(patient));
     }
 
-    private static Region createContent() {
+    private static Region createContent(Patient patient) {
         // THESE ARE SUPER BASIC BOXES WITH A TITLE,
         // PLEASE GUT THEM WHEN YOU CREATE THE UI
         VBox content = new VBox();
