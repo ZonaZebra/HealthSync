@@ -3,13 +3,15 @@ package com.healthsync.ui;
 import com.healthsync.entities.Patient;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class DoctorScene extends BaseScene {
     public DoctorScene(Patient patient) {
@@ -73,14 +75,14 @@ public class DoctorScene extends BaseScene {
         GridPane prescriptionEntry = new GridPane();
         GridPane patientHistory = new GridPane();
 
-        physicalTestFindings.setPadding(new Insets(0,0,0,0));
-        physicalTestFindings.setPrefSize(900,300);
+        physicalTestFindings.setPrefSize(900,400);
+        physicalTestFindings.setPadding(new Insets(0,0,20,0));
 
-        prescriptionEntry.setPadding(new Insets(0,0,0,0));
-        prescriptionEntry.setPrefSize(500,300);
+        prescriptionEntry.setPadding(new Insets(0,0,20,0));
+        prescriptionEntry.setPrefSize(500,400);
 
         patientHistory.setPadding(new Insets(0,0,0,0));
-        patientHistory.setPrefSize(1415,300);
+        patientHistory.setPrefSize(1415,400);
 
         physicalTestFindings.setStyle(BorderLayout);
         prescriptionEntry.setStyle(BorderLayout);
@@ -88,15 +90,16 @@ public class DoctorScene extends BaseScene {
 
         // Components of physical test findings
 
-
         //Patient Name
+        Label patientNameLabel = new Label("   Patient Name:");
+        Label birthdayLabel = new Label("   Date of Birth:");
+
         GridPane patientInfo = new GridPane();
-        patientInfo.setVgap(15);
         patientInfo.setHgap(50);
         patientInfo.setPrefWidth(800);
 
         HBox nameBox = new HBox();
-        Text name = new Text("First Name");
+        Text name = new Text(patient.getFirstName()+" "+ patient.getLastName());
         nameBox.setPadding(new Insets(0,10,0,10));
         nameBox.getChildren().addAll(name);
         nameBox.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
@@ -105,7 +108,8 @@ public class DoctorScene extends BaseScene {
         nameBox.setPrefWidth(350);
 
         HBox dobBox = new HBox();
-        Text dateOfBirth = new Text("XX-XX-XXXX");
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Text dateOfBirth = new Text(dateFormat.format(patient.getBirthday()));
         dobBox.setPadding(new Insets(0,10,0,10));
         dobBox.getChildren().addAll(dateOfBirth);
         dobBox.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
@@ -113,8 +117,10 @@ public class DoctorScene extends BaseScene {
                 "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
         dobBox.setPrefWidth(350);
 
-        patientInfo.add(nameBox, 0,0);
-        patientInfo.add(dobBox, 1,0);
+        patientInfo.add(patientNameLabel, 0,0);
+        patientInfo.add(birthdayLabel, 1,0);
+        patientInfo.add(nameBox, 0,1);
+        patientInfo.add(dobBox, 1,1);
         patientInfo.setAlignment(Pos.CENTER);
 
         // Checkboxes
@@ -146,28 +152,23 @@ public class DoctorScene extends BaseScene {
         checks.setAlignment(Pos.CENTER);
 
         // Additional Comments
+        Label addCommentsLabel = new Label("   Additional Comments:");
         GridPane additionalComments = new GridPane();
-        additionalComments.setVgap(15);
         additionalComments.setHgap(50);
         additionalComments.setPrefWidth(850);
 
-        GridPane labelAndComments = new GridPane();
+        // Additional Comments will be here
+        TextArea writtenComments = new TextArea();
+        writtenComments.setStyle("-fx-border-color: black; ");
+        writtenComments.setPrefSize(850,300);
 
-
-        HBox commentsBox = new HBox();
-        Text comments = new Text("Comments");
-        commentsBox.setPadding(new Insets(0,10,0,10));
-        commentsBox.getChildren().addAll(comments);
-        commentsBox.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
-                "-fx-border-radius: 30; -fx-border-style: solid;" +
-                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
-        commentsBox.setPrefWidth(850);
-        commentsBox.setPrefHeight(125);
         additionalComments.setAlignment(Pos.CENTER);
 
-        additionalComments.add(commentsBox,0,0);
+        additionalComments.add(addCommentsLabel,0,0);
+        additionalComments.add(writtenComments,0,1);
 
         physicalTestFindings.add(physicalTestFindingsLabel,0,0);
+
         physicalTestFindings.add(patientInfo, 0,1);
         physicalTestFindings.add(checks,0,2);
         physicalTestFindings.add(additionalComments,0,3);
@@ -176,10 +177,35 @@ public class DoctorScene extends BaseScene {
         prescriptionEntry.add(prescriptionEntryLabel,0,0);
 
         // Components of PatientHistory
+        VBox historyContent = new VBox();
+        historyContent.setStyle("-fx-background-color: #FFFFFF;");
+
+        // Add History here
+        for(int i =0; i<100; i++){
+            historyContent.getChildren().addAll(new Text("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" +
+                    "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" +
+                    "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" +
+                    "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" +
+                    "TESTTESTTESTTEST"));
+        }
+
+        VBox scrollBar = new VBox();
+        scrollBar.setPadding(new Insets(15,15,15,25));
+        ScrollPane historyScrollPane = new ScrollPane();
+        historyScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        historyScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        historyScrollPane.setStyle("-fx-background-color: #FFFFFF; -fx-background: transparent;");
+        historyScrollPane.setPrefHeight(320);
+        historyScrollPane.setContent(historyContent);
+        scrollBar.getChildren().addAll(historyScrollPane);
+        scrollBar.setStyle("-fx-border-radius: 30; -fx-background-insets: 0; " +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-background: transparent;");
         patientHistory.add(patientHistoryLabel,0,0);
+        patientHistory.add(scrollBar,0,1);
+
+
 
         topFields.getChildren().addAll(physicalTestFindings, prescriptionEntry);
-
         mainStructure.add(topFields,0,0);
         mainStructure.add(patientHistory,0,1);
 
