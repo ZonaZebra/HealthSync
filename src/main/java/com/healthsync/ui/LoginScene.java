@@ -66,15 +66,16 @@ public class LoginScene extends BaseScene {
                         PatientScene patientScene = new PatientScene();
                         stage.setScene(patientScene);
                         stage.setTitle("HealthSync - Patient");
+
                     }
                     case "Doctor" -> {
-                        DoctorScene doctorScene = new DoctorScene();
-                        stage.setScene(doctorScene);
-                        stage.setTitle("HealthSync - Doctor");
+                        FindPatientScene findPatientScene = new FindPatientScene(authenticatedUser, stage);
+                        stage.setScene(findPatientScene);
+                        stage.setTitle("HealthSync - Find Patient");
                     }
                     case "Nurse" -> {
-                        NurseScene nurseScene = new NurseScene();
-                        stage.setScene(nurseScene);
+                        FindPatientScene findPatientScene = new FindPatientScene(authenticatedUser, stage);
+                        stage.setScene(findPatientScene);
                         stage.setTitle("HealthSync - Nurse");
                     }
                     case "Admin" -> {
