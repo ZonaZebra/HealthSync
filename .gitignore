@@ -11,6 +11,8 @@ target/
 *.iws
 *.iml
 *.ipr
+com/healthsync/util/DBConnection.java
+.gitignore
 
 ### Eclipse ###
 .apt_generated

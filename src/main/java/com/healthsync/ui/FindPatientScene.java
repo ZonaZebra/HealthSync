@@ -57,7 +57,8 @@ public class FindPatientScene extends BaseScene{
 
     searchButton.setOnAction(e -> {
       // Grab given patient ID
-      String patientID = patientIDField.getText();
+//      String patientID = patientIDField.getText();
+      String patientID = "LuisMedin85494";
 
       // Access to DB to look for patient, use patientDao.getPatientById()
       // patientDao returns a Patient if found, otherwise null
@@ -66,19 +67,14 @@ public class FindPatientScene extends BaseScene{
       if(foundPatient!=null){
         // On Success - got to corresponding portal (Doctor/Nurse) & pass patient info
         String role = user.getRole();
-        Alert alert;
         switch (role) {
           case "Doctor" -> {
-            alert = new Alert(Alert.AlertType.INFORMATION, "Going to Doctor!", ButtonType.OK);
-            alert.show();
             DoctorScene doctorScene = new DoctorScene(foundPatient);
             stage.setScene(doctorScene);
             stage.setTitle("HealthSync - Doctor");
 
           }
           case "Nurse" -> {
-            alert = new Alert(Alert.AlertType.INFORMATION, "Going to Nurse!", ButtonType.OK);
-            alert.show();
             NurseScene nurseScene = new NurseScene(foundPatient);
             stage.setScene(nurseScene);
             stage.setTitle("HealthSync - Nurse");

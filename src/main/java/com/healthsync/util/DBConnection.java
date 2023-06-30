@@ -7,9 +7,9 @@ import java.util.Properties;
 
 public class DBConnection {
 
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String DB_URL = "jdbc:postgresql://localhost:5433/postgres";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "Celeste12!";
 
     private DBConnection() {
         // private constructor to prevent instantiation
