@@ -53,11 +53,8 @@ public class LoginScene extends BaseScene {
         Button loginButton = new Button("Login");
         loginButton.setStyle("-fx-background-radius: 15; -fx-padding: 10 20 10 20;");
         loginButton.setOnAction(e -> {
-//            String userID = userIDField.getText();
-//            String password = passwordField.getText();
-            String userID = "LuisMedin25000";
-            String password = "password123";
-
+            String userID = userIDField.getText();
+            String password = passwordField.getText();
             User authenticatedUser = userService.authenticate(userID, password);
             if (authenticatedUser == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid UserID or Password!", ButtonType.OK);

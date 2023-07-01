@@ -50,18 +50,6 @@ public class Patient extends User {
         this.pharmacyInformation = pharmacyInformation;
     }
 
-    public String getPhoneNumber(){
-        String phone= "";
-        int i =0;
-        while(contactInformation.charAt(i) != ','){
-            phone+=contactInformation.charAt(i);
-            i++;
-
-        }
-
-        return phone;
-    }
-
     @Override
     public String toString() {
         return "Patient{" +
