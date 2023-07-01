@@ -18,6 +18,8 @@ public class DoctorScene extends BaseScene {
         super(createContent(patient));
     }
 
+    //TODO: Needs to save or clear test findings, needs to send or clear prescription, needs to pull patient history
+
     private static Region createContent(Patient patient) {
 
         // Common styling stuff
