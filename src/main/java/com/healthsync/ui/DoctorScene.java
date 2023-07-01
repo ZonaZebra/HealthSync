@@ -19,84 +19,45 @@ public class DoctorScene extends BaseScene {
     }
 
     private static Region createContent(Patient patient) {
-        // THESE ARE SUPER BASIC BOXES WITH A TITLE,
-        // PLEASE GUT THEM WHEN YOU CREATE THE UI
 
-        VBox content = new VBox();
-        content.setAlignment(Pos.CENTER);
-        content.setSpacing(30);
-        content.setPadding(new Insets(20, 40, 20, 40));
-
+        // Common styling stuff
         String BorderLayout = """
                 -fx-border-color: black;
                 -fx-border-width: 1;
-                -fx-border-radius: 30;
+                -fx-border-radius: 10;
                 -fx-border-style: solid;
                 -fx-background-color: #FFFFFF;
-                -fx-background-radius: 30;
+                -fx-background-radius: 10;
                 """;
 
         String labelLayout = """
                 -fx-background-color: #7198E7;
-                -fx-background-radius: 30 30 0 0;
+                -fx-background-radius: 10 10 0 0;
                 -fx-border-color: #1F2B6C;
-                -fx-border-width: 1;
-                -fx-border-radius: 30 30 0 0;
+                -fx-border-width: 0 0 1 0;
+                -fx-border-radius: 10 10 0 0;
                 -fx-border-style: solid;
                 -fx-font-size: 20px;
                 -fx-font-weight: bold;
                 """;
 
-        // need 3 boxes: Physical Test Findings, Prescription Entry, and Patient History
+        // --------------------------- Components of physical test findings ------------------------------------
+        GridPane physicalTestFindingsContainer = new GridPane();
+        physicalTestFindingsContainer.setVgap(15);
+        physicalTestFindingsContainer.setPrefSize(900,400);
+        physicalTestFindingsContainer.setPadding(new Insets(0,0,20,0));
+        physicalTestFindingsContainer.setStyle(BorderLayout);
 
         Label physicalTestFindingsLabel = new Label("Physical Test Findings");
-        Label prescriptionEntryLabel = new Label("Prescription Entry");
-        Label patientHistoryLabel = new Label("Patient History");
-
         physicalTestFindingsLabel.setAlignment(Pos.CENTER);
         physicalTestFindingsLabel.setPrefWidth(1300);
-        prescriptionEntryLabel.setAlignment(Pos.CENTER);
-        prescriptionEntryLabel.setPrefWidth(1300);
-        patientHistoryLabel.setAlignment(Pos.CENTER);
-        patientHistoryLabel.setPrefWidth(1500);
-
         physicalTestFindingsLabel.setStyle(labelLayout);
-        prescriptionEntryLabel.setStyle(labelLayout);
-        patientHistoryLabel.setStyle(labelLayout);
-
-        GridPane mainStructure = new GridPane();
-        mainStructure.setVgap(15);
-        mainStructure.setHgap(15);
-        mainStructure.setAlignment(Pos.CENTER);
-
-        HBox topFields = new HBox(15);
-        GridPane physicalTestFindings = new GridPane();
-        physicalTestFindings.setVgap(15);
-        GridPane prescriptionEntry = new GridPane();
-        GridPane patientHistory = new GridPane();
-
-        physicalTestFindings.setPrefSize(900,400);
-        physicalTestFindings.setPadding(new Insets(0,0,20,0));
-
-        prescriptionEntry.setPadding(new Insets(0,0,20,0));
-        prescriptionEntry.setPrefSize(500,400);
-
-        patientHistory.setPadding(new Insets(0,0,0,0));
-        patientHistory.setPrefSize(1415,400);
-
-        physicalTestFindings.setStyle(BorderLayout);
-        prescriptionEntry.setStyle(BorderLayout);
-        patientHistory.setStyle(BorderLayout);
-
-        // Components of physical test findings
 
         //Patient Name
         Label patientNameLabel = new Label("   Patient Name:");
+        patientNameLabel.setOpacity(.50);
         Label birthdayLabel = new Label("   Date of Birth:");
-
-        GridPane patientInfo = new GridPane();
-        patientInfo.setHgap(50);
-        patientInfo.setPrefWidth(800);
+        birthdayLabel.setOpacity(.50);
 
         HBox nameBox = new HBox();
         Text name = new Text(patient.getFirstName()+" "+ patient.getLastName());
@@ -117,6 +78,9 @@ public class DoctorScene extends BaseScene {
                 "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
         dobBox.setPrefWidth(350);
 
+        GridPane patientInfo = new GridPane();
+        patientInfo.setHgap(50);
+        patientInfo.setPrefWidth(800);
         patientInfo.add(patientNameLabel, 0,0);
         patientInfo.add(birthdayLabel, 1,0);
         patientInfo.add(nameBox, 0,1);
@@ -153,6 +117,7 @@ public class DoctorScene extends BaseScene {
 
         // Additional Comments
         Label addCommentsLabel = new Label("   Additional Comments:");
+        addCommentsLabel.setOpacity(.50);
         GridPane additionalComments = new GridPane();
         additionalComments.setHgap(50);
         additionalComments.setPrefWidth(850);
@@ -167,50 +132,161 @@ public class DoctorScene extends BaseScene {
         additionalComments.add(addCommentsLabel,0,0);
         additionalComments.add(writtenComments,0,1);
 
-        physicalTestFindings.add(physicalTestFindingsLabel,0,0);
+        // Buttons
+        Button clearButtonFindings = new Button("Clear Entry");
+        Button saveButtonFindings = new Button("Save");
+        HBox buttonsContainerFindings = new HBox(550);
 
-        physicalTestFindings.add(patientInfo, 0,1);
-        physicalTestFindings.add(checks,0,2);
-        physicalTestFindings.add(additionalComments,0,3);
+        clearButtonFindings.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; " +
+                "-fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
+        clearButtonFindings.setPrefSize(150,40);
+        saveButtonFindings.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; " +
+                "-fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
+        saveButtonFindings.setPrefSize(150,40);
 
-        // Components of prescription Entry
-        prescriptionEntry.add(prescriptionEntryLabel,0,0);
+        buttonsContainerFindings.getChildren().addAll(clearButtonFindings, saveButtonFindings);
+        buttonsContainerFindings.setAlignment(Pos.CENTER);
 
-        // Components of PatientHistory
+        physicalTestFindingsContainer.add(physicalTestFindingsLabel,0,0);
+        physicalTestFindingsContainer.add(patientInfo, 0,1);
+        physicalTestFindingsContainer.add(checks,0,2);
+        physicalTestFindingsContainer.add(additionalComments,0,3);
+        physicalTestFindingsContainer.add(buttonsContainerFindings,0,4);
+
+        // -------------------------Components of prescription Entry --------------------------------------
+        GridPane prescriptionEntryContainer = new GridPane();
+        prescriptionEntryContainer.setPadding(new Insets(0,0,20,0));
+        prescriptionEntryContainer.setPrefSize(500,400);
+        prescriptionEntryContainer.setStyle(BorderLayout);
+
+        Label prescriptionEntryLabel = new Label("Prescription Entry");
+        prescriptionEntryLabel.setAlignment(Pos.CENTER);
+        prescriptionEntryLabel.setPrefWidth(1300);
+        prescriptionEntryLabel.setStyle(labelLayout);
+        VBox prescriptionNotesContainer = new VBox();
+
+        // Prescription Name fields
+        VBox prescriptionNameContainer = new VBox();
+        prescriptionNameContainer.setPadding(new Insets(15,10,0,10));
+
+        Label prescriptionNameLabel = new Label("   Prescription Name:");
+        prescriptionNameLabel.setOpacity(.50);
+        TextField prescriptionNameText = new TextField();
+        prescriptionNameText.setPrefWidth(450);
+        prescriptionNameText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+
+        prescriptionNameContainer.getChildren().addAll(prescriptionNameLabel,prescriptionNameText);
+
+        // Prescription Dosage fields
+        GridPane dosageContainer = new GridPane();
+
+        Label dosageLabel = new Label("   Dosage:");
+        dosageLabel.setOpacity(.50);
+        TextField dosageText = new TextField();
+        dosageText.setPrefWidth(217.5);
+        dosageText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+
+        Label frequencyLabel = new Label("   Frequency:");
+        frequencyLabel.setOpacity(.50);
+        TextField frequencyText = new TextField();
+        frequencyText.setPrefWidth(217.5);
+        frequencyText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+
+        dosageContainer.add(dosageLabel,0,0);
+        dosageContainer.add(dosageText,0,1);
+        dosageContainer.add(frequencyLabel,1,0);
+        dosageContainer.add(frequencyText,1,1);
+        dosageContainer.setAlignment(Pos.CENTER);
+        dosageContainer.setHgap(15);
+
+        // Prescription Notes Fields
+        Label prescriptionNotesLabel = new Label("   Additional Prescription Notes");
+        prescriptionNotesLabel.setOpacity(.50);
+
+        HBox textAreaBox = new HBox();
+        TextArea prescriptionNotesText = new TextArea();
+        prescriptionNotesText.setMaxWidth(450);
+        textAreaBox.setPadding(new Insets(0,0,0,10));
+        textAreaBox.getChildren().addAll(prescriptionNotesText);
+        prescriptionNotesText.setStyle("-fx-border-color: black; ");
+        prescriptionNotesContainer.getChildren().addAll(prescriptionNotesLabel,textAreaBox);
+
+        // Prescription Buttons
+        Button clearButtonPrescription = new Button("Clear Entry");
+        Button saveButtonPrescription = new Button("Save");
+        HBox prescriptionButtonsContainer = new HBox(150);
+
+        clearButtonPrescription.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; -fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
+        clearButtonPrescription.setPrefSize(150,40);
+        saveButtonPrescription.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; -fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
+        saveButtonPrescription.setPrefSize(150,40);
+
+        prescriptionButtonsContainer.getChildren().addAll(clearButtonPrescription, saveButtonPrescription);
+        prescriptionButtonsContainer.setAlignment(Pos.CENTER);
+
+        GridPane prescriptionContainer = new GridPane();
+        prescriptionContainer.add(prescriptionNameContainer,0,0);
+        prescriptionContainer.add(dosageContainer,0,1);
+        prescriptionContainer.add(prescriptionNotesContainer,0,2);
+        prescriptionContainer.add(prescriptionButtonsContainer,0,3);
+        prescriptionContainer.setAlignment(Pos.CENTER);
+        prescriptionContainer.setVgap(10);
+
+        prescriptionEntryContainer.add(prescriptionEntryLabel,0,0);
+        prescriptionEntryContainer.add(prescriptionContainer,0,1);
+
+        // -------------------------------------Components of PatientHistory ---------------------------------
+        GridPane patientHistoryContainer = new GridPane();
+        patientHistoryContainer.setPrefSize(1415,400);
+        patientHistoryContainer.setStyle(BorderLayout);
+
+        Label patientHistoryLabel = new Label("Patient History");
+        patientHistoryLabel.setAlignment(Pos.CENTER);
+        patientHistoryLabel.setPrefWidth(1500);
+        patientHistoryLabel.setStyle(labelLayout);
+
         VBox historyContent = new VBox();
         historyContent.setStyle("-fx-background-color: #FFFFFF;");
 
         // Add History here
-        for(int i =0; i<100; i++){
-            historyContent.getChildren().addAll(new Text("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" +
-                    "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" +
-                    "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" +
-                    "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" +
-                    "TESTTESTTESTTEST"));
+        for(int i =0; i<10; i++){
+            historyContent.getChildren().addAll(new Text("- History item #" + (i+1)));
         }
 
-        VBox scrollBar = new VBox();
-        scrollBar.setPadding(new Insets(15,15,15,25));
+        VBox scrollBarContainer = new VBox();
+        scrollBarContainer.setPadding(new Insets(15,15,15,25));
+        scrollBarContainer.setStyle("-fx-border-radius: 30; -fx-background-insets: 0; " +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-background: transparent;");
+
         ScrollPane historyScrollPane = new ScrollPane();
         historyScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         historyScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         historyScrollPane.setStyle("-fx-background-color: #FFFFFF; -fx-background: transparent;");
         historyScrollPane.setPrefHeight(320);
         historyScrollPane.setContent(historyContent);
-        scrollBar.getChildren().addAll(historyScrollPane);
-        scrollBar.setStyle("-fx-border-radius: 30; -fx-background-insets: 0; " +
-                "-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-background: transparent;");
-        patientHistory.add(patientHistoryLabel,0,0);
-        patientHistory.add(scrollBar,0,1);
 
+        scrollBarContainer.getChildren().addAll(historyScrollPane);
 
+        patientHistoryContainer.add(patientHistoryLabel,0,0);
+        patientHistoryContainer.add(scrollBarContainer,0,1);
 
-        topFields.getChildren().addAll(physicalTestFindings, prescriptionEntry);
-        mainStructure.add(topFields,0,0);
-        mainStructure.add(patientHistory,0,1);
+        // Tie it all together
+        HBox topFieldsContainer = new HBox(15);
+        topFieldsContainer.getChildren().addAll(physicalTestFindingsContainer, prescriptionEntryContainer);
 
-        content.getChildren().addAll(mainStructure);
+        GridPane mainStructure = new GridPane();
+        mainStructure.setVgap(15);
+        mainStructure.setHgap(15);
+        mainStructure.setAlignment(Pos.CENTER);
+        mainStructure.add(topFieldsContainer,0,0);
+        mainStructure.add(patientHistoryContainer,0,1);
 
-        return content;
+        return mainStructure;
     }
 }
