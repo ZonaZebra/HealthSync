@@ -66,19 +66,17 @@ public class FindPatientScene extends BaseScene{
       if(foundPatient!=null){
         // On Success - got to corresponding portal (Doctor/Nurse) & pass patient info
         String role = user.getRole();
-        Alert alert;
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Patient "+foundPatient.getFirstName()+" found. " +
+                "Welcome "+ role + " "+user.getLastName()+"!");
+        alert.show();
         switch (role) {
           case "Doctor" -> {
-            alert = new Alert(Alert.AlertType.INFORMATION, "Going to Doctor!", ButtonType.OK);
-            alert.show();
             DoctorScene doctorScene = new DoctorScene(foundPatient);
             stage.setScene(doctorScene);
             stage.setTitle("HealthSync - Doctor");
 
           }
           case "Nurse" -> {
-            alert = new Alert(Alert.AlertType.INFORMATION, "Going to Nurse!", ButtonType.OK);
-            alert.show();
             NurseScene nurseScene = new NurseScene(foundPatient);
             stage.setScene(nurseScene);
             stage.setTitle("HealthSync - Nurse");
@@ -89,7 +87,6 @@ public class FindPatientScene extends BaseScene{
         Alert alert = new Alert(Alert.AlertType.ERROR, "No Patient found. Try Again.", ButtonType.OK);
         alert.show();
       }
-
     });
 
     content.getChildren().addAll(largeLogo, inputBox,searchButton);
