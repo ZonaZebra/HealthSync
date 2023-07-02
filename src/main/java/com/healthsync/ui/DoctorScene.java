@@ -5,6 +5,7 @@ import com.healthsync.entities.Patient;
 import com.healthsync.entities.Physical_Test_Findings;
 import com.healthsync.entities.Prescriptions;
 import com.healthsync.entities.User;
+import com.healthsync.service.PrescriptionService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -54,8 +55,8 @@ public class DoctorScene extends BaseScene {
         // --------------------------- Components of physical test findings ------------------------------------
         GridPane physicalTestFindingsContainer = new GridPane();
         physicalTestFindingsContainer.setVgap(15);
-        physicalTestFindingsContainer.setPrefSize(900,400);
-        physicalTestFindingsContainer.setPadding(new Insets(0,0,20,0));
+        physicalTestFindingsContainer.setPrefSize(900, 400);
+        physicalTestFindingsContainer.setPadding(new Insets(0, 0, 20, 0));
         physicalTestFindingsContainer.setStyle(BorderLayout);
 
         Label physicalTestFindingsLabel = new Label("Physical Test Findings");
@@ -70,8 +71,8 @@ public class DoctorScene extends BaseScene {
         birthdayLabel.setOpacity(.50);
 
         HBox nameBox = new HBox();
-        Text name = new Text(patient.getFirstName()+" "+ patient.getLastName());
-        nameBox.setPadding(new Insets(0,10,0,10));
+        Text name = new Text(patient.getFirstName() + " " + patient.getLastName());
+        nameBox.setPadding(new Insets(0, 10, 0, 10));
         nameBox.getChildren().addAll(name);
         nameBox.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
                 "-fx-border-radius: 30; -fx-border-style: solid;" +
@@ -81,7 +82,7 @@ public class DoctorScene extends BaseScene {
         HBox dobBox = new HBox();
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Text dateOfBirth = new Text(dateFormat.format(patient.getBirthday()));
-        dobBox.setPadding(new Insets(0,10,0,10));
+        dobBox.setPadding(new Insets(0, 10, 0, 10));
         dobBox.getChildren().addAll(dateOfBirth);
         dobBox.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
                 "-fx-border-radius: 30; -fx-border-style: solid;" +
@@ -91,10 +92,10 @@ public class DoctorScene extends BaseScene {
         GridPane patientInfo = new GridPane();
         patientInfo.setHgap(50);
         patientInfo.setPrefWidth(800);
-        patientInfo.add(patientNameLabel, 0,0);
-        patientInfo.add(birthdayLabel, 1,0);
-        patientInfo.add(nameBox, 0,1);
-        patientInfo.add(dobBox, 1,1);
+        patientInfo.add(patientNameLabel, 0, 0);
+        patientInfo.add(birthdayLabel, 1, 0);
+        patientInfo.add(nameBox, 0, 1);
+        patientInfo.add(dobBox, 1, 1);
         patientInfo.setAlignment(Pos.CENTER);
 
         // Checkboxes
@@ -117,12 +118,12 @@ public class DoctorScene extends BaseScene {
         heartIssue.setStyle("-fx-font-size: 15px;");
         extremitiesIssue.setStyle("-fx-font-size: 15px;");
 
-        checks.add(lungIssue,0,0);
-        checks.add(abdominalIssue,1,0);
-        checks.add(headIssue,2,0);
-        checks.add(brainIssue,0,1);
-        checks.add(heartIssue,1,1);
-        checks.add(extremitiesIssue,2,1);
+        checks.add(lungIssue, 0, 0);
+        checks.add(abdominalIssue, 1, 0);
+        checks.add(headIssue, 2, 0);
+        checks.add(brainIssue, 0, 1);
+        checks.add(heartIssue, 1, 1);
+        checks.add(extremitiesIssue, 2, 1);
         checks.setAlignment(Pos.CENTER);
 
         // Additional Comments
@@ -135,12 +136,12 @@ public class DoctorScene extends BaseScene {
         // Additional Comments will be here
         TextArea writtenComments = new TextArea();
         writtenComments.setStyle("-fx-border-color: black; ");
-        writtenComments.setPrefSize(850,300);
+        writtenComments.setPrefSize(850, 300);
 
         additionalComments.setAlignment(Pos.CENTER);
 
-        additionalComments.add(addCommentsLabel,0,0);
-        additionalComments.add(writtenComments,0,1);
+        additionalComments.add(addCommentsLabel, 0, 0);
+        additionalComments.add(writtenComments, 0, 1);
 
         // Buttons
         Button clearButtonFindings = new Button("Clear Entry");
@@ -149,26 +150,26 @@ public class DoctorScene extends BaseScene {
 
         clearButtonFindings.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; " +
                 "-fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
-        clearButtonFindings.setPrefSize(150,40);
+        clearButtonFindings.setPrefSize(150, 40);
         saveButtonFindings.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; " +
                 "-fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
-        saveButtonFindings.setPrefSize(150,40);
+        saveButtonFindings.setPrefSize(150, 40);
 
         buttonsContainerFindings.getChildren().addAll(clearButtonFindings, saveButtonFindings);
         buttonsContainerFindings.setAlignment(Pos.CENTER);
 
-        physicalTestFindingsContainer.add(physicalTestFindingsLabel,0,0);
-        physicalTestFindingsContainer.add(patientInfo, 0,1);
-        physicalTestFindingsContainer.add(checks,0,2);
-        physicalTestFindingsContainer.add(additionalComments,0,3);
-        physicalTestFindingsContainer.add(buttonsContainerFindings,0,4);
+        physicalTestFindingsContainer.add(physicalTestFindingsLabel, 0, 0);
+        physicalTestFindingsContainer.add(patientInfo, 0, 1);
+        physicalTestFindingsContainer.add(checks, 0, 2);
+        physicalTestFindingsContainer.add(additionalComments, 0, 3);
+        physicalTestFindingsContainer.add(buttonsContainerFindings, 0, 4);
 
         // Confirm clearing of entries and then clear them
-        clearButtonFindings.setOnAction(e ->{
+        clearButtonFindings.setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "All Physical Findings will be cleared, continue?", ButtonType.YES, ButtonType.NO);
 
-            Optional<ButtonType> answer =alert.showAndWait();
-            if(Objects.equals(answer.get().getText(), "Yes")){
+            Optional<ButtonType> answer = alert.showAndWait();
+            if (Objects.equals(answer.get().getText(), "Yes")) {
                 writtenComments.clear();
                 lungIssue.setSelected(false);
                 abdominalIssue.setSelected(false);
@@ -180,39 +181,38 @@ public class DoctorScene extends BaseScene {
         });
 
         // Create test findings and sent to DB
-        saveButtonFindings.setOnAction(e->{
+        saveButtonFindings.setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Save Test Findings??", ButtonType.YES, ButtonType.NO);
 
-            Optional<ButtonType> answer =alert.showAndWait();
-            if(Objects.equals(answer.get().getText(), "Yes")){
-                String issues= "";
-                if(lungIssue.isSelected()){
-                    issues+= lungIssue.getText()+", ";
+            Optional<ButtonType> answer = alert.showAndWait();
+            if (Objects.equals(answer.get().getText(), "Yes")) {
+                String issues = "";
+                if (lungIssue.isSelected()) {
+                    issues += lungIssue.getText() + ", ";
                 }
-                if(abdominalIssue.isSelected()){
-                    issues+= abdominalIssue.getText()+", ";
+                if (abdominalIssue.isSelected()) {
+                    issues += abdominalIssue.getText() + ", ";
                 }
-                if(headIssue.isSelected()){
-                    issues+= headIssue.getText()+", ";
+                if (headIssue.isSelected()) {
+                    issues += headIssue.getText() + ", ";
                 }
-                if(brainIssue.isSelected()){
-                    issues+= brainIssue.getText()+", ";
+                if (brainIssue.isSelected()) {
+                    issues += brainIssue.getText() + ", ";
                 }
-                if(heartIssue.isSelected()){
-                    issues+= heartIssue.getText()+", ";
+                if (heartIssue.isSelected()) {
+                    issues += heartIssue.getText() + ", ";
                 }
-                if(extremitiesIssue.isSelected()){
-                    issues+= extremitiesIssue.getText()+", ";
+                if (extremitiesIssue.isSelected()) {
+                    issues += extremitiesIssue.getText() + ", ";
                 }
 
                 String comments = writtenComments.getText();
 
-                String adminBy =  doctor.getUserId();
+                String adminBy = doctor.getUserId();
                 String patientID = patient.getUserId();
 
                 // This will work for testing, but need to figure out how to always make the test ID unique
-                testFindingsDao.createPhysicalTestFinding(new Physical_Test_Findings(1,issues, comments, patientID,adminBy));
-
+                testFindingsDao.createPhysicalTestFinding(new Physical_Test_Findings(1, issues, comments, patientID, adminBy));
 
 
                 alert = new Alert(Alert.AlertType.INFORMATION, "Test Findings Submitted");
@@ -222,8 +222,8 @@ public class DoctorScene extends BaseScene {
 
         // -------------------------Components of prescription Entry --------------------------------------
         GridPane prescriptionEntryContainer = new GridPane();
-        prescriptionEntryContainer.setPadding(new Insets(0,0,20,0));
-        prescriptionEntryContainer.setPrefSize(500,400);
+        prescriptionEntryContainer.setPadding(new Insets(0, 0, 20, 0));
+        prescriptionEntryContainer.setPrefSize(500, 400);
         prescriptionEntryContainer.setStyle(BorderLayout);
 
         Label prescriptionEntryLabel = new Label("Prescription Entry");
@@ -234,7 +234,7 @@ public class DoctorScene extends BaseScene {
 
         // Prescription Name fields
         VBox prescriptionNameContainer = new VBox();
-        prescriptionNameContainer.setPadding(new Insets(15,10,0,10));
+        prescriptionNameContainer.setPadding(new Insets(15, 10, 0, 10));
 
         Label prescriptionNameLabel = new Label("   Prescription Name:");
         prescriptionNameLabel.setOpacity(.50);
@@ -244,7 +244,7 @@ public class DoctorScene extends BaseScene {
                 "-fx-border-radius: 30; -fx-border-style: solid;" +
                 "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
 
-        prescriptionNameContainer.getChildren().addAll(prescriptionNameLabel,prescriptionNameText);
+        prescriptionNameContainer.getChildren().addAll(prescriptionNameLabel, prescriptionNameText);
 
         // Prescription Dosage fields
         GridPane dosageContainer = new GridPane();
@@ -265,10 +265,10 @@ public class DoctorScene extends BaseScene {
                 "-fx-border-radius: 30; -fx-border-style: solid;" +
                 "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
 
-        dosageContainer.add(dosageLabel,0,0);
-        dosageContainer.add(dosageText,0,1);
-        dosageContainer.add(frequencyLabel,1,0);
-        dosageContainer.add(frequencyText,1,1);
+        dosageContainer.add(dosageLabel, 0, 0);
+        dosageContainer.add(dosageText, 0, 1);
+        dosageContainer.add(frequencyLabel, 1, 0);
+        dosageContainer.add(frequencyText, 1, 1);
         dosageContainer.setAlignment(Pos.CENTER);
         dosageContainer.setHgap(15);
 
@@ -279,10 +279,10 @@ public class DoctorScene extends BaseScene {
         HBox textAreaBox = new HBox();
         TextArea prescriptionNotesText = new TextArea();
         prescriptionNotesText.setMaxWidth(450);
-        textAreaBox.setPadding(new Insets(0,0,0,10));
+        textAreaBox.setPadding(new Insets(0, 0, 0, 10));
         textAreaBox.getChildren().addAll(prescriptionNotesText);
         prescriptionNotesText.setStyle("-fx-border-color: black; ");
-        prescriptionNotesContainer.getChildren().addAll(prescriptionNotesLabel,textAreaBox);
+        prescriptionNotesContainer.getChildren().addAll(prescriptionNotesLabel, textAreaBox);
 
         // Prescription Buttons
         Button clearButtonPrescription = new Button("Clear Entry");
@@ -291,31 +291,31 @@ public class DoctorScene extends BaseScene {
 
         clearButtonPrescription.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; " +
                 "-fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
-        clearButtonPrescription.setPrefSize(150,40);
+        clearButtonPrescription.setPrefSize(150, 40);
         saveButtonPrescription.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; " +
                 "-fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
-        saveButtonPrescription.setPrefSize(150,40);
+        saveButtonPrescription.setPrefSize(150, 40);
 
         prescriptionButtonsContainer.getChildren().addAll(clearButtonPrescription, saveButtonPrescription);
         prescriptionButtonsContainer.setAlignment(Pos.CENTER);
 
         GridPane prescriptionContainer = new GridPane();
-        prescriptionContainer.add(prescriptionNameContainer,0,0);
-        prescriptionContainer.add(dosageContainer,0,1);
-        prescriptionContainer.add(prescriptionNotesContainer,0,2);
-        prescriptionContainer.add(prescriptionButtonsContainer,0,3);
+        prescriptionContainer.add(prescriptionNameContainer, 0, 0);
+        prescriptionContainer.add(dosageContainer, 0, 1);
+        prescriptionContainer.add(prescriptionNotesContainer, 0, 2);
+        prescriptionContainer.add(prescriptionButtonsContainer, 0, 3);
         prescriptionContainer.setAlignment(Pos.CENTER);
         prescriptionContainer.setVgap(10);
 
-        prescriptionEntryContainer.add(prescriptionEntryLabel,0,0);
-        prescriptionEntryContainer.add(prescriptionContainer,0,1);
+        prescriptionEntryContainer.add(prescriptionEntryLabel, 0, 0);
+        prescriptionEntryContainer.add(prescriptionContainer, 0, 1);
 
         // Confirm clearing of entries and then clear them
-        clearButtonPrescription.setOnAction(e ->{
+        clearButtonPrescription.setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "All Physical Findings will be cleared, continue?", ButtonType.YES, ButtonType.NO);
 
-            Optional<ButtonType> answer =alert.showAndWait();
-            if(Objects.equals(answer.get().getText(), "Yes")){
+            Optional<ButtonType> answer = alert.showAndWait();
+            if (Objects.equals(answer.get().getText(), "Yes")) {
                 dosageText.clear();
                 frequencyText.clear();
                 prescriptionNameText.clear();
@@ -323,28 +323,29 @@ public class DoctorScene extends BaseScene {
             }
         });
 
-        saveButtonPrescription.setOnAction(e->{
+        saveButtonPrescription.setOnAction(e -> {
             Alert alert;
-            if(!Objects.equals(prescriptionNameText.getText(), "") && !Objects.equals(dosageText.getText(), "") && !Objects.equals(frequencyText.getText(), "")){
+            if (!Objects.equals(prescriptionNameText.getText(), "") && !Objects.equals(dosageText.getText(), "") && !Objects.equals(frequencyText.getText(), "")) {
                 Physical_Test_Findings physical_test_findings;
-                Prescriptions prescription;
                 alert = new Alert(Alert.AlertType.CONFIRMATION, "Submit Prescription to Pharmacy?", ButtonType.YES, ButtonType.NO);
 
-                Optional<ButtonType> answer =alert.showAndWait();
-                if(Objects.equals(answer.get().getText(), "Yes")){
-                    String presName = prescriptionNameText.getText();
+                Optional<ButtonType> answer = alert.showAndWait();
+                if (Objects.equals(answer.get().getText(), "Yes")) {
+                    String prescriptionName = prescriptionNameText.getText();
                     int dosage_mg = Integer.parseInt(dosageText.getText());
                     int frequency = Integer.parseInt(frequencyText.getText());
-                    String prescriber = doctor.getFirstName() +" "+ doctor.getLastName();
-
+                    String doctorId = doctor.getUserId();
                     String addInstructions;
-                    if(!Objects.equals(prescriptionNotesText.getText(), "")){
+                    if (!Objects.equals(prescriptionNotesText.getText(), "")) {
                         addInstructions = prescriptionNotesText.getText();
-                    }else{
-                        addInstructions = "N/A";
+                    } else {
+                        addInstructions = "N/A"; // Hardcoded for now
                     }
+                    String patientID = patient.getUserId();
+                    int pharmacyID = -1; // Hardcoded for now
 
-                    prescription = new Prescriptions(1,presName,dosage_mg, frequency,addInstructions, 1, prescriber);
+                    PrescriptionService prescriptionService = new PrescriptionService();
+                    Prescriptions prescription = prescriptionService.createPrescription(prescriptionName, dosage_mg, frequency, addInstructions, pharmacyID, patientID, doctorId);
                     System.out.println(prescription);
                     dosageText.clear();
                     frequencyText.clear();
@@ -355,7 +356,7 @@ public class DoctorScene extends BaseScene {
                     alert.show();
                 }
 
-            }else{
+            } else {
                 alert = new Alert(Alert.AlertType.INFORMATION, "Missing Prescription Field, Please Complete Form.");
                 alert.show();
             }
@@ -364,7 +365,7 @@ public class DoctorScene extends BaseScene {
 
         // -------------------------------------Components of PatientHistory ---------------------------------
         GridPane patientHistoryContainer = new GridPane();
-        patientHistoryContainer.setPrefSize(1415,400);
+        patientHistoryContainer.setPrefSize(1415, 400);
         patientHistoryContainer.setStyle(BorderLayout);
 
         Label patientHistoryLabel = new Label("Patient History");
@@ -376,12 +377,12 @@ public class DoctorScene extends BaseScene {
         historyContent.setStyle("-fx-background-color: #FFFFFF;");
 
         // Add History here
-        for(int i =0; i<10; i++){
-            historyContent.getChildren().addAll(new Text("- History item #" + (i+1)));
+        for (int i = 0; i < 10; i++) {
+            historyContent.getChildren().addAll(new Text("- History item #" + (i + 1)));
         }
 
         VBox scrollBarContainer = new VBox();
-        scrollBarContainer.setPadding(new Insets(15,15,15,25));
+        scrollBarContainer.setPadding(new Insets(15, 15, 15, 25));
         scrollBarContainer.setStyle("-fx-border-radius: 30; -fx-background-insets: 0; " +
                 "-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-background: transparent;");
 
@@ -394,8 +395,8 @@ public class DoctorScene extends BaseScene {
 
         scrollBarContainer.getChildren().addAll(historyScrollPane);
 
-        patientHistoryContainer.add(patientHistoryLabel,0,0);
-        patientHistoryContainer.add(scrollBarContainer,0,1);
+        patientHistoryContainer.add(patientHistoryLabel, 0, 0);
+        patientHistoryContainer.add(scrollBarContainer, 0, 1);
 
         // Tie it all together
         HBox topFieldsContainer = new HBox(15);
@@ -405,8 +406,8 @@ public class DoctorScene extends BaseScene {
         mainStructure.setVgap(15);
         mainStructure.setHgap(15);
         mainStructure.setAlignment(Pos.CENTER);
-        mainStructure.add(topFieldsContainer,0,0);
-        mainStructure.add(patientHistoryContainer,0,1);
+        mainStructure.add(topFieldsContainer, 0, 0);
+        mainStructure.add(patientHistoryContainer, 0, 1);
 
         return mainStructure;
     }
