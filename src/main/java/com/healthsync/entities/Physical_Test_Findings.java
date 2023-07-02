@@ -1,7 +1,7 @@
 package com.healthsync.entities;
 
 public class Physical_Test_Findings {
-    private final int physical_test_id; // primary key
+    private int physical_test_id; // primary key
     private String issues;
     private String notes;
     private String patient_id; // references userID from User table
@@ -19,6 +19,10 @@ public class Physical_Test_Findings {
 
     public int getPhysical_test_id() {
         return physical_test_id;
+    }
+
+    public void setPhysical_test_id(int physical_test_id) {
+        this.physical_test_id = physical_test_id;
     }
 
     public String getIssues() {
