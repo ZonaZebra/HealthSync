@@ -208,13 +208,14 @@ public class DoctorScene extends BaseScene {
                 String comments = writtenComments.getText();
 
                 String adminBy =  doctor.getUserId();
+                String patientID = patient.getUserId();
 
                 // This will work for testing, but need to figure out how to always make the test ID unique
-                testFindingsDao.createPhysicalTestFinding(new Physical_Test_Findings(1,issues, comments,adminBy));
+                testFindingsDao.createPhysicalTestFinding(new Physical_Test_Findings(1,issues, comments, patientID,adminBy));
 
 
 
-                alert = new Alert(Alert.AlertType.INFORMATION, "Prescription Submitted");
+                alert = new Alert(Alert.AlertType.INFORMATION, "Test Findings Submitted");
                 alert.show();
             }
         });
