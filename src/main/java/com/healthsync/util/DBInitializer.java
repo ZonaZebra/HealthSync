@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.Statement;
 
 public class DBInitializer {
-
     // If you need to add/remove/update a table, just add on to this method don't remove stuff, EVER...
 
     public static void initializeDatabase() {
@@ -46,7 +45,7 @@ public class DBInitializer {
 
             // Creating the messages table
             String createMessagesTable = "CREATE TABLE IF NOT EXISTS messages (" +
-                    "message_id VARCHAR PRIMARY KEY, " +
+                    "message_id SERIAL PRIMARY KEY CHECK (message_id >= 10000), " +
                     "sender_id VARCHAR REFERENCES users(user_id), " +
                     "receiver_id VARCHAR REFERENCES users(user_id), " +
                     "date_sent TIMESTAMP NOT NULL, " +
@@ -55,21 +54,9 @@ public class DBInitializer {
                     ")";
             stmt.execute(createMessagesTable);
 
-            // Update messages table
-            String updateMessagesTable = "DROP TABLE IF EXISTS messages; " +
-                    "CREATE TABLE messages (" +
-                    "message_id INT PRIMARY KEY, " +
-                    "sender_id VARCHAR REFERENCES users(user_id), " +
-                    "receiver_id VARCHAR REFERENCES users(user_id), " +
-                    "date_sent TIMESTAMP NOT NULL, " +
-                    "subject VARCHAR NOT NULL, " +
-                    "message TEXT NOT NULL" +
-                    ")";
-            stmt.execute(updateMessagesTable);
-
             // Appointments table
             String createAppointmentsTable = "CREATE TABLE IF NOT EXISTS appointments (" +
-                    "appointment_id INT PRIMARY KEY, " +
+                    "appointment_id SERIAL PRIMARY KEY CHECK (appointment_id >= 10000), " +
                     "patient_id VARCHAR REFERENCES users(user_id), " +
                     "doctor_id VARCHAR REFERENCES users(user_id), " +
                     "appointment_date TIMESTAMP NOT NULL, " +
@@ -81,7 +68,7 @@ public class DBInitializer {
 
             // Insurance_Info table
             String createInsuranceInfoTable = "CREATE TABLE IF NOT EXISTS insurance_info (" +
-                    "policy_id INT PRIMARY KEY, " +
+                    "policy_id SERIAL PRIMARY KEY CHECK (policy_id >= 10000), " +
                     "insurance_company VARCHAR NOT NULL, " +
                     "insurance_policy_number VARCHAR, " +
                     "insurance_group_number VARCHAR" +
@@ -90,7 +77,7 @@ public class DBInitializer {
 
             // Physical_Test_Findings table
             String createPhysicalTestFindingsTable = "CREATE TABLE IF NOT EXISTS physical_test_findings (" +
-                    "physical_test_id INT PRIMARY KEY, " +
+                    "physical_test_id SERIAL PRIMARY KEY CHECK (physical_test_id >= 10000), " +
                     "issues VARCHAR, " +
                     "notes VARCHAR, " +
                     "patient_id VARCHAR REFERENCES users(user_id), " +
@@ -100,7 +87,7 @@ public class DBInitializer {
 
             // Prescriptions table
             String createPrescriptionsTable = "CREATE TABLE IF NOT EXISTS prescriptions (" +
-                    "prescription_id INT PRIMARY KEY, " +
+                    "prescription_id SERIAL PRIMARY KEY CHECK (prescription_id >= 10000), " +
                     "product VARCHAR NOT NULL, " +
                     "dosage_in_mg INT NOT NULL, " +
                     "frequency INT NOT NULL, " +
@@ -112,7 +99,7 @@ public class DBInitializer {
 
             // Questionnaire_Results table
             String createQuestionnaireResultsTable = "CREATE TABLE IF NOT EXISTS questionnaire_results (" +
-                    "questionnaire_id INT PRIMARY KEY, " +
+                    "questionnaire_id SERIAL PRIMARY KEY CHECK (questionnaire_id >= 10000), " +
                     "name VARCHAR NOT NULL, " +
                     "date DATE NOT NULL, " +
                     "sex CHAR(1), " +
@@ -122,7 +109,7 @@ public class DBInitializer {
 
             // Vitals_Results table
             String createVitalsResultsTable = "CREATE TABLE IF NOT EXISTS vitals_results (" +
-                    "vitals_results_id INT PRIMARY KEY, " +
+                    "vitals_results_id SERIAL PRIMARY KEY CHECK (vitals_results_id >= 10000), " +
                     "height FLOAT NOT NULL, " +
                     "weight FLOAT NOT NULL, " +
                     "systolic_bp INT NOT NULL, " +
