@@ -71,7 +71,8 @@ public class DBInitializer {
                     "policy_id SERIAL PRIMARY KEY CHECK (policy_id >= 10000), " +
                     "insurance_company VARCHAR NOT NULL, " +
                     "insurance_policy_number VARCHAR, " +
-                    "insurance_group_number VARCHAR" +
+                    "insurance_group_number VARCHAR, " +
+                    "patient_id VARCHAR REFERENCES users(user_id)" +
                     ")";
             stmt.execute(createInsuranceInfoTable);
 
@@ -104,6 +105,7 @@ public class DBInitializer {
                     "name VARCHAR NOT NULL, " +
                     "date DATE NOT NULL, " +
                     "sex CHAR(1), " +
+                    "patient_id VARCHAR REFERENCES users(user_id), " +
                     "administered_by VARCHAR REFERENCES users(user_id)" +
                     ")";
             stmt.execute(createQuestionnaireResultsTable);
@@ -116,7 +118,8 @@ public class DBInitializer {
                     "systolic_bp INT NOT NULL, " +
                     "diastolic_bp INT NOT NULL, " +
                     "resting_pulse FLOAT NOT NULL, " +
-                    "temperature FLOAT NOT NULL" +
+                    "temperature FLOAT NOT NULL, " +
+                    "patient_id VARCHAR REFERENCES users(user_id)" +
                     ")";
             stmt.execute(createVitalsResultsTable);
 
