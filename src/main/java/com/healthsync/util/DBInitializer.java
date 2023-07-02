@@ -130,6 +130,10 @@ public class DBInitializer {
             stmt.execute("ALTER SEQUENCE questionnaire_results_questionnaire_id_seq RESTART WITH 10000");
             stmt.execute("ALTER SEQUENCE vitals_results_vitals_results_id_seq RESTART WITH 10000");
 
+            // Added user_id column to the Vitals_Results table - 002
+            String addUserColumnToVitalsResultsTable = "ALTER TABLE vitals_results " + "ADD COLUMN IF NOT EXISTS user_id VARCHAR REFERENCES users(user_id)";
+            stmt.execute(addUserColumnToVitalsResultsTable);
+
             // Add new db updates here with a comment...
 
         } catch (Exception e) {
