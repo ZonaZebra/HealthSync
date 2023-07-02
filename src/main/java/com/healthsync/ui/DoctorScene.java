@@ -182,6 +182,9 @@ public class DoctorScene extends BaseScene {
 
         // Create test findings and sent to DB
         saveButtonFindings.setOnAction(e -> {
+            // Disable the button immediately after it is clicked
+            saveButtonFindings.setDisable(true);
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Save Test Findings??", ButtonType.YES, ButtonType.NO);
 
             Optional<ButtonType> answer = alert.showAndWait();
@@ -217,8 +220,12 @@ public class DoctorScene extends BaseScene {
 
                 alert = new Alert(Alert.AlertType.INFORMATION, "Test Findings Submitted");
                 alert.show();
+            } else {
+                // If the user decided not to proceed, re-enable the button
+                saveButtonFindings.setDisable(false);
             }
         });
+
 
         // -------------------------Components of prescription Entry --------------------------------------
         GridPane prescriptionEntryContainer = new GridPane();
