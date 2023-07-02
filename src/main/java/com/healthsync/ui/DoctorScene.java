@@ -5,7 +5,7 @@ import com.healthsync.entities.Patient;
 import com.healthsync.entities.Physical_Test_Findings;
 import com.healthsync.entities.Prescriptions;
 import com.healthsync.entities.User;
-import com.healthsync.service.PrescriptionService;
+import com.healthsync.service.DoctorService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -212,8 +212,8 @@ public class DoctorScene extends BaseScene {
                 String patientID = patient.getUserId();
 
                 // This will work for testing, but need to figure out how to always make the test ID unique
-                testFindingsDao.createPhysicalTestFinding(new Physical_Test_Findings(1, issues, comments, patientID, adminBy));
-
+                DoctorService doctorService = new DoctorService();
+                Physical_Test_Findings testFindings = doctorService.createPhysicalTestFindingsEntry(issues, comments, patientID, adminBy);
 
                 alert = new Alert(Alert.AlertType.INFORMATION, "Test Findings Submitted");
                 alert.show();
@@ -344,8 +344,8 @@ public class DoctorScene extends BaseScene {
                     String patientID = patient.getUserId();
                     int pharmacyID = -1; // Hardcoded for now
 
-                    PrescriptionService prescriptionService = new PrescriptionService();
-                    Prescriptions prescription = prescriptionService.createPrescription(prescriptionName, dosage_mg, frequency, addInstructions, pharmacyID, patientID, doctorId);
+                    DoctorService doctorService = new DoctorService();
+                    Prescriptions prescription = doctorService.createPrescription(prescriptionName, dosage_mg, frequency, addInstructions, pharmacyID, patientID, doctorId);
                     System.out.println(prescription);
                     dosageText.clear();
                     frequencyText.clear();
