@@ -3,37 +3,45 @@ package com.healthsync.dao;
 import com.healthsync.entities.Messages;
 import com.healthsync.util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessagesDao {
 
-    public boolean createMessage(Messages message) {
+    public int createMessage(Messages message) {
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
-                return false;
+                return -1;
             }
-            String sql = "INSERT INTO messages (message_id, sender_id, receiver_id, date_sent, subject, message) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, message.getMessageID());
-            stmt.setString(2, message.getSenderID());
-            stmt.setString(3, message.getReceiverID());
-            stmt.setTimestamp(4, new java.sql.Timestamp(message.getDateSent().getTime()));
-            stmt.setString(5, message.getSubject());
-            stmt.setString(6, message.getMessage());
+            String sql = "INSERT INTO messages (sender_id, receiver_id, date_sent, subject, message) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, message.getSenderID());
+            stmt.setString(2, message.getReceiverID());
+            stmt.setTimestamp(3, new java.sql.Timestamp(message.getDateSent().getTime()));
+            stmt.setString(4, message.getSubject());
+            stmt.setString(5, message.getMessage());
 
-            int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating message failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating message failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
+
 
     public Messages getMessageById(String messageId) {
         try (Connection conn = DBConnection.getConnection()) {
