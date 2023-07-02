@@ -93,9 +93,11 @@ public class DBInitializer {
                     "frequency INT NOT NULL, " +
                     "instructions VARCHAR, " +
                     "pharmacy_id INT, " +
+                    "patient_id VARCHAR REFERENCES users(user_id), " +
                     "prescribed_by VARCHAR REFERENCES staff(user_id)" +
                     ")";
             stmt.execute(createPrescriptionsTable);
+            stmt.execute("ALTER SEQUENCE prescriptions_prescription_id_seq RESTART WITH 10000");
 
             // Questionnaire_Results table
             String createQuestionnaireResultsTable = "CREATE TABLE IF NOT EXISTS questionnaire_results (" +
