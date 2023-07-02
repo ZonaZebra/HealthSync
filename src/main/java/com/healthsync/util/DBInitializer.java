@@ -93,6 +93,7 @@ public class DBInitializer {
                     "physical_test_id INT PRIMARY KEY, " +
                     "issues VARCHAR, " +
                     "notes VARCHAR, " +
+                    "patient_id VARCHAR REFERENCES users(user_id), " +
                     "administered_by VARCHAR REFERENCES users(user_id)" +
                     ")";
             stmt.execute(createPhysicalTestFindingsTable);

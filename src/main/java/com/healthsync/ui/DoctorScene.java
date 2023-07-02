@@ -1,6 +1,10 @@
 package com.healthsync.ui;
 
+import com.healthsync.dao.PhysicalTestFindingsDao;
 import com.healthsync.entities.Patient;
+import com.healthsync.entities.Physical_Test_Findings;
+import com.healthsync.entities.Prescriptions;
+import com.healthsync.entities.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -12,15 +16,19 @@ import javafx.scene.text.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
+import java.util.Optional;
 
 public class DoctorScene extends BaseScene {
-    public DoctorScene(Patient patient) {
-        super(createContent(patient));
+    public DoctorScene(Patient patient, User doctor) {
+        super(createContent(patient, doctor));
     }
 
     //TODO: Needs to save or clear test findings, needs to send or clear prescription, needs to pull patient history
+    private static final PhysicalTestFindingsDao testFindingsDao = new PhysicalTestFindingsDao();
 
-    private static Region createContent(Patient patient) {
+
+    private static Region createContent(Patient patient, User doctor) {
 
         // Common styling stuff
         String BorderLayout = """
@@ -155,6 +163,62 @@ public class DoctorScene extends BaseScene {
         physicalTestFindingsContainer.add(additionalComments,0,3);
         physicalTestFindingsContainer.add(buttonsContainerFindings,0,4);
 
+        // Confirm clearing of entries and then clear them
+        clearButtonFindings.setOnAction(e ->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "All Physical Findings will be cleared, continue?", ButtonType.YES, ButtonType.NO);
+
+            Optional<ButtonType> answer =alert.showAndWait();
+            if(Objects.equals(answer.get().getText(), "Yes")){
+                writtenComments.clear();
+                lungIssue.setSelected(false);
+                abdominalIssue.setSelected(false);
+                headIssue.setSelected(false);
+                brainIssue.setSelected(false);
+                heartIssue.setSelected(false);
+                extremitiesIssue.setSelected(false);
+            }
+        });
+
+        // Create test findings and sent to DB
+        saveButtonFindings.setOnAction(e->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Save Test Findings??", ButtonType.YES, ButtonType.NO);
+
+            Optional<ButtonType> answer =alert.showAndWait();
+            if(Objects.equals(answer.get().getText(), "Yes")){
+                String issues= "";
+                if(lungIssue.isSelected()){
+                    issues+= lungIssue.getText()+", ";
+                }
+                if(abdominalIssue.isSelected()){
+                    issues+= abdominalIssue.getText()+", ";
+                }
+                if(headIssue.isSelected()){
+                    issues+= headIssue.getText()+", ";
+                }
+                if(brainIssue.isSelected()){
+                    issues+= brainIssue.getText()+", ";
+                }
+                if(heartIssue.isSelected()){
+                    issues+= heartIssue.getText()+", ";
+                }
+                if(extremitiesIssue.isSelected()){
+                    issues+= extremitiesIssue.getText()+", ";
+                }
+
+                String comments = writtenComments.getText();
+
+                String adminBy =  doctor.getUserId();
+
+                // This will work for testing, but need to figure out how to always make the test ID unique
+                testFindingsDao.createPhysicalTestFinding(new Physical_Test_Findings(1,issues, comments,adminBy));
+
+
+
+                alert = new Alert(Alert.AlertType.INFORMATION, "Prescription Submitted");
+                alert.show();
+            }
+        });
+
         // -------------------------Components of prescription Entry --------------------------------------
         GridPane prescriptionEntryContainer = new GridPane();
         prescriptionEntryContainer.setPadding(new Insets(0,0,20,0));
@@ -184,7 +248,7 @@ public class DoctorScene extends BaseScene {
         // Prescription Dosage fields
         GridPane dosageContainer = new GridPane();
 
-        Label dosageLabel = new Label("   Dosage:");
+        Label dosageLabel = new Label("   Dosage (mg):");
         dosageLabel.setOpacity(.50);
         TextField dosageText = new TextField();
         dosageText.setPrefWidth(217.5);
@@ -221,12 +285,14 @@ public class DoctorScene extends BaseScene {
 
         // Prescription Buttons
         Button clearButtonPrescription = new Button("Clear Entry");
-        Button saveButtonPrescription = new Button("Save");
+        Button saveButtonPrescription = new Button("Submit to Pharmacy");
         HBox prescriptionButtonsContainer = new HBox(150);
 
-        clearButtonPrescription.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; -fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
+        clearButtonPrescription.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; " +
+                "-fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
         clearButtonPrescription.setPrefSize(150,40);
-        saveButtonPrescription.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; -fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
+        saveButtonPrescription.setStyle("-fx-background-radius: 10; -fx-background-color: #BFD2F8; " +
+                "-fx-padding: 10 20 10 20; -fx-border-radius: 10; -fx-border-color:#1F2B6C;");
         saveButtonPrescription.setPrefSize(150,40);
 
         prescriptionButtonsContainer.getChildren().addAll(clearButtonPrescription, saveButtonPrescription);
@@ -242,6 +308,58 @@ public class DoctorScene extends BaseScene {
 
         prescriptionEntryContainer.add(prescriptionEntryLabel,0,0);
         prescriptionEntryContainer.add(prescriptionContainer,0,1);
+
+        // Confirm clearing of entries and then clear them
+        clearButtonPrescription.setOnAction(e ->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "All Physical Findings will be cleared, continue?", ButtonType.YES, ButtonType.NO);
+
+            Optional<ButtonType> answer =alert.showAndWait();
+            if(Objects.equals(answer.get().getText(), "Yes")){
+                dosageText.clear();
+                frequencyText.clear();
+                prescriptionNameText.clear();
+                prescriptionNotesText.clear();
+            }
+        });
+
+        saveButtonPrescription.setOnAction(e->{
+            Alert alert;
+            if(!Objects.equals(prescriptionNameText.getText(), "") && !Objects.equals(dosageText.getText(), "") && !Objects.equals(frequencyText.getText(), "")){
+                Physical_Test_Findings physical_test_findings;
+                Prescriptions prescription;
+                alert = new Alert(Alert.AlertType.CONFIRMATION, "Submit Prescription to Pharmacy?", ButtonType.YES, ButtonType.NO);
+
+                Optional<ButtonType> answer =alert.showAndWait();
+                if(Objects.equals(answer.get().getText(), "Yes")){
+                    String presName = prescriptionNameText.getText();
+                    int dosage_mg = Integer.parseInt(dosageText.getText());
+                    int frequency = Integer.parseInt(frequencyText.getText());
+                    String prescriber = doctor.getFirstName() +" "+ doctor.getLastName();
+
+                    String addInstructions;
+                    if(!Objects.equals(prescriptionNotesText.getText(), "")){
+                        addInstructions = prescriptionNotesText.getText();
+                    }else{
+                        addInstructions = "N/A";
+                    }
+
+                    prescription = new Prescriptions(1,presName,dosage_mg, frequency,addInstructions, 1, prescriber);
+                    System.out.println(prescription);
+                    dosageText.clear();
+                    frequencyText.clear();
+                    prescriptionNameText.clear();
+                    prescriptionNotesText.clear();
+
+                    alert = new Alert(Alert.AlertType.INFORMATION, "Prescription Submitted");
+                    alert.show();
+                }
+
+            }else{
+                alert = new Alert(Alert.AlertType.INFORMATION, "Missing Prescription Field, Please Complete Form.");
+                alert.show();
+            }
+        });
+
 
         // -------------------------------------Components of PatientHistory ---------------------------------
         GridPane patientHistoryContainer = new GridPane();
