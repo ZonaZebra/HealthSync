@@ -37,14 +37,13 @@ public class PhysicalTestFindingsDao {
     
     public Physical_Test_Findings getPhysicalTestFindings(String patientID){
 
-
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
                 return null;
             }
 
-            String sql = "SELECT * FROM physical_test_findings WHERE physical_test_id = ?";
+            String sql = "SELECT * FROM physical_test_findings WHERE patient_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, patientID);
 
