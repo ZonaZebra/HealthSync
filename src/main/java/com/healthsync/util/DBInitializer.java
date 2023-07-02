@@ -71,8 +71,7 @@ public class DBInitializer {
                     "policy_id SERIAL PRIMARY KEY CHECK (policy_id >= 10000), " +
                     "insurance_company VARCHAR NOT NULL, " +
                     "insurance_policy_number VARCHAR, " +
-                    "insurance_group_number VARCHAR, " +
-                    "patient_id VARCHAR REFERENCES users(user_id)" +
+                    "insurance_group_number VARCHAR" +
                     ")";
             stmt.execute(createInsuranceInfoTable);
 
@@ -105,7 +104,6 @@ public class DBInitializer {
                     "name VARCHAR NOT NULL, " +
                     "date DATE NOT NULL, " +
                     "sex CHAR(1), " +
-                    "patient_id VARCHAR REFERENCES users(user_id), " +
                     "administered_by VARCHAR REFERENCES users(user_id)" +
                     ")";
             stmt.execute(createQuestionnaireResultsTable);
@@ -118,28 +116,36 @@ public class DBInitializer {
                     "systolic_bp INT NOT NULL, " +
                     "diastolic_bp INT NOT NULL, " +
                     "resting_pulse FLOAT NOT NULL, " +
-                    "temperature FLOAT NOT NULL, " +
-                    "patient_id VARCHAR REFERENCES users(user_id)" +
+                    "temperature FLOAT NOT NULL" +
                     ")";
             stmt.execute(createVitalsResultsTable);
 
-            // Adding min values to PK sequences - 001
-
-            stmt.execute("ALTER SEQUENCE messages_message_id_seq RESTART WITH 10000");
-            stmt.execute("ALTER SEQUENCE appointments_appointment_id_seq RESTART WITH 10000");
-            stmt.execute("ALTER SEQUENCE insurance_info_policy_id_seq RESTART WITH 10000");
-            stmt.execute("ALTER SEQUENCE physical_test_findings_physical_test_id_seq RESTART WITH 10000");
-            stmt.execute("ALTER SEQUENCE prescriptions_prescription_id_seq RESTART WITH 10000");
-            stmt.execute("ALTER SEQUENCE questionnaire_results_questionnaire_id_seq RESTART WITH 10000");
-            stmt.execute("ALTER SEQUENCE vitals_results_vitals_results_id_seq RESTART WITH 10000");
+            // Moved 001 -> 005
 
             // Added user_id column to the Vitals_Results table - 002
             String addUserColumnToVitalsResultsTable = "ALTER TABLE vitals_results " + "ADD COLUMN IF NOT EXISTS user_id VARCHAR REFERENCES users(user_id)";
             stmt.execute(addUserColumnToVitalsResultsTable);
 
-          // Drop insurance_info table - 003
+            // Drop insurance_info table - 003
             String dropInsuranceInfoTable = "DROP TABLE IF EXISTS insurance_info";
             stmt.execute(dropInsuranceInfoTable);
+
+            // Truncate serialized tables - 004
+            stmt.execute("TRUNCATE TABLE messages RESTART IDENTITY CASCADE");
+            stmt.execute("TRUNCATE TABLE appointments RESTART IDENTITY CASCADE");
+            stmt.execute("TRUNCATE TABLE physical_test_findings RESTART IDENTITY CASCADE");
+            stmt.execute("TRUNCATE TABLE prescriptions RESTART IDENTITY CASCADE");
+            stmt.execute("TRUNCATE TABLE questionnaire_results RESTART IDENTITY CASCADE");
+            stmt.execute("TRUNCATE TABLE vitals_results RESTART IDENTITY CASCADE");
+
+            // Adding min values to PK sequences - 005
+
+            stmt.execute("ALTER SEQUENCE messages_message_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE appointments_appointment_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE physical_test_findings_physical_test_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE prescriptions_prescription_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE questionnaire_results_questionnaire_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE vitals_results_vitals_results_id_seq RESTART WITH 10000");
 
             // Add new db updates here with a comment...
 
