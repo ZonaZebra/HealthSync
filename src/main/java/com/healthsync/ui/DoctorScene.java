@@ -7,6 +7,7 @@ import com.healthsync.entities.Prescriptions;
 import com.healthsync.entities.User;
 import com.healthsync.service.DoctorService;
 import com.healthsync.service.PatientHistoryService;
+import com.healthsync.service.RegistrationService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -349,11 +350,11 @@ public class DoctorScene extends BaseScene {
                         addInstructions = "N/A"; // Hardcoded for now
                     }
                     String patientID = patient.getUserId();
-                    int pharmacyID = -1; // Hardcoded for now
+                    RegistrationService registrationService = new RegistrationService(); // this is a hack
+                    int pharmacyID = registrationService.getPharmacyId(patient.getPharmacyInformation().split(",")[0].trim());
 
                     DoctorService doctorService = new DoctorService();
                     Prescriptions prescription = doctorService.createPrescription(prescriptionName, dosage_mg, frequency, addInstructions, pharmacyID, patientID, doctorId);
-                    System.out.println(prescription);
                     dosageText.clear();
                     frequencyText.clear();
                     prescriptionNameText.clear();

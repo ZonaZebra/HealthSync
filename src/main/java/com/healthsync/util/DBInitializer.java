@@ -137,6 +137,10 @@ public class DBInitializer {
             String addUserColumnToVitalsResultsTable = "ALTER TABLE vitals_results " + "ADD COLUMN IF NOT EXISTS user_id VARCHAR REFERENCES users(user_id)";
             stmt.execute(addUserColumnToVitalsResultsTable);
 
+          // Drop insurance_info table - 003
+            String dropInsuranceInfoTable = "DROP TABLE IF EXISTS insurance_info";
+            stmt.execute(dropInsuranceInfoTable);
+
             // Add new db updates here with a comment...
 
         } catch (Exception e) {

@@ -26,6 +26,7 @@ public class DoctorService {
         int prescription_id = prescriptionsDao.createPrescription(prescription);
         if (prescription_id != -1) {
             prescription.setPrescription_id(prescription_id);
+            System.out.println(prescription);
             return prescription;
         } else {
             return null;
@@ -44,6 +45,7 @@ public class DoctorService {
         int physical_test_id = testFindingsDao.createPhysicalTestFinding(testFindings);
         if (physical_test_id != -1) {
             testFindings.setPhysical_test_id(physical_test_id);
+            System.out.println(testFindings);
             return testFindings;
         } else {
             return null;
