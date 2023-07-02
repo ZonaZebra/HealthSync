@@ -4,7 +4,9 @@ import com.healthsync.entities.Physical_Test_Findings;
 import com.healthsync.util.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PhysicalTestFindingsDao {
 
@@ -42,13 +44,13 @@ public class PhysicalTestFindingsDao {
         return -1;
     }
 
-
-    public Physical_Test_Findings getPhysicalTestFindings(String patientID) {
+    public List<Physical_Test_Findings> getPhysicalTestFindings(String patientID) {
+        List<Physical_Test_Findings> findings = new ArrayList<>();
 
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
-                return null;
+                return findings;
             }
 
             String sql = "SELECT * FROM physical_test_findings WHERE patient_id = ?";
@@ -56,25 +58,20 @@ public class PhysicalTestFindingsDao {
             stmt.setString(1, patientID);
 
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                Date birthday = new Date(rs.getDate("birthday").getTime());
-                String contactInformation = rs.getString("phone_number") + "," + rs.getString("email");
-                String insuranceInformation = rs.getString("insurance_provider") + "," + rs.getString("insurance_policy_number");
-                String pharmacyInformation = rs.getString("pharmacy_name") + "," + rs.getString("pharmacy_location");
-
+            while (rs.next()) {
                 int testID = rs.getInt("physical_test_id");
                 String issues = rs.getString("issues");
                 String notes = rs.getString("notes");
                 String patientId = rs.getString("patient_id");
                 String adminBy = rs.getString("administered_by");
 
-
-                return new Physical_Test_Findings(testID, issues, notes, patientId, adminBy);
+                findings.add(new Physical_Test_Findings(testID, issues, notes, patientId, adminBy));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return findings;
     }
+
 
 }
