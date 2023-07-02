@@ -137,6 +137,10 @@ public class DBInitializer {
             stmt.execute("TRUNCATE TABLE prescriptions RESTART IDENTITY CASCADE");
             stmt.execute("TRUNCATE TABLE questionnaire_results RESTART IDENTITY CASCADE");
             stmt.execute("TRUNCATE TABLE vitals_results RESTART IDENTITY CASCADE");
+            stmt.execute("TRUNCATE TABLE users RESTART IDENTITY CASCADE");
+            stmt.execute("TRUNCATE TABLE staff RESTART IDENTITY CASCADE");
+            stmt.execute("TRUNCATE TABLE patients RESTART IDENTITY CASCADE");
+
 
             // Adding min values to PK sequences - 005
 
@@ -147,7 +151,33 @@ public class DBInitializer {
             stmt.execute("ALTER SEQUENCE questionnaire_results_questionnaire_id_seq RESTART WITH 10000");
             stmt.execute("ALTER SEQUENCE vitals_results_vitals_results_id_seq RESTART WITH 10000");
 
+            // Adding test data - 006
+            // Insert a doctor
+            String insertDoctor = "INSERT INTO users (user_id, first_name, last_name, password, role) VALUES " +
+                    "('TestDoctor11111', 'Benedict', 'Cumberbatch', '$2a$10$yk/Djmus7yREI6vO1VUtRO5YzqmzbdLpAQqrwJB4cFrwUB3n382lm', 'Doctor')";
+            stmt.execute(insertDoctor);
+            String insertDoctorDetails = "INSERT INTO staff (user_id, email) VALUES " +
+                    "('TestDoctor11111', 'doctor@email.com')";
+            stmt.execute(insertDoctorDetails);
+            // Insert a patient into the 'users' table
+            String insertPatient = "INSERT INTO users (user_id, first_name, last_name, password, role) VALUES " +
+                    "('TestPatient11111', 'Robert', 'Downie', '$2a$10$yk/Djmus7yREI6vO1VUtRO5YzqmzbdLpAQqrwJB4cFrwUB3n382lm', 'Patient')";
+            stmt.execute(insertPatient);
+            // Insert the same patient into the 'patients' table
+            String insertPatientDetails = "INSERT INTO patients (user_id, birthday, phone_number, email, insurance_provider, insurance_policy_number, pharmacy_name, pharmacy_location) VALUES " +
+                    "('TestPatient11111', '1970-01-01', '5555555555', 'robert.downie@example.com', 'Test Insurance', '123456', 'Walgreens', 'Camelback Rd & N 32nd St')";
+            stmt.execute(insertPatientDetails);
+            // Insert a nurse
+            String insertNurse = "INSERT INTO users (user_id, first_name, last_name, password, role) VALUES " +
+                    "('TestNurse11111', 'Chris', 'Evans', '$2a$10$yk/Djmus7yREI6vO1VUtRO5YzqmzbdLpAQqrwJB4cFrwUB3n382lm', 'Nurse')";
+            stmt.execute(insertNurse);
+            // Insert an admin
+            String insertAdmin = "INSERT INTO users (user_id, first_name, last_name, password, role) VALUES " +
+                    "('TestAdmin11111', 'Chris', 'Hemsworth', '$2a$10$yk/Djmus7yREI6vO1VUtRO5YzqmzbdLpAQqrwJB4cFrwUB3n382lm', 'Admin')";
+            stmt.execute(insertAdmin);
+
             // Add new db updates here with a comment...
+
 
         } catch (Exception e) {
             e.printStackTrace();
