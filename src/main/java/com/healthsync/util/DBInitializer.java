@@ -97,7 +97,6 @@ public class DBInitializer {
                     "prescribed_by VARCHAR REFERENCES staff(user_id)" +
                     ")";
             stmt.execute(createPrescriptionsTable);
-            stmt.execute("ALTER SEQUENCE prescriptions_prescription_id_seq RESTART WITH 10000");
 
             // Questionnaire_Results table
             String createQuestionnaireResultsTable = "CREATE TABLE IF NOT EXISTS questionnaire_results (" +
@@ -120,6 +119,18 @@ public class DBInitializer {
                     "temperature FLOAT NOT NULL" +
                     ")";
             stmt.execute(createVitalsResultsTable);
+
+            // Adding min values to PK sequences - 001
+
+            stmt.execute("ALTER SEQUENCE messages_message_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE appointments_appointment_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE insurance_info_policy_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE physical_test_findings_physical_test_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE prescriptions_prescription_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE questionnaire_results_questionnaire_id_seq RESTART WITH 10000");
+            stmt.execute("ALTER SEQUENCE vitals_results_vitals_results_id_seq RESTART WITH 10000");
+
+            // Add new db updates here with a comment...
 
         } catch (Exception e) {
             e.printStackTrace();
