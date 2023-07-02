@@ -17,13 +17,12 @@ public class PhysicalTestFindingsDao {
                 return -1;
             }
 
-            String sql = "INSERT INTO physical_test_findings (physical_test_id, issues, notes, patient_id, administered_by) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO physical_test_findings (issues, notes, patient_id, administered_by) VALUES (?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, finding.getPhysical_test_id());
-            stmt.setString(2, finding.getIssues());
-            stmt.setString(3, finding.getNotes());
-            stmt.setString(4, finding.getPatientID());
-            stmt.setString(5, finding.getAdministered_by());
+            stmt.setString(1, finding.getIssues());
+            stmt.setString(2, finding.getNotes());
+            stmt.setString(3, finding.getPatientID());
+            stmt.setString(4, finding.getAdministered_by());
 
             int affectedRows = stmt.executeUpdate();
 
