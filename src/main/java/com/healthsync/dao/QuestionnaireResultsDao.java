@@ -4,7 +4,9 @@ import com.healthsync.entities.Questionnaire_Results;
 import com.healthsync.util.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class QuestionnaireResultsDao {
 
@@ -43,31 +45,44 @@ public class QuestionnaireResultsDao {
     }
 
 
-    public Questionnaire_Results getQuestionnaireResultById(int questionnaireId) {
+    public List<Questionnaire_Results> getQuestionnaireResultsByPatientId(int patientId) {
+        List<Questionnaire_Results> results = new ArrayList<>();
+
         try (Connection conn = DBConnection.getConnection()) {
-            String sql = "SELECT * FROM questionnaire_results WHERE questionnaire_id = ?";
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return null;
+            }
+
+            String sql = "SELECT * FROM questionnaire_results WHERE patient_id = ? ORDER BY date ASC";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, questionnaireId);
+            stmt.setInt(1, patientId);
 
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 Date date = new Date(rs.getDate("date").getTime());
-                return new Questionnaire_Results(
+                results.add(new Questionnaire_Results(
                         rs.getInt("questionnaire_id"),
                         rs.getString("name"),
                         date,
                         rs.getString("sex").charAt(0),
                         rs.getString("administered_by")
-                );
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return results;
     }
+
 
     public boolean updateQuestionnaireResult(Questionnaire_Results result) {
         try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return false;
+            }
+
             String sql = "UPDATE questionnaire_results SET name = ?, date = ?, sex = ?, administered_by = ? WHERE questionnaire_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, result.getName());
@@ -86,6 +101,11 @@ public class QuestionnaireResultsDao {
 
     public boolean deleteQuestionnaireResult(int questionnaireId) {
         try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return false;
+            }
+            
             String sql = "DELETE FROM questionnaire_results WHERE questionnaire_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, questionnaireId);

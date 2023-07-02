@@ -42,33 +42,62 @@ public class MessagesDao {
         return -1;
     }
 
-
-    public Messages getMessageById(String messageId) {
+    public List<Messages> getMessagesBySenderId(String senderId) {
+        List<Messages> messages = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
-                return null;
+                return messages;
             }
-            String sql = "SELECT * FROM messages WHERE message_id = ?";
+            String sql = "SELECT * FROM messages WHERE sender_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, messageId);
+            stmt.setString(1, senderId);
 
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Messages(
+            while (rs.next()) {
+                messages.add(new Messages(
                         rs.getInt("message_id"),
                         rs.getString("sender_id"),
                         rs.getString("receiver_id"),
                         rs.getDate("date_sent"),
                         rs.getString("subject"),
                         rs.getString("message")
-                );
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return messages;
     }
+
+    public List<Messages> getMessagesByReceiverId(String receiverId) {
+        List<Messages> messages = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return messages;
+            }
+            String sql = "SELECT * FROM messages WHERE receiver_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, receiverId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                messages.add(new Messages(
+                        rs.getInt("message_id"),
+                        rs.getString("sender_id"),
+                        rs.getString("receiver_id"),
+                        rs.getDate("date_sent"),
+                        rs.getString("subject"),
+                        rs.getString("message")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
 
     public List<Messages> getAllMessages() {
         List<Messages> messages = new ArrayList<>();

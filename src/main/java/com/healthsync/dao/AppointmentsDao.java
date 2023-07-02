@@ -45,19 +45,20 @@ public class AppointmentsDao {
     }
 
 
-    public Appointments getAppointmentById(int id) {
+    public List<Appointments> getAppointmentsByPatientId(String patientId) {
+        List<Appointments> appointments = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
-                return null;
+                return appointments;
             }
-            String sql = "SELECT * FROM appointments WHERE appointment_id = ?";
+            String sql = "SELECT * FROM appointments WHERE patient_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, id);
+            stmt.setString(1, patientId);
 
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Appointments(
+            while (rs.next()) {
+                appointments.add(new Appointments(
                         rs.getInt("appointment_id"),
                         rs.getString("patient_id"),
                         rs.getString("doctor_id"),
@@ -65,13 +66,14 @@ public class AppointmentsDao {
                         rs.getInt("questionnaire_id"),
                         rs.getInt("vitals_results_id"),
                         rs.getInt("physical_test_id")
-                );
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return appointments;
     }
+
 
     public boolean updateAppointment(Appointments appointment) {
         try (Connection conn = DBConnection.getConnection()) {
