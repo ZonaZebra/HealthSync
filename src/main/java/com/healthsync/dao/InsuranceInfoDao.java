@@ -3,33 +3,42 @@ package com.healthsync.dao;
 import com.healthsync.entities.Insurance_Info;
 import com.healthsync.util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class InsuranceInfoDao {
 
-    public boolean createInsuranceInfo(Insurance_Info insurance_info) {
+    public int createInsuranceInfo(Insurance_Info insurance_info) {
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
-                return false;
+                return -1;
             }
 
-            String sql = "INSERT INTO insurance_info (policy_id, insurance_company, insurance_policy_number, insurance_group_number) VALUES (?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, insurance_info.getPolicy_id());
-            stmt.setString(2, insurance_info.getInsurance_company());
-            stmt.setString(3, insurance_info.getInsurance_policy_number());
-            stmt.setString(4, insurance_info.getInsurance_group_number());
+            String sql = "INSERT INTO insurance_info (insurance_company, insurance_policy_number, insurance_group_number) VALUES (?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, insurance_info.getInsurance_company());
+            stmt.setString(2, insurance_info.getInsurance_policy_number());
+            stmt.setString(3, insurance_info.getInsurance_group_number());
 
-            return stmt.executeUpdate() > 0;
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating insurance information failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating insurance information failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
+
 
     public Insurance_Info getInsuranceInfoById(int policy_id) {
         try (Connection conn = DBConnection.getConnection()) {

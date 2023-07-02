@@ -3,31 +3,45 @@ package com.healthsync.dao;
 import com.healthsync.entities.Questionnaire_Results;
 import com.healthsync.util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Date;
 
 public class QuestionnaireResultsDao {
 
-    public boolean createQuestionnaireResult(Questionnaire_Results result) {
+    public int createQuestionnaireResult(Questionnaire_Results result) {
         try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return -1;
+            }
+
             String sql = "INSERT INTO questionnaire_results (questionnaire_id, name, date, sex, administered_by) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, result.getQuestionnaire_id());
             stmt.setString(2, result.getName());
             stmt.setDate(3, new java.sql.Date(result.getDate().getTime()));
             stmt.setString(4, String.valueOf(result.getSex()));
             stmt.setString(5, result.getAdministered_by());
 
-            return stmt.executeUpdate() > 0;
+            int affectedRows = stmt.executeUpdate();
 
+            if (affectedRows == 0) {
+                throw new SQLException("Creating questionnaire result failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating questionnaire result failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
+
 
     public Questionnaire_Results getQuestionnaireResultById(int questionnaireId) {
         try (Connection conn = DBConnection.getConnection()) {
