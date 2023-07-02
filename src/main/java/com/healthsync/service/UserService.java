@@ -17,6 +17,7 @@ public class UserService {
 
         boolean isCreated = userDao.createUser(user);
         if (isCreated) {
+            System.out.println(user);
             return user;
         } else {
             return null;
