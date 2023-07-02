@@ -5,7 +5,6 @@ import com.healthsync.util.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PhysicalTestFindingsDao {
@@ -43,6 +42,7 @@ public class PhysicalTestFindingsDao {
         return -1;
     }
 
+    // Grabs all physical test findings associated with patient
     public List<Physical_Test_Findings> getPhysicalTestFindings(String patientID) {
         List<Physical_Test_Findings> findings = new ArrayList<>();
 

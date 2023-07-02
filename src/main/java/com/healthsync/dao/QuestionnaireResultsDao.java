@@ -44,8 +44,8 @@ public class QuestionnaireResultsDao {
         return -1;
     }
 
-
-    public List<Questionnaire_Results> getQuestionnaireResultsByPatientId(int patientId) {
+    // Grabs all questionaires associated with patient ID
+    public List<Questionnaire_Results> getQuestionnaireResultsByPatientId(String patientId) {
         List<Questionnaire_Results> results = new ArrayList<>();
 
         try (Connection conn = DBConnection.getConnection()) {
@@ -56,7 +56,7 @@ public class QuestionnaireResultsDao {
 
             String sql = "SELECT * FROM questionnaire_results WHERE patient_id = ? ORDER BY date ASC";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, patientId);
+            stmt.setString(1, patientId);
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {

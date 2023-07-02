@@ -119,7 +119,8 @@ public class VitalsResultsDao {
         return false;
     }
 
-    public List<Vitals_Results> getAllVitalsResults() {
+    // Should return all vitals for a given patient ID
+    public List<Vitals_Results> getAllVitalsResults(String patientID) {
         List<Vitals_Results> vitalsResultsList = new ArrayList<>();
 
         try (Connection conn = DBConnection.getConnection()) {
@@ -128,8 +129,9 @@ public class VitalsResultsDao {
                 return vitalsResultsList; // Return empty list
             }
 
-            String sql = "SELECT * FROM vitals_results";
+            String sql = "SELECT * FROM vitals_results WHERE patient_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, patientID);
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {

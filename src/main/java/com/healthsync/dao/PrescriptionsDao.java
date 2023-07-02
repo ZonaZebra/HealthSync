@@ -4,6 +4,8 @@ import com.healthsync.entities.Prescriptions;
 import com.healthsync.util.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PrescriptionsDao {
@@ -97,6 +99,40 @@ public class PrescriptionsDao {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // This should grab all prescriptions associated with a specified patient
+    public List<Prescriptions> getPrescriptions(String patientID) {
+        List<Prescriptions> findings = new ArrayList<>();
+
+        try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return findings;
+            }
+
+            String sql = "SELECT * FROM prescriptions WHERE patient_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, patientID);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int testID = rs.getInt("prescription_id");
+                String product = rs.getString("product");
+                int dosage = rs.getInt("dosage_in_mg");
+                int frequency = rs.getInt("frequency");
+                String instruction = rs.getString("instructions");
+                int pharmacyID = rs.getInt("pharmacy_id");
+                String patient_ID = rs.getString("patient_id");
+                String prescriber = rs.getString("prescribed_by");
+
+                findings.add(new Prescriptions(testID, product, dosage, frequency,
+                        instruction, pharmacyID, patient_ID, prescriber));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return findings;
     }
 
 }

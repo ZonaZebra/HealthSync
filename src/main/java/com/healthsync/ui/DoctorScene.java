@@ -6,6 +6,7 @@ import com.healthsync.entities.Physical_Test_Findings;
 import com.healthsync.entities.Prescriptions;
 import com.healthsync.entities.User;
 import com.healthsync.service.DoctorService;
+import com.healthsync.service.PatientHistoryService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -185,7 +186,7 @@ public class DoctorScene extends BaseScene {
             // Disable the button immediately after it is clicked
             saveButtonFindings.setDisable(true);
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Save Test Findings??", ButtonType.YES, ButtonType.NO);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Save Test Findings?", ButtonType.YES, ButtonType.NO);
 
             Optional<ButtonType> answer = alert.showAndWait();
             if (Objects.equals(answer.get().getText(), "Yes")) {
@@ -210,7 +211,6 @@ public class DoctorScene extends BaseScene {
                 }
 
                 String comments = writtenComments.getText();
-
                 String adminBy = doctor.getUserId();
                 String patientID = patient.getUserId();
 
@@ -384,9 +384,11 @@ public class DoctorScene extends BaseScene {
         historyContent.setStyle("-fx-background-color: #FFFFFF;");
 
         // Add History here
-        for (int i = 0; i < 10; i++) {
-            historyContent.getChildren().addAll(new Text("- History item #" + (i + 1)));
-        }
+//        for (int i = 0; i < 10; i++) {
+//            historyContent.getChildren().addAll(new Text("- History item #" + (i + 1)));
+//        }
+        PatientHistoryService patientHistoryService = new PatientHistoryService();
+        historyContent.getChildren().add(patientHistoryService.getPatientHistory(patient.getUserId()));
 
         VBox scrollBarContainer = new VBox();
         scrollBarContainer.setPadding(new Insets(15, 15, 15, 25));
