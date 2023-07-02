@@ -18,12 +18,13 @@ public class PhysicalTestFindingsDao {
                 return false;
             }
 
-            String sql = "INSERT INTO physical_test_findings (physical_test_id, issues, notes, administered_by) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO physical_test_findings (physical_test_id, issues, notes, patient_id, administered_by) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, finding.getPhysical_test_id());
             stmt.setString(2, finding.getIssues());
             stmt.setString(3, finding.getNotes());
-            stmt.setString(4, finding.getAdministered_by());
+            stmt.setString(4, finding.getPatientID());
+            stmt.setString(5, finding.getAdministered_by());
 
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
@@ -57,10 +58,11 @@ public class PhysicalTestFindingsDao {
                 int testID = rs.getInt("physical_test_id");
                 String issues= rs.getString("issues");
                 String notes= rs.getString("notes");
+                String patientId= rs.getString("patient_id");
                 String adminBy= rs.getString("administered_by");
 
 
-                return new Physical_Test_Findings(testID,issues,notes,adminBy);
+                return new Physical_Test_Findings(testID,issues,notes,patientId,adminBy);
             }
         } catch (SQLException e) {
             e.printStackTrace();
