@@ -6,13 +6,13 @@ public class Prescriptions {
     private int dosage_in_mg;
     private int frequency;
     private String instructions;
-    private String pharmacy_id; // references pharmacy_info(pharmacy_id)
+    private int pharmacy_id; // references pharmacy_info(pharmacy_id)
     private String patient_id; // references userID from User table
     private String prescribed_by; // references staff(userid)
 
     // Constructors
 
-    public Prescriptions(int prescription_id, String product, int dosage_in_mg, int frequency, String instructions, String pharmacy_id, String patient_id, String prescribed_by) {
+    public Prescriptions(int prescription_id, String product, int dosage_in_mg, int frequency, String instructions, int pharmacy_id, String patient_id, String prescribed_by) {
         this.prescription_id = prescription_id;
         this.product = product;
         this.dosage_in_mg = dosage_in_mg;
@@ -25,6 +25,10 @@ public class Prescriptions {
 
     public int getPrescription_id() {
         return prescription_id;
+    }
+
+    public void setPrescription_id(int prescription_id) {
+        this.prescription_id = prescription_id;
     }
 
     public String getProduct() {
@@ -59,11 +63,11 @@ public class Prescriptions {
         this.instructions = instructions;
     }
 
-    public String getPharmacy_id() {
+    public int getPharmacy_id() {
         return pharmacy_id;
     }
 
-    public void setPharmacy_id(String pharmacy_id) {
+    public void setPharmacy_id(int pharmacy_id) {
         this.pharmacy_id = pharmacy_id;
     }
 
