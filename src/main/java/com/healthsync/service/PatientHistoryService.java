@@ -34,26 +34,35 @@ public class PatientHistoryService {
 //        test.getChildren().add(new Text(prescriptionsList.get(0).toString()));
 //        test.getChildren().add(new Text("- vitals"));
 
-        // Add Test history First
+        // Add Test findings First
         if(testFindingsList.size()!= 0){test.getChildren().add(new Text("Physical Test Findings:"));}
         for (Physical_Test_Findings physical_test_findings : testFindingsList) {
 
             test.getChildren().add(new Text("   -"+ physical_test_findings.getPhysical_test_id()));
         }
-        test.getChildren().add(new Text()); // Add some space between sections
+        if(testFindingsList.size()!= 0){test.getChildren().add(new Text()); } // Add some space between sections
 
         // Then add questionnaire results
-        if(questionnaireResultsList.size()!= 0){test.getChildren().add(new Text("Questionnaire Results:"));}
-        for (Physical_Test_Findings physical_test_findings : testFindingsList) {
-
-            test.getChildren().add(new Text("   -"+ physical_test_findings.toString()));
+        if(questionnaireResultsList.size()!= 0){test.getChildren().add(new Text("Prescriptions:"));}
+        for (Questionnaire_Results questionnaire_results : questionnaireResultsList) {
+            test.getChildren().add(new Text("   -" + questionnaire_results.getQuestionnaire_id()));
         }
+        if(questionnaireResultsList.size()!= 0){test.getChildren().add(new Text()); } // Add some space between sections
 
         // Then add Vitals results
+        if(vitalsResultsList.size()!= 0){test.getChildren().add(new Text("Questionnaire Results:"));}
+        for (Vitals_Results vitalsResults : vitalsResultsList) {
+            test.getChildren().add(new Text("   -" + vitalsResults.getVitals_results_id()));
+        }
+        if(vitalsResultsList.size()!= 0){test.getChildren().add(new Text()); }// Add some space between sections
 
         // Then add Prescriptions
-
-
+        if(prescriptionsList.size()!= 0){test.getChildren().add(new Text("Questionnaire Results:"));}
+        for (Prescriptions prescription : prescriptionsList) {
+            test.getChildren().add(new Text("   -" + prescription.getPrescription_id()));
+        }
+        if(prescriptionsList.size()!= 0){test.getChildren().add(new Text()); }// Add some space between sections
+        
         return test;
     }
 
