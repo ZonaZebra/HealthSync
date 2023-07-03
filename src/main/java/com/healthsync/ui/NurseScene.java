@@ -20,69 +20,183 @@ public class NurseScene extends BaseScene {
         content.setSpacing(30);
         content.setPadding(new Insets(20, 40, 20, 40));
 
-        Label title = new Label("Nurse Portal");
-        title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        // Common styling stuff
+        String BorderLayout = """
+                -fx-border-color: black;
+                -fx-border-width: 1;
+                -fx-border-radius: 10;
+                -fx-border-style: solid;
+                -fx-background-color: #FFFFFF;
+                -fx-background-radius: 10;
+                """;
 
         String labelLayout = """
                 -fx-background-color: #7198E7;
-                -fx-background-radius: 30 30 0 0;
+                -fx-background-radius: 10 10 0 0;
                 -fx-border-color: #1F2B6C;
-                -fx-border-width: 1;
-                -fx-border-radius: 30 30 0 0;
+                -fx-border-width: 0 0 1 0;
+                -fx-border-radius: 10 10 0 0;
                 -fx-border-style: solid;
                 -fx-font-size: 20px;
                 -fx-font-weight: bold;
                 """;
 
-        Label vitalsEntryLabel = new Label("Vitals Entry");
-        vitalsEntryLabel.setAlignment(Pos.CENTER);
-        vitalsEntryLabel.setPrefWidth(600);
-        vitalsEntryLabel.setStyle(labelLayout);
+        Label title = new Label("Nurse Portal");
+        title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+
+
 
         Label questionnaireLabel = new Label("Questionnaire");
         questionnaireLabel.setAlignment(Pos.CENTER);
         questionnaireLabel.setPrefWidth(800);
         questionnaireLabel.setStyle(labelLayout);
 
-        String BorderLayout = """
-                -fx-border-color: black;
-                -fx-border-width: 1;
-                -fx-border-radius: 30;
-                -fx-border-style: solid;
-                -fx-background-color: #FFFFFF;
-                -fx-background-radius: 30;
-                """;
+        // --------------------- vitals entry --------------------------------------
 
-        GridPane vitalsEntry = new GridPane();
-        vitalsEntry.setVgap(15);
-        vitalsEntry.setHgap(15);
-        vitalsEntry.setPadding(new Insets(0,0,0,0));
-        vitalsEntry.setPrefSize(600,200);
-        vitalsEntry.setStyle(BorderLayout);
+        GridPane vitalsEntryContainer = new GridPane();
+        vitalsEntryContainer.setVgap(15);
+        vitalsEntryContainer.setPrefSize(500, 400);
+        vitalsEntryContainer.setPadding(new Insets(0, 0, 20, 0));
+        vitalsEntryContainer.setStyle(BorderLayout);
 
-        TextField height = new TextField();
-        height.setPromptText("Height");
-        TextField bodyTemperature = new TextField();
-        bodyTemperature.setPromptText("Body Temperature");
-        TextField pulseRate = new TextField();
-        pulseRate.setPromptText("Pulse Rate");
+        Label vitalsEntryLabel = new Label("Vitals Entry");
+        vitalsEntryLabel.setAlignment(Pos.CENTER);
+        vitalsEntryLabel.setPrefWidth(900);
+        vitalsEntryLabel.setStyle(labelLayout);
 
-        TextField weight = new TextField();
-        weight.setPromptText("Weight");
-        TextField bloodPressure = new TextField();
-        bloodPressure.setPromptText("Blood Pressure");
-        TextField bloodOxygen = new TextField();
-        bloodOxygen.setPromptText("Blood Oxygen");
+        VBox heightContainer = new VBox();
+        heightContainer.setPadding(new Insets(15, 10, 0, 10));
 
-        vitalsEntry.add(height, 0, 1);
-        vitalsEntry.add(bodyTemperature, 0, 2);
-        vitalsEntry.add(pulseRate, 0, 3);
+        Label heightLabel = new Label("   Height:");
+        heightLabel.setOpacity(.50);
+        TextField heightText = new TextField();
+        heightText.setPrefWidth(450);
+        heightText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
 
-        vitalsEntry.add(weight, 1, 1);
-        vitalsEntry.add(bloodPressure, 1, 2);
-        vitalsEntry.add(bloodOxygen, 1, 3);
+        heightContainer.getChildren().addAll(heightLabel, heightText);
 
-        vitalsEntry.add(vitalsEntryLabel, 0, 0, 2, 1);
+        VBox weigtheContainer = new VBox();
+        weigtheContainer.setPadding(new Insets(15, 10, 0, 10));
+
+        Label weightLabel = new Label("   Weight:");
+        weightLabel.setOpacity(.50);
+        TextField weightText = new TextField();
+        weightText.setPrefWidth(450);
+        weightText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+
+        weigtheContainer.getChildren().addAll(weightLabel, weightText);
+
+        VBox bodyTempContainer = new VBox();
+        bodyTempContainer.setPadding(new Insets(15, 10, 0, 10));
+
+        Label bodyTempLabel = new Label("   Body Temperature:");
+        bodyTempLabel.setOpacity(.50);
+        TextField bodyTempText = new TextField();
+        bodyTempText.setPrefWidth(450);
+        bodyTempText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+
+        bodyTempContainer.getChildren().addAll(bodyTempLabel, bodyTempText);
+
+        VBox bloodPressureContainer = new VBox();
+        bloodPressureContainer.setPadding(new Insets(15, 10, 0, 10));
+
+        Label bloodPressureLabel = new Label("   Blood Pressure:");
+        bloodPressureLabel.setOpacity(.50);
+        TextField bloodPressureText = new TextField();
+        bloodPressureText.setPrefWidth(450);
+        bloodPressureText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+
+        bloodPressureContainer.getChildren().addAll(bloodPressureLabel, bloodPressureText);
+
+        VBox pulseRateContainer = new VBox();
+        pulseRateContainer.setPadding(new Insets(15, 10, 0, 10));
+
+        Label pulseRateLabel = new Label("   Pulse Rate:");
+        pulseRateLabel.setOpacity(.50);
+        TextField pulseRateText = new TextField();
+        pulseRateText.setPrefWidth(450);
+        pulseRateText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+
+        pulseRateContainer.getChildren().addAll(pulseRateLabel, pulseRateText);
+
+        VBox bloodOxygenContainer = new VBox();
+        bloodOxygenContainer.setPadding(new Insets(15, 10, 0, 10));
+
+        Label bloodOxygenLabel = new Label("   Prescription Name:");
+        bloodOxygenLabel.setOpacity(.50);
+        TextField bloodOxygenText = new TextField();
+        bloodOxygenText.setPrefWidth(450);
+        bloodOxygenText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+
+        bloodOxygenContainer.getChildren().addAll(bloodOxygenLabel, bloodOxygenText);
+
+        GridPane vitalsContainer = new GridPane();
+        vitalsContainer.add(heightContainer, 0, 0);
+        vitalsContainer.add(weigtheContainer, 1, 0);
+
+        vitalsContainer.add(bodyTempContainer, 0, 1);
+        vitalsContainer.add(bloodPressureContainer, 1, 1);
+
+        vitalsContainer.add(pulseRateContainer, 0, 2);
+        vitalsContainer.add(bloodOxygenContainer, 1, 2);
+
+        vitalsContainer.setAlignment(Pos.CENTER);
+        vitalsContainer.setVgap(10);
+
+
+        vitalsEntryContainer.add(vitalsEntryLabel, 0, 0);
+        vitalsEntryContainer.add(vitalsContainer, 0, 1);
+
+
+
+
+//        GridPane vitalsEntry = new GridPane();
+//        vitalsEntry.setVgap(15);
+//        vitalsEntry.setHgap(15);
+//        vitalsEntry.setPadding(new Insets(0,0,0,0));
+//        vitalsEntry.setStyle(BorderLayout);
+//
+//        TextField height = new TextField();
+//        height.setPromptText("Height");
+//        TextField bodyTemperature = new TextField();
+//        bodyTemperature.setPromptText("Body Temperature");
+//        TextField pulseRate = new TextField();
+//        pulseRate.setPromptText("Pulse Rate");
+//
+//        TextField weight = new TextField();
+//        weight.setPromptText("Weight");
+//        TextField bloodPressure = new TextField();
+//        bloodPressure.setPromptText("Blood Pressure");
+//        TextField bloodOxygen = new TextField();
+//        bloodOxygen.setPromptText("Blood Oxygen");
+
+//        vitalsEntry.add(height, 0, 1);
+//        vitalsEntry.add(bodyTemperature, 0, 2);
+//        vitalsEntry.add(pulseRate, 0, 3);
+//
+//        vitalsEntry.add(weight, 1, 1);
+//        vitalsEntry.add(bloodPressure, 1, 2);
+//        vitalsEntry.add(bloodOxygen, 1, 3);
+
+
+        // --------------------- questionnaire entry --------------------------------
+
+        GridPane questionnaireContainer = new GridPane();
+        questionnaireContainer.setPadding(new Insets(0, 0, 20, 0));
+        questionnaireContainer.setPrefSize(900, 400);
+        questionnaireContainer.setStyle(BorderLayout);
 
         GridPane questionnaire = new GridPane();
         questionnaire.setVgap(5);
@@ -139,10 +253,11 @@ public class NurseScene extends BaseScene {
         questionnaire.add(constipation, 0, 5);
         questionnaire.add(cramping, 1, 5);
 
-        questionnaire.add(questionnaireLabel, 0, 0, 5, 1);
-
         HBox topFields = new HBox(15);
-        topFields.getChildren().addAll(vitalsEntry, questionnaire);
+//        topFields.getChildren().addAll(vitalsEntry, questionnaire);
+
+        questionnaireContainer.add(questionnaireLabel, 0, 0);
+        questionnaireContainer.add(questionnaire, 0, 1);
 
 
         // -------------------- Patient History ---------------------------
@@ -184,6 +299,17 @@ public class NurseScene extends BaseScene {
         VBox.setVgrow(title, Priority.ALWAYS);
         content.getChildren().addAll(topFields, patientHistoryContainer);
 
-        return content;
+        // Tie it all together
+        HBox topFieldsContainer = new HBox(15);
+        topFieldsContainer.getChildren().addAll(vitalsEntryContainer, questionnaireContainer);
+
+        GridPane mainStructure = new GridPane();
+        mainStructure.setVgap(15);
+        mainStructure.setHgap(15);
+        mainStructure.setAlignment(Pos.CENTER);
+        mainStructure.add(topFieldsContainer, 0, 0);
+        mainStructure.add(patientHistoryContainer, 0, 1);
+
+        return mainStructure;
     }
 }
