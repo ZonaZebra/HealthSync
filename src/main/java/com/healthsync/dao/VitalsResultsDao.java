@@ -24,6 +24,7 @@ public class VitalsResultsDao {
             stmt.setInt(4, vitalsResults.getDiastolic_bp());
             stmt.setDouble(5, vitalsResults.getResting_pulse());
             stmt.setDouble(6, vitalsResults.getTemperature());
+            stmt.setString(7, vitalsResults.getPatient_id());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -64,7 +65,8 @@ public class VitalsResultsDao {
                         rs.getInt("systolic_bp"),
                         rs.getInt("diastolic_bp"),
                         rs.getDouble("resting_pulse"),
-                        rs.getDouble("temperature")
+                        rs.getDouble("temperature"),
+                        rs.getString("patient_id")
                 );
             }
         } catch (SQLException e) {
@@ -89,6 +91,7 @@ public class VitalsResultsDao {
             stmt.setDouble(5, vitalsResults.getResting_pulse());
             stmt.setDouble(6, vitalsResults.getTemperature());
             stmt.setInt(7, vitalsResults.getVitals_results_id());
+            stmt.setString(8, vitalsResults.getPatient_id());
 
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
@@ -142,7 +145,8 @@ public class VitalsResultsDao {
                         rs.getInt("systolic_bp"),
                         rs.getInt("diastolic_bp"),
                         rs.getDouble("resting_pulse"),
-                        rs.getDouble("temperature")
+                        rs.getDouble("temperature"),
+                        rs.getString("patient_id")
                 ));
             }
         } catch (SQLException e) {

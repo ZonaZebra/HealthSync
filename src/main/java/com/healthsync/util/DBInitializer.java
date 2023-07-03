@@ -153,8 +153,12 @@ public class DBInitializer {
             stmt.execute("ALTER SEQUENCE questionnaire_results_questionnaire_id_seq RESTART WITH 10000");
             stmt.execute("ALTER SEQUENCE vitals_results_vitals_results_id_seq RESTART WITH 10000");
 
-            // Adding test data - 006
-            // Password on all of these is set to "pass"
+            // Add column to questionnaire_results table - 006
+            String addPatientIdToQuestionnaireResults = "ALTER TABLE questionnaire_results " +
+                    "ADD COLUMN IF NOT EXISTS patient_id VARCHAR REFERENCES patients(user_id)";
+            stmt.execute(addPatientIdToQuestionnaireResults);
+
+            // Adding test data, Password on all of these is set to "pass"
             // Insert a doctor
             String insertDoctor = "INSERT INTO users (user_id, first_name, last_name, password, role) VALUES " +
                     "('TestDoctor11111', 'Benedict', 'Cumberbatch', '$2a$10$yk/Djmus7yREI6vO1VUtRO5YzqmzbdLpAQqrwJB4cFrwUB3n382lm', 'Doctor')";
