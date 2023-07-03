@@ -54,7 +54,7 @@ public class QuestionnaireResultsDao {
                 return null;
             }
 
-            String sql = "SELECT * FROM questionnaire_results WHERE patient_id = ? ORDER BY date ASC";
+            String sql = "SELECT * FROM questionnaire_results WHERE patient_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, patientId);
 
@@ -105,7 +105,7 @@ public class QuestionnaireResultsDao {
                 System.err.println("Failed to establish database connection.");
                 return false;
             }
-            
+
             String sql = "DELETE FROM questionnaire_results WHERE questionnaire_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, questionnaireId);
