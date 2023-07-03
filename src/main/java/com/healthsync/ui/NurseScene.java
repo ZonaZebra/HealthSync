@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 
 
 public class NurseScene extends BaseScene {
@@ -15,11 +16,6 @@ public class NurseScene extends BaseScene {
     }
 
     private static Region createContent(Patient patient) {
-        VBox content = new VBox();
-        content.setAlignment(Pos.CENTER);
-        content.setSpacing(30);
-        content.setPadding(new Insets(20, 40, 20, 40));
-
         // Common styling stuff
         String BorderLayout = """
                 -fx-border-color: black;
@@ -45,23 +41,17 @@ public class NurseScene extends BaseScene {
         title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
 
-
-        Label questionnaireLabel = new Label("Questionnaire");
-        questionnaireLabel.setAlignment(Pos.CENTER);
-        questionnaireLabel.setPrefWidth(800);
-        questionnaireLabel.setStyle(labelLayout);
-
         // --------------------- vitals entry --------------------------------------
 
         GridPane vitalsEntryContainer = new GridPane();
         vitalsEntryContainer.setVgap(15);
-        vitalsEntryContainer.setPrefSize(500, 400);
+        vitalsEntryContainer.setPrefSize(700, 400);
         vitalsEntryContainer.setPadding(new Insets(0, 0, 20, 0));
         vitalsEntryContainer.setStyle(BorderLayout);
 
         Label vitalsEntryLabel = new Label("Vitals Entry");
         vitalsEntryLabel.setAlignment(Pos.CENTER);
-        vitalsEntryLabel.setPrefWidth(900);
+        vitalsEntryLabel.setPrefWidth(700);
         vitalsEntryLabel.setStyle(labelLayout);
 
         VBox heightContainer = new VBox();
@@ -193,29 +183,69 @@ public class NurseScene extends BaseScene {
 
         // --------------------- questionnaire entry --------------------------------
 
+
         GridPane questionnaireContainer = new GridPane();
         questionnaireContainer.setPadding(new Insets(0, 0, 20, 0));
-        questionnaireContainer.setPrefSize(900, 400);
+        questionnaireContainer.setPrefSize(700, 400);
         questionnaireContainer.setStyle(BorderLayout);
+
+        Label questionnaireLabel = new Label("Questionnaire");
+        questionnaireLabel.setAlignment(Pos.CENTER);
+        questionnaireLabel.setPrefWidth(700);
+        questionnaireLabel.setStyle(labelLayout);
 
         GridPane questionnaire = new GridPane();
         questionnaire.setVgap(5);
         questionnaire.setHgap(10);
-        questionnaire.setPadding(new Insets(0,0,0,0));
-        questionnaire.setPrefSize(800,220);
-        questionnaire.setStyle(BorderLayout);
+        questionnaire.setAlignment(Pos.CENTER);
+        questionnaire.setPrefWidth(900);
 
-        TextField nameField = new TextField();
-        nameField.setPromptText("Name");
-        nameField.setPrefWidth(60);
-        TextField ageField = new TextField();
-        ageField.setPromptText("Age");
-        ageField.setPrefWidth(20);
+
+//        HBox nameField = new HBox();
+//        Text name = new Text(patient.getFirstName() + " " + patient.getLastName());
+//        nameField.setPadding(new Insets(0, 10, 0, 10));
+//        nameField.getChildren().addAll(name);
+//        nameField.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+//                "-fx-border-radius: 30; -fx-border-style: solid;" +
+//                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+//        nameField.setPrefWidth(350);
+
+        HBox nameContainer = new HBox();
+        nameContainer.setPadding(new Insets(15, 10, 0, 10));
+
+        Label nameLabel = new Label("Name:  ");
+        nameLabel.setOpacity(.50);
+        Text nameText = new Text(patient.getFirstName() + " " + patient.getLastName());
+        nameContainer.setStyle("-fx-font-size: 15px; -fx-background-color: #FFFFFF; ");
+
+        nameContainer.getChildren().addAll(nameLabel, nameText);
+
+        HBox ageContainer = new HBox();
+        ageContainer.setPadding(new Insets(15, 10, 0, 10));
+
+        Label ageLabel = new Label("Age:  ");
+        ageLabel.setOpacity(.50);
+        Text ageText = new Text("age");
+        ageContainer.setStyle("-fx-font-size: 15px; -fx-background-color: #FFFFFF; ");
+
+        ageContainer.getChildren().addAll(ageLabel, ageText);
+
+//        HBox ageField = new HBox();
+//        Text age = new Text(" age temp");
+//        ageField.setPadding(new Insets(0, 10, 0, 10));
+//        ageField.getChildren().addAll(age);
+//        ageField.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+//                "-fx-border-radius: 30; -fx-border-style: solid;" +
+//                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+//        ageField.setPrefWidth(350);
 
         Label sexLabel = new Label("Sex:");
+        sexLabel.setOpacity(.50);
+
         ToggleGroup genderGroup = new ToggleGroup();
         RadioButton male = new RadioButton("M");
         RadioButton female = new RadioButton("F");
+
         male.setToggleGroup(genderGroup);
         female.setToggleGroup(genderGroup);
 
@@ -224,10 +254,13 @@ public class NurseScene extends BaseScene {
         genderBox.add(sexLabel, 0, 0);
         genderBox.add(male, 1, 0);
         genderBox.add(female, 2, 0);
+
+
         questionnaire.add(genderBox, 2, 1);
 
-        questionnaire.add(nameField, 0, 1);
-        questionnaire.add(ageField, 1, 1);
+        questionnaire.add(nameContainer, 0, 1);
+        questionnaire.add(ageContainer, 1, 1);
+        questionnaire.setStyle("-fx-font-size: 15px; -fx-background-color: #FFFFFF; ");
 
 
         Label problemQuestion = new Label("Which of the following problems are you experiencing?");
@@ -252,9 +285,6 @@ public class NurseScene extends BaseScene {
         questionnaire.add(headaches, 2, 4);
         questionnaire.add(constipation, 0, 5);
         questionnaire.add(cramping, 1, 5);
-
-        HBox topFields = new HBox(15);
-//        topFields.getChildren().addAll(vitalsEntry, questionnaire);
 
         questionnaireContainer.add(questionnaireLabel, 0, 0);
         questionnaireContainer.add(questionnaire, 0, 1);
@@ -294,10 +324,6 @@ public class NurseScene extends BaseScene {
         patientHistoryContainer.add(patientHistoryLabel, 0, 0);
         patientHistoryContainer.add(scrollBarContainer, 0, 1);
 
-
-        content.getChildren().add(title);
-        VBox.setVgrow(title, Priority.ALWAYS);
-        content.getChildren().addAll(topFields, patientHistoryContainer);
 
         // Tie it all together
         HBox topFieldsContainer = new HBox(15);
