@@ -64,10 +64,7 @@ public class LoginScene extends BaseScene {
                 switch (role) {
                     case "Patient" -> {
                         PatientScene patientScene = new PatientScene(authenticatedUser, stage);
-                        stage.setMinWidth(1157);
-                        stage.setMinWidth(1160);
                         stage.setScene(patientScene);
-                        stage.centerOnScreen();
                         stage.setTitle("HealthSync - Patient");
                     }
                     case "Doctor" -> {

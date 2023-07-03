@@ -19,7 +19,7 @@ public class PatientHistoryService {
     private static final PrescriptionsDao prescriptionsDao = new PrescriptionsDao();
     private static final VitalsResultsDao vitalsResultsDao = new VitalsResultsDao();
 
-    public VBox getPatientHistory(String patient_ID){
+    public VBox getPatientHistory(String patient_ID) {
         VBox test = new VBox();
         List<Physical_Test_Findings> testFindingsList = testFindingsDao.getPhysicalTestFindings(patient_ID);
         List<Questionnaire_Results> questionnaireResultsList = questionnaireResultsDao.getQuestionnaireResultsByPatientId(patient_ID);
@@ -31,27 +31,42 @@ public class PatientHistoryService {
         // Add Test findings First
         Text testFindingsLabel = new Text("Physical Test Findings:");
         testFindingsLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
-        if(testFindingsList.size()!= 0){test.getChildren().add(testFindingsLabel);}
-        for (Physical_Test_Findings physical_test_findings : testFindingsList) {
-            test.getChildren().add(new Text("   - Test Finding ID: "+ physical_test_findings.getPhysical_test_id()));
-            test.getChildren().add(new Text("         - Reported Issues: "+ physical_test_findings.getIssues()));
-            test.getChildren().add(new Text("         - Additional Notes: "+ physical_test_findings.getNotes()));
+        if (testFindingsList.size() != 0) {
+            test.getChildren().add(testFindingsLabel);
         }
-        if(testFindingsList.size()!= 0){test.getChildren().add(new Text()); } // Add some space between sections
+        for (Physical_Test_Findings physical_test_findings : testFindingsList) {
+            test.getChildren().add(new Text("   - Test Finding ID: " + physical_test_findings.getPhysical_test_id()));
+            test.getChildren().add(new Text("         - Reported Issues: " + physical_test_findings.getIssues()));
+            test.getChildren().add(new Text("         - Additional Notes: " + physical_test_findings.getNotes()));
+        }
+        for (Physical_Test_Findings physical_test_findings : testFindingsList) {
+            test.getChildren().add(new Text("   - Test Finding ID: " + physical_test_findings.getPhysical_test_id()));
+            test.getChildren().add(new Text("         - Reported Issues: " + physical_test_findings.getIssues()));
+            test.getChildren().add(new Text("         - Additional Notes: " + physical_test_findings.getNotes()));
+        }
+        if (testFindingsList.size() != 0) {
+            test.getChildren().add(new Text());
+        } // Add some space between sections
 
         // Then add questionnaire results
         Text questionnaireLabel = new Text("Questionnaire Results:");
         questionnaireLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
-        if(questionnaireResultsList.size()!= 0){test.getChildren().add(questionnaireLabel);}
+        if (questionnaireResultsList.size() != 0) {
+            test.getChildren().add(questionnaireLabel);
+        }
         for (Questionnaire_Results questionnaire_results : questionnaireResultsList) {
             test.getChildren().add(new Text("   -" + questionnaire_results.getQuestionnaire_id()));
         }
-        if(questionnaireResultsList.size()!= 0){test.getChildren().add(new Text()); } // Add some space between sections
+        if (questionnaireResultsList.size() != 0) {
+            test.getChildren().add(new Text());
+        } // Add some space between sections
 
         // Then add Vitals results
         Text vitalsResultsLabel = new Text("Vitals Results:");
-        vitalsResultsLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
-        if(vitalsResultsList.size()!= 0){test.getChildren().add(vitalsResultsLabel);}
+        vitalsResultsLabel.setStyle("-fx-font-weight: bold;");
+        if (vitalsResultsList.size() != 0) {
+            test.getChildren().add(vitalsResultsLabel);
+        }
         for (Vitals_Results vitalsResults : vitalsResultsList) {
             test.getChildren().add(new Text("   - Vitals ID: " + vitalsResults.getVitals_results_id()));
             test.getChildren().add(new Text("         - Height: " + vitalsResults.getHeight()));
@@ -61,20 +76,26 @@ public class PatientHistoryService {
             test.getChildren().add(new Text("         - Resting Pulse Rate: " + vitalsResults.getResting_pulse()));
             test.getChildren().add(new Text("         - Body Temperature: " + vitalsResults.getTemperature()));
         }
-        if(vitalsResultsList.size()!= 0){test.getChildren().add(new Text()); }// Add some space between sections
+        if (vitalsResultsList.size() != 0) {
+            test.getChildren().add(new Text());
+        }// Add some space between sections
 
         // Then add Prescriptions
         Text prescriptionsLabel = new Text("Prescriptions:");
         prescriptionsLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
-        if(prescriptionsList.size()!= 0){test.getChildren().add(prescriptionsLabel);}
+        if (prescriptionsList.size() != 0) {
+            test.getChildren().add(prescriptionsLabel);
+        }
         for (Prescriptions prescription : prescriptionsList) {
             test.getChildren().add(new Text("   - Prescription ID: " + prescription.getPrescription_id()));
-            test.getChildren().add(new Text("         - Prescription Name: "+ prescription.getProduct()));
-            test.getChildren().add(new Text("         - Dosage (mg): "+ prescription.getDosage_in_mg()));
-            test.getChildren().add(new Text("         - Frequency (hours): "+ prescription.getFrequency()));
-            test.getChildren().add(new Text("         - Additional Instructions: "+ prescription.getInstructions()));
+            test.getChildren().add(new Text("         - Prescription Name: " + prescription.getProduct()));
+            test.getChildren().add(new Text("         - Dosage (mg): " + prescription.getDosage_in_mg()));
+            test.getChildren().add(new Text("         - Frequency (hours): " + prescription.getFrequency()));
+            test.getChildren().add(new Text("         - Additional Instructions: " + prescription.getInstructions()));
         }
-        if(prescriptionsList.size()!= 0){test.getChildren().add(new Text()); }// Add some space between sections
+        if (prescriptionsList.size() != 0) {
+            test.getChildren().add(new Text());
+        }// Add some space between sections
 
         return test;
     }

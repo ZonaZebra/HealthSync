@@ -1,6 +1,8 @@
 package com.healthsync.ui;
 
-import com.healthsync.entities.Patient;
+import com.healthsync.dao.AppointmentsDao;
+import com.healthsync.entities.*;
+import com.healthsync.service.NurseService;
 import com.healthsync.service.PatientHistoryService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,14 +10,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.util.Date;
+
 
 public class NurseScene extends BaseScene {
 
-    public NurseScene(Patient patient) {
-        super(createContent(patient));
+    public NurseScene(Patient patient, User nurse) {
+        super(createContent(patient, nurse));
     }
 
-    private static Region createContent(Patient patient) {
+    private static Region createContent(Patient patient, User nurse) {
         // Common styling stuff
         String BorderLayout = """
                 -fx-border-color: black;
@@ -42,6 +46,9 @@ public class NurseScene extends BaseScene {
 
 
         // --------------------- vitals entry --------------------------------------
+        NurseService nurseService = new NurseService();
+        Appointments appointments = nurseService.createAppointment(patient.getUserId(), nurse.getUserId(), new Date(), -1, -1, -1);
+
 
         GridPane vitalsEntryContainer = new GridPane();
         vitalsEntryContainer.setVgap(15);
@@ -67,8 +74,8 @@ public class NurseScene extends BaseScene {
 
         heightContainer.getChildren().addAll(heightLabel, heightText);
 
-        VBox weigtheContainer = new VBox();
-        weigtheContainer.setPadding(new Insets(15, 10, 0, 10));
+        VBox weightContainerContainer = new VBox();
+        weightContainerContainer.setPadding(new Insets(15, 10, 0, 10));
 
         Label weightLabel = new Label("   Weight:");
         weightLabel.setOpacity(.50);
@@ -78,7 +85,7 @@ public class NurseScene extends BaseScene {
                 "-fx-border-radius: 30; -fx-border-style: solid;" +
                 "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
 
-        weigtheContainer.getChildren().addAll(weightLabel, weightText);
+        weightContainerContainer.getChildren().addAll(weightLabel, weightText);
 
         VBox bodyTempContainer = new VBox();
         bodyTempContainer.setPadding(new Insets(15, 10, 0, 10));
@@ -134,7 +141,7 @@ public class NurseScene extends BaseScene {
 
         GridPane vitalsContainer = new GridPane();
         vitalsContainer.add(heightContainer, 0, 0);
-        vitalsContainer.add(weigtheContainer, 1, 0);
+        vitalsContainer.add(weightContainerContainer, 1, 0);
 
         vitalsContainer.add(bodyTempContainer, 0, 1);
         vitalsContainer.add(bloodPressureContainer, 1, 1);
@@ -149,36 +156,18 @@ public class NurseScene extends BaseScene {
         vitalsEntryContainer.add(vitalsEntryLabel, 0, 0);
         vitalsEntryContainer.add(vitalsContainer, 0, 1);
 
+        Button vitalsSubmitButton = new Button("Submit");
+        vitalsSubmitButton.setOnAction(e -> {
+            double height = Double.parseDouble(heightText.getText());
+            double weight = Double.parseDouble(weightText.getText());
+            double temperature = Double.parseDouble(bodyTempText.getText());
+            int pulseRate = Integer.parseInt(pulseRateText.getText());
+            int bloodPressure = Integer.parseInt(bloodPressureText.getText());
+            String patientId = patient.getUserId();
+            Vitals_Results vitals_results = nurseService.createVitalsResults(height, weight, bloodPressure, bloodPressure, pulseRate, temperature, patientId);
+        });
 
-
-
-//        GridPane vitalsEntry = new GridPane();
-//        vitalsEntry.setVgap(15);
-//        vitalsEntry.setHgap(15);
-//        vitalsEntry.setPadding(new Insets(0,0,0,0));
-//        vitalsEntry.setStyle(BorderLayout);
-//
-//        TextField height = new TextField();
-//        height.setPromptText("Height");
-//        TextField bodyTemperature = new TextField();
-//        bodyTemperature.setPromptText("Body Temperature");
-//        TextField pulseRate = new TextField();
-//        pulseRate.setPromptText("Pulse Rate");
-//
-//        TextField weight = new TextField();
-//        weight.setPromptText("Weight");
-//        TextField bloodPressure = new TextField();
-//        bloodPressure.setPromptText("Blood Pressure");
-//        TextField bloodOxygen = new TextField();
-//        bloodOxygen.setPromptText("Blood Oxygen");
-
-//        vitalsEntry.add(height, 0, 1);
-//        vitalsEntry.add(bodyTemperature, 0, 2);
-//        vitalsEntry.add(pulseRate, 0, 3);
-//
-//        vitalsEntry.add(weight, 1, 1);
-//        vitalsEntry.add(bloodPressure, 1, 2);
-//        vitalsEntry.add(bloodOxygen, 1, 3);
+        vitalsEntryContainer.add(vitalsSubmitButton, 0, 2);
 
 
         // --------------------- questionnaire entry --------------------------------
@@ -200,16 +189,6 @@ public class NurseScene extends BaseScene {
         questionnaire.setAlignment(Pos.CENTER);
         questionnaire.setPrefWidth(900);
 
-
-//        HBox nameField = new HBox();
-//        Text name = new Text(patient.getFirstName() + " " + patient.getLastName());
-//        nameField.setPadding(new Insets(0, 10, 0, 10));
-//        nameField.getChildren().addAll(name);
-//        nameField.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
-//                "-fx-border-radius: 30; -fx-border-style: solid;" +
-//                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
-//        nameField.setPrefWidth(350);
-
         HBox nameContainer = new HBox();
         nameContainer.setPadding(new Insets(15, 10, 0, 10));
 
@@ -229,15 +208,6 @@ public class NurseScene extends BaseScene {
         ageContainer.setStyle("-fx-font-size: 15px; -fx-background-color: #FFFFFF; ");
 
         ageContainer.getChildren().addAll(ageLabel, ageText);
-
-//        HBox ageField = new HBox();
-//        Text age = new Text(" age temp");
-//        ageField.setPadding(new Insets(0, 10, 0, 10));
-//        ageField.getChildren().addAll(age);
-//        ageField.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
-//                "-fx-border-radius: 30; -fx-border-style: solid;" +
-//                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
-//        ageField.setPrefWidth(350);
 
         Label sexLabel = new Label("Sex:");
         sexLabel.setOpacity(.50);
@@ -289,6 +259,17 @@ public class NurseScene extends BaseScene {
         questionnaireContainer.add(questionnaireLabel, 0, 0);
         questionnaireContainer.add(questionnaire, 0, 1);
 
+        Button questionnaireSubmitButton = new Button("Submit");
+        questionnaireSubmitButton.setOnAction(e -> {
+            String name = nameText.getText();
+            Date date = new Date();
+            char sex = genderGroup.getSelectedToggle().equals(male) ? 'M' : 'F';
+            String administered_by = nurse.getUserId();
+            Questionnaire_Results result = nurseService.createQuestionnaireResultEntry(name, date, sex, administered_by);
+        });
+
+        questionnaireContainer.add(questionnaireSubmitButton, 0, 2);
+
 
         // -------------------- Patient History ---------------------------
 
@@ -335,7 +316,6 @@ public class NurseScene extends BaseScene {
         mainStructure.setAlignment(Pos.CENTER);
         mainStructure.add(topFieldsContainer, 0, 0);
         mainStructure.add(patientHistoryContainer, 0, 1);
-
         return mainStructure;
     }
 }
