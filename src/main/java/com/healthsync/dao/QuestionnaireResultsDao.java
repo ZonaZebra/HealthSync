@@ -17,13 +17,12 @@ public class QuestionnaireResultsDao {
                 return -1;
             }
 
-            String sql = "INSERT INTO questionnaire_results (questionnaire_id, name, date, sex, administered_by) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO questionnaire_results (name, date, sex, administered_by) VALUES (?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, result.getQuestionnaire_id());
-            stmt.setString(2, result.getName());
-            stmt.setDate(3, new java.sql.Date(result.getDate().getTime()));
-            stmt.setString(4, String.valueOf(result.getSex()));
-            stmt.setString(5, result.getAdministered_by());
+            stmt.setString(1, result.getName());
+            stmt.setDate(2, new java.sql.Date(result.getDate().getTime()));
+            stmt.setString(3, String.valueOf(result.getSex()));
+            stmt.setString(4, result.getAdministered_by());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -44,7 +43,7 @@ public class QuestionnaireResultsDao {
         return -1;
     }
 
-    // Grabs all questionaires associated with patient ID
+    // Grabs all questionnaires associated with patient ID
     public List<Questionnaire_Results> getQuestionnaireResultsByPatientId(String patientId) {
         List<Questionnaire_Results> results = new ArrayList<>();
 
