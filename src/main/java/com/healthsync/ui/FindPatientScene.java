@@ -72,10 +72,9 @@ public class FindPatientScene extends BaseScene {
                     case "Doctor" -> {
                         alert = new Alert(Alert.AlertType.INFORMATION, "Going to Doctor!", ButtonType.OK);
                         alert.show();
-                        DoctorScene doctorScene = new DoctorScene(foundPatient, user);
-                        stage.setScene(doctorScene);
+                        DoctorPatientScene doctorPatientScene = new DoctorPatientScene(foundPatient, user, stage);
+                        stage.setScene(doctorPatientScene);
                         stage.setTitle("HealthSync - Doctor");
-
                     }
                     case "Nurse" -> {
                         alert = new Alert(Alert.AlertType.INFORMATION, "Going to Nurse!", ButtonType.OK);

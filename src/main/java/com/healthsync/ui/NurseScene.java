@@ -11,6 +11,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.util.Date;
+import java.util.Objects;
 
 
 public class NurseScene extends BaseScene {
@@ -263,7 +264,7 @@ public class NurseScene extends BaseScene {
         questionnaireSubmitButton.setOnAction(e -> {
             String name = nameText.getText();
             Date date = new Date();
-            char sex = genderGroup.getSelectedToggle().equals(male) ? 'M' : 'F';
+            char sex = Objects.equals(genderGroup.getSelectedToggle(), male) ? 'M' : 'F';
             String administered_by = nurse.getUserId();
             Questionnaire_Results result = nurseService.createQuestionnaireResultEntry(name, date, sex, administered_by);
         });
