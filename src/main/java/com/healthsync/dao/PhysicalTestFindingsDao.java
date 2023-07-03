@@ -3,32 +3,74 @@ package com.healthsync.dao;
 import com.healthsync.entities.Physical_Test_Findings;
 import com.healthsync.util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhysicalTestFindingsDao {
 
-    public boolean createPhysicalTestFinding(Physical_Test_Findings finding) {
+    public int createPhysicalTestFinding(Physical_Test_Findings finding) {
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
-                return false;
+                return -1;
             }
 
-            String sql = "INSERT INTO physical_test_findings (physical_test_id, issues, notes, administered_by) VALUES (?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, finding.getPhysical_test_id());
-            stmt.setString(2, finding.getIssues());
-            stmt.setString(3, finding.getNotes());
+            String sql = "INSERT INTO physical_test_findings (issues, notes, patient_id, administered_by) VALUES (?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, finding.getIssues());
+            stmt.setString(2, finding.getNotes());
+            stmt.setString(3, finding.getPatientID());
             stmt.setString(4, finding.getAdministered_by());
 
-            int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
+            int affectedRows = stmt.executeUpdate();
 
+            if (affectedRows == 0) {
+                throw new SQLException("Creating physical test finding failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating physical test finding failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
+
+    // Grabs all physical test findings associated with patient
+    public List<Physical_Test_Findings> getPhysicalTestFindings(String patientID) {
+        List<Physical_Test_Findings> findings = new ArrayList<>();
+
+        try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return findings;
+            }
+
+            String sql = "SELECT * FROM physical_test_findings WHERE patient_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, patientID);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int testID = rs.getInt("physical_test_id");
+                String issues = rs.getString("issues");
+                String notes = rs.getString("notes");
+                String patientId = rs.getString("patient_id");
+                String adminBy = rs.getString("administered_by");
+
+                findings.add(new Physical_Test_Findings(testID, issues, notes, patientId, adminBy));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return findings;
+    }
+
+
 }

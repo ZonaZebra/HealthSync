@@ -39,11 +39,13 @@ public class PatientDao {
             // Assuming insuranceInformation is a string in format: "provider,policyNumber"
             String[] insuranceInfo = patient.getInsuranceInformation().split(",");
             patientStmt.setString(5, insuranceInfo[0]);
-            patientStmt.setString(6, insuranceInfo[1]);
+            patientStmt.setString(6, insuranceInfo.length > 1 ? insuranceInfo[1] : "N/A");
+
             // Assuming pharmacyInformation is a string in format: "pharmacyName,pharmacyLocation"
             String[] pharmacyInfo = patient.getPharmacyInformation().split(",");
             patientStmt.setString(7, pharmacyInfo[0]);
-            patientStmt.setString(8, pharmacyInfo[1]);
+            patientStmt.setString(8, pharmacyInfo.length > 1 ? pharmacyInfo[1] : "N/A");
+
 
             int userRowsInserted = userStmt.executeUpdate();
             int patientRowsInserted = patientStmt.executeUpdate();

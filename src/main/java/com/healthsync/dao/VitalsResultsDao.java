@@ -3,39 +3,45 @@ package com.healthsync.dao;
 import com.healthsync.entities.Vitals_Results;
 import com.healthsync.util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class VitalsResultsDao {
 
-    public boolean createVitalsResults(Vitals_Results vitalsResults) {
+    public int createVitalsResults(Vitals_Results vitalsResults) {
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
-                return false;
+                return -1;
             }
 
-            String sql = "INSERT INTO vitals_results (vitals_results_id, height, weight, systolic_bp, diastolic_bp, resting_pulse, temperature) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, vitalsResults.getVitals_results_id());
-            stmt.setDouble(2, vitalsResults.getHeight());
-            stmt.setDouble(3, vitalsResults.getWeight());
-            stmt.setInt(4, vitalsResults.getSystolic_bp());
-            stmt.setInt(5, vitalsResults.getDiastolic_bp());
-            stmt.setDouble(6, vitalsResults.getResting_pulse());
-            stmt.setDouble(7, vitalsResults.getTemperature());
+            String sql = "INSERT INTO vitals_results (height, weight, systolic_bp, diastolic_bp, resting_pulse, temperature) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setDouble(1, vitalsResults.getHeight());
+            stmt.setDouble(2, vitalsResults.getWeight());
+            stmt.setInt(3, vitalsResults.getSystolic_bp());
+            stmt.setInt(4, vitalsResults.getDiastolic_bp());
+            stmt.setDouble(5, vitalsResults.getResting_pulse());
+            stmt.setDouble(6, vitalsResults.getTemperature());
 
-            int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
+            int affectedRows = stmt.executeUpdate();
 
+            if (affectedRows == 0) {
+                throw new SQLException("Creating vitals results failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating vitals results failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
     public Vitals_Results getVitalsResultsById(int vitalsResultsId) {
@@ -113,7 +119,8 @@ public class VitalsResultsDao {
         return false;
     }
 
-    public List<Vitals_Results> getAllVitalsResults() {
+    // Should return all vitals for a given patient ID
+    public List<Vitals_Results> getAllVitalsResults(String patientID) {
         List<Vitals_Results> vitalsResultsList = new ArrayList<>();
 
         try (Connection conn = DBConnection.getConnection()) {
@@ -122,8 +129,9 @@ public class VitalsResultsDao {
                 return vitalsResultsList; // Return empty list
             }
 
-            String sql = "SELECT * FROM vitals_results";
+            String sql = "SELECT * FROM vitals_results WHERE patient_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, patientID);
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {

@@ -3,57 +3,86 @@ package com.healthsync.dao;
 import com.healthsync.entities.Questionnaire_Results;
 import com.healthsync.util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class QuestionnaireResultsDao {
 
-    public boolean createQuestionnaireResult(Questionnaire_Results result) {
+    public int createQuestionnaireResult(Questionnaire_Results result) {
         try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return -1;
+            }
+
             String sql = "INSERT INTO questionnaire_results (questionnaire_id, name, date, sex, administered_by) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, result.getQuestionnaire_id());
             stmt.setString(2, result.getName());
             stmt.setDate(3, new java.sql.Date(result.getDate().getTime()));
             stmt.setString(4, String.valueOf(result.getSex()));
             stmt.setString(5, result.getAdministered_by());
 
-            return stmt.executeUpdate() > 0;
+            int affectedRows = stmt.executeUpdate();
 
+            if (affectedRows == 0) {
+                throw new SQLException("Creating questionnaire result failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating questionnaire result failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
-    public Questionnaire_Results getQuestionnaireResultById(int questionnaireId) {
+    // Grabs all questionaires associated with patient ID
+    public List<Questionnaire_Results> getQuestionnaireResultsByPatientId(String patientId) {
+        List<Questionnaire_Results> results = new ArrayList<>();
+
         try (Connection conn = DBConnection.getConnection()) {
-            String sql = "SELECT * FROM questionnaire_results WHERE questionnaire_id = ?";
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return null;
+            }
+
+            String sql = "SELECT * FROM questionnaire_results WHERE patient_id = ? ORDER BY date ASC";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, questionnaireId);
+            stmt.setString(1, patientId);
 
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 Date date = new Date(rs.getDate("date").getTime());
-                return new Questionnaire_Results(
+                results.add(new Questionnaire_Results(
                         rs.getInt("questionnaire_id"),
                         rs.getString("name"),
                         date,
                         rs.getString("sex").charAt(0),
                         rs.getString("administered_by")
-                );
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return results;
     }
+
 
     public boolean updateQuestionnaireResult(Questionnaire_Results result) {
         try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return false;
+            }
+
             String sql = "UPDATE questionnaire_results SET name = ?, date = ?, sex = ?, administered_by = ? WHERE questionnaire_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, result.getName());
@@ -72,6 +101,11 @@ public class QuestionnaireResultsDao {
 
     public boolean deleteQuestionnaireResult(int questionnaireId) {
         try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) {
+                System.err.println("Failed to establish database connection.");
+                return false;
+            }
+            
             String sql = "DELETE FROM questionnaire_results WHERE questionnaire_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, questionnaireId);
