@@ -3,54 +3,62 @@ package com.healthsync.dao;
 import com.healthsync.entities.Appointments;
 import com.healthsync.util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppointmentsDao {
 
-    public boolean createAppointment(Appointments appointment) {
+    public int createAppointment(Appointments appointment) {
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
-                return false;
+                return -1;
             }
 
-            String sql = "INSERT INTO appointments (appointment_id, patient_id, doctor_id, appointment_date, questionnaire_id, vitals_results_id, physical_test_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, appointment.getAppointment_id());
-            stmt.setString(2, appointment.getPatient_id());
-            stmt.setString(3, appointment.getDoctor_id());
-            stmt.setTimestamp(4, new java.sql.Timestamp(appointment.getAppointment_date().getTime()));
-            stmt.setInt(5, appointment.getQuestionnaire_id());
-            stmt.setInt(6, appointment.getVitals_results_id());
-            stmt.setInt(7, appointment.getPhysical_test_id());
+            String sql = "INSERT INTO appointments (patient_id, doctor_id, appointment_date, questionnaire_id, vitals_results_id, physical_test_id) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, appointment.getPatient_id());
+            stmt.setString(2, appointment.getDoctor_id());
+            stmt.setTimestamp(3, new java.sql.Timestamp(appointment.getAppointment_date().getTime()));
+            stmt.setInt(4, appointment.getQuestionnaire_id());
+            stmt.setInt(5, appointment.getVitals_results_id());
+            stmt.setInt(6, appointment.getPhysical_test_id());
 
-            int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
+            int affectedRows = stmt.executeUpdate();
 
+            if (affectedRows == 0) {
+                throw new SQLException("Creating appointment failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating appointment failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
-    public Appointments getAppointmentById(int id) {
+
+    public List<Appointments> getAppointmentsByPatientId(String patientId) {
+        List<Appointments> appointments = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 System.err.println("Failed to establish database connection.");
-                return null;
+                return appointments;
             }
-            String sql = "SELECT * FROM appointments WHERE appointment_id = ?";
+            String sql = "SELECT * FROM appointments WHERE patient_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, id);
+            stmt.setString(1, patientId);
 
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Appointments(
+            while (rs.next()) {
+                appointments.add(new Appointments(
                         rs.getInt("appointment_id"),
                         rs.getString("patient_id"),
                         rs.getString("doctor_id"),
@@ -58,13 +66,14 @@ public class AppointmentsDao {
                         rs.getInt("questionnaire_id"),
                         rs.getInt("vitals_results_id"),
                         rs.getInt("physical_test_id")
-                );
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return appointments;
     }
+
 
     public boolean updateAppointment(Appointments appointment) {
         try (Connection conn = DBConnection.getConnection()) {
