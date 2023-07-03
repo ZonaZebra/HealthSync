@@ -3,7 +3,7 @@ package com.healthsync.entities;
 import java.util.Date;
 
 public class Questionnaire_Results {
-    private final int questionnaire_id; // primary key
+    private int questionnaire_id; // primary key
     private String name;
     private Date date;
     private char sex;
@@ -66,5 +66,9 @@ public class Questionnaire_Results {
                 ", sex=" + sex +
                 ", administered_by=" + administered_by +
                 '}';
+    }
+
+    public void setQuestionnaire_id(int questionnaireId) {
+        this.questionnaire_id = questionnaireId;
     }
 }
