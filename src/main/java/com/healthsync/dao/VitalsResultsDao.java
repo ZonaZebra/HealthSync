@@ -16,7 +16,7 @@ public class VitalsResultsDao {
                 return -1;
             }
 
-            String sql = "INSERT INTO vitals_results (height, weight, systolic_bp, diastolic_bp, resting_pulse, temperature) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO vitals_results (height, weight, systolic_bp, diastolic_bp, resting_pulse, temperature, patient_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, vitalsResults.getHeight());
             stmt.setString(2, vitalsResults.getWeight());
