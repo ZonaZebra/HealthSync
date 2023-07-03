@@ -9,9 +9,11 @@ public class Vitals_Results {
     private double resting_pulse;
     private double temperature;
 
+    private String patient_id; // foreign key
+
     // Constructors
 
-    public Vitals_Results(int vitals_results_id, double height, double weight, int systolic_bp, int diastolic_bp, double resting_pulse, double temperature) {
+    public Vitals_Results(int vitals_results_id, double height, double weight, int systolic_bp, int diastolic_bp, double resting_pulse, double temperature, String patient_id) {
         this.vitals_results_id = vitals_results_id;
         this.height = height;
         this.weight = weight;
@@ -19,10 +21,23 @@ public class Vitals_Results {
         this.diastolic_bp = diastolic_bp;
         this.resting_pulse = resting_pulse;
         this.temperature = temperature;
+        this.patient_id = patient_id;
     }
 
     public int getVitals_results_id() {
         return vitals_results_id;
+    }
+
+    public void setVitals_results_id(int vitals_results_id) {
+        this.vitals_results_id = vitals_results_id;
+    }
+
+    public String getPatient_id() {
+        return patient_id;
+    }
+
+    public void setPatient_id(String patient_id) {
+        this.patient_id = patient_id;
     }
 
     public double getHeight() {
