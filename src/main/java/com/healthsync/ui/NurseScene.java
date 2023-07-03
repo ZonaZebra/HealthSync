@@ -1,6 +1,7 @@
 package com.healthsync.ui;
 
 import com.healthsync.entities.Patient;
+import com.healthsync.service.PatientHistoryService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -138,30 +139,50 @@ public class NurseScene extends BaseScene {
         questionnaire.add(constipation, 0, 5);
         questionnaire.add(cramping, 1, 5);
 
-
-
         questionnaire.add(questionnaireLabel, 0, 0, 5, 1);
-
 
         HBox topFields = new HBox(15);
         topFields.getChildren().addAll(vitalsEntry, questionnaire);
 
+
+        // -------------------- Patient History ---------------------------
+
+        GridPane patientHistoryContainer = new GridPane();
+        patientHistoryContainer.setPrefSize(1415, 400);
+        patientHistoryContainer.setStyle(BorderLayout);
+
         Label patientHistoryLabel = new Label("Patient History");
         patientHistoryLabel.setAlignment(Pos.CENTER);
-        patientHistoryLabel.setPrefWidth(1400);
+        patientHistoryLabel.setPrefWidth(1500);
         patientHistoryLabel.setStyle(labelLayout);
 
-        GridPane patientHistory = new GridPane();
-        patientHistory.setVgap(15);
-        patientHistory.setHgap(15);
-        patientHistory.setPadding(new Insets(0,0,0,0));
-        patientHistory.setPrefSize(1400,200);
-        patientHistory.setStyle(BorderLayout);
-        patientHistory.add(patientHistoryLabel, 0, 0, 2, 1);
+        VBox historyContent = new VBox();
+        historyContent.setStyle("-fx-background-color: #FFFFFF;");
+
+        PatientHistoryService patientHistoryService = new PatientHistoryService();
+        historyContent.getChildren().add(patientHistoryService.getPatientHistory(patient.getUserId()));
+
+        VBox scrollBarContainer = new VBox();
+        scrollBarContainer.setPadding(new Insets(15, 15, 15, 25));
+        scrollBarContainer.setStyle("-fx-border-radius: 30; -fx-background-insets: 0; " +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-background: transparent;");
+
+        ScrollPane historyScrollPane = new ScrollPane();
+        historyScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        historyScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        historyScrollPane.setStyle("-fx-background-color: #FFFFFF; -fx-background: transparent;");
+        historyScrollPane.setPrefHeight(320);
+        historyScrollPane.setContent(historyContent);
+
+        scrollBarContainer.getChildren().addAll(historyScrollPane);
+
+        patientHistoryContainer.add(patientHistoryLabel, 0, 0);
+        patientHistoryContainer.add(scrollBarContainer, 0, 1);
+
 
         content.getChildren().add(title);
         VBox.setVgrow(title, Priority.ALWAYS);
-        content.getChildren().addAll(topFields, patientHistory);
+        content.getChildren().addAll(topFields, patientHistoryContainer);
 
         return content;
     }

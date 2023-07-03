@@ -26,17 +26,11 @@ public class PatientHistoryService {
         List<Prescriptions> prescriptionsList = prescriptionsDao.getPrescriptions(patient_ID);
         List<Vitals_Results> vitalsResultsList = vitalsResultsDao.getAllVitalsResults(patient_ID);
 
-        // need to go through all the lists and create the box itself
-
-        // list could have something or nothing
-//        test.getChildren().add(new Text(testFindingsList.get(0).toString()));
-//        test.getChildren().add(new Text("- questionnaire results"));
-//        test.getChildren().add(new Text(prescriptionsList.get(0).toString()));
-//        test.getChildren().add(new Text("- vitals"));
+        test.setStyle("-fx-font-size: 15;");
 
         // Add Test findings First
         Text testFindingsLabel = new Text("Physical Test Findings:");
-        testFindingsLabel.setStyle("-fx-font-weight: bold;");
+        testFindingsLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
         if(testFindingsList.size()!= 0){test.getChildren().add(testFindingsLabel);}
         for (Physical_Test_Findings physical_test_findings : testFindingsList) {
             test.getChildren().add(new Text("   - Test Finding ID: "+ physical_test_findings.getPhysical_test_id()));
@@ -47,7 +41,7 @@ public class PatientHistoryService {
 
         // Then add questionnaire results
         Text questionnaireLabel = new Text("Questionnaire Results:");
-        questionnaireLabel.setStyle("-fx-font-weight: bold;");
+        questionnaireLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
         if(questionnaireResultsList.size()!= 0){test.getChildren().add(questionnaireLabel);}
         for (Questionnaire_Results questionnaire_results : questionnaireResultsList) {
             test.getChildren().add(new Text("   -" + questionnaire_results.getQuestionnaire_id()));
@@ -56,7 +50,7 @@ public class PatientHistoryService {
 
         // Then add Vitals results
         Text vitalsResultsLabel = new Text("Vitals Results:");
-        vitalsResultsLabel.setStyle("-fx-font-weight: bold;");
+        vitalsResultsLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
         if(vitalsResultsList.size()!= 0){test.getChildren().add(vitalsResultsLabel);}
         for (Vitals_Results vitalsResults : vitalsResultsList) {
             test.getChildren().add(new Text("   - Vitals ID: " + vitalsResults.getVitals_results_id()));
@@ -71,7 +65,7 @@ public class PatientHistoryService {
 
         // Then add Prescriptions
         Text prescriptionsLabel = new Text("Prescriptions:");
-        prescriptionsLabel.setStyle("-fx-font-weight: bold;");
+        prescriptionsLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
         if(prescriptionsList.size()!= 0){test.getChildren().add(prescriptionsLabel);}
         for (Prescriptions prescription : prescriptionsList) {
             test.getChildren().add(new Text("   - Prescription ID: " + prescription.getPrescription_id()));
