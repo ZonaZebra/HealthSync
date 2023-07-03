@@ -1,22 +1,22 @@
 package com.healthsync.entities;
 
-import java.util.Date;
-
 public class Questionnaire_Results {
     private int questionnaire_id; // primary key
     private String name;
-    private Date date;
+    private String date;
     private char sex;
     private String administered_by; // this will reference userID from User table
+    private String patient_ID;
 
     // Constructors
 
-    public Questionnaire_Results(int questionnaire_id, String name, Date date, char sex, String administered_by) {
+    public Questionnaire_Results(int questionnaire_id, String name, String date, char sex, String administered_by, String patient_ID) {
         this.questionnaire_id = questionnaire_id;
         this.name = name;
         this.date = date;
         this.sex = sex;
         this.administered_by = administered_by;
+        this.patient_ID = patient_ID;
     }
 
     public int getQuestionnaire_id() {
@@ -31,11 +31,11 @@ public class Questionnaire_Results {
         this.name = name;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

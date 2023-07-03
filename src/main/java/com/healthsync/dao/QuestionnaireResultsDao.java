@@ -5,7 +5,6 @@ import com.healthsync.util.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class QuestionnaireResultsDao {
@@ -20,7 +19,7 @@ public class QuestionnaireResultsDao {
             String sql = "INSERT INTO questionnaire_results (name, date, sex, administered_by) VALUES (?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, result.getName());
-            stmt.setDate(2, new java.sql.Date(result.getDate().getTime()));
+            stmt.setString(2,result.getDate());
             stmt.setString(3, String.valueOf(result.getSex()));
             stmt.setString(4, result.getAdministered_by());
 
@@ -59,13 +58,15 @@ public class QuestionnaireResultsDao {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Date date = new Date(rs.getDate("date").getTime());
+//                Date date = new Date(rs.getDate("date").getTime());
+                String date = rs.getString("date");
                 results.add(new Questionnaire_Results(
                         rs.getInt("questionnaire_id"),
                         rs.getString("name"),
                         date,
                         rs.getString("sex").charAt(0),
-                        rs.getString("administered_by")
+                        rs.getString("administered_by"),
+                        rs.getString("patient_id")
                 ));
             }
         } catch (SQLException e) {
@@ -85,7 +86,8 @@ public class QuestionnaireResultsDao {
             String sql = "UPDATE questionnaire_results SET name = ?, date = ?, sex = ?, administered_by = ? WHERE questionnaire_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, result.getName());
-            stmt.setDate(2, new java.sql.Date(result.getDate().getTime()));
+//            stmt.setDate(2, new java.sql.Date(result.getDate().getTime()));
+            stmt.setString(4, result.getDate());
             stmt.setString(3, String.valueOf(result.getSex()));
             stmt.setString(4, result.getAdministered_by());
             stmt.setInt(5, result.getQuestionnaire_id());

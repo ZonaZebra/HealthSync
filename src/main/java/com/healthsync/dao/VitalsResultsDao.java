@@ -16,14 +16,14 @@ public class VitalsResultsDao {
                 return -1;
             }
 
-            String sql = "INSERT INTO vitals_results (height, weight, systolic_bp, diastolic_bp, resting_pulse, temperature) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO vitals_results (height, weight, systolic_bp, diastolic_bp, resting_pulse, temperature) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setDouble(1, vitalsResults.getHeight());
-            stmt.setDouble(2, vitalsResults.getWeight());
-            stmt.setInt(3, vitalsResults.getSystolic_bp());
-            stmt.setInt(4, vitalsResults.getDiastolic_bp());
-            stmt.setDouble(5, vitalsResults.getResting_pulse());
-            stmt.setDouble(6, vitalsResults.getTemperature());
+            stmt.setString(1, vitalsResults.getHeight());
+            stmt.setString(2, vitalsResults.getWeight());
+            stmt.setString(3, vitalsResults.getSystolic_bp());
+            stmt.setString(4, vitalsResults.getDiastolic_bp());
+            stmt.setString(5, vitalsResults.getResting_pulse());
+            stmt.setString(6, vitalsResults.getTemperature());
             stmt.setString(7, vitalsResults.getPatient_id());
 
             int affectedRows = stmt.executeUpdate();
@@ -60,12 +60,12 @@ public class VitalsResultsDao {
             if (rs.next()) {
                 return new Vitals_Results(
                         rs.getInt("vitals_results_id"),
-                        rs.getDouble("height"),
-                        rs.getDouble("weight"),
-                        rs.getInt("systolic_bp"),
-                        rs.getInt("diastolic_bp"),
-                        rs.getDouble("resting_pulse"),
-                        rs.getDouble("temperature"),
+                        rs.getString("height"),
+                        rs.getString("weight"),
+                        rs.getString("systolic_bp"),
+                        rs.getString("diastolic_bp"),
+                        rs.getString("resting_pulse"),
+                        rs.getString("temperature"),
                         rs.getString("patient_id")
                 );
             }
@@ -84,12 +84,12 @@ public class VitalsResultsDao {
 
             String sql = "UPDATE vitals_results SET height = ?, weight = ?, systolic_bp = ?, diastolic_bp = ?, resting_pulse = ?, temperature = ? WHERE vitals_results_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDouble(1, vitalsResults.getHeight());
-            stmt.setDouble(2, vitalsResults.getWeight());
-            stmt.setInt(3, vitalsResults.getSystolic_bp());
-            stmt.setInt(4, vitalsResults.getDiastolic_bp());
-            stmt.setDouble(5, vitalsResults.getResting_pulse());
-            stmt.setDouble(6, vitalsResults.getTemperature());
+            stmt.setString(1, vitalsResults.getHeight());
+            stmt.setString(2, vitalsResults.getWeight());
+            stmt.setString(3, vitalsResults.getSystolic_bp());
+            stmt.setString(4, vitalsResults.getDiastolic_bp());
+            stmt.setString(5, vitalsResults.getResting_pulse());
+            stmt.setString(6, vitalsResults.getTemperature());
             stmt.setInt(7, vitalsResults.getVitals_results_id());
             stmt.setString(8, vitalsResults.getPatient_id());
 
@@ -140,12 +140,12 @@ public class VitalsResultsDao {
             while (rs.next()) {
                 vitalsResultsList.add(new Vitals_Results(
                         rs.getInt("vitals_results_id"),
-                        rs.getDouble("height"),
-                        rs.getDouble("weight"),
-                        rs.getInt("systolic_bp"),
-                        rs.getInt("diastolic_bp"),
-                        rs.getDouble("resting_pulse"),
-                        rs.getDouble("temperature"),
+                        rs.getString("height"),
+                        rs.getString("weight"),
+                        rs.getString("systolic_bp"),
+                        rs.getString("diastolic_bp"),
+                        rs.getString("resting_pulse"),
+                        rs.getString("temperature"),
                         rs.getString("patient_id")
                 ));
             }

@@ -2,18 +2,18 @@ package com.healthsync.entities;
 
 public class Vitals_Results {
     private int vitals_results_id; // primary key
-    private double height;
-    private double weight;
-    private int systolic_bp;
-    private int diastolic_bp;
-    private double resting_pulse;
-    private double temperature;
+    private String height;
+    private String weight;
+    private String systolic_bp;
+    private String diastolic_bp;
+    private String resting_pulse;
+    private String temperature;
 
     private String patient_id; // foreign key
 
     // Constructors
 
-    public Vitals_Results(int vitals_results_id, double height, double weight, int systolic_bp, int diastolic_bp, double resting_pulse, double temperature, String patient_id) {
+    public Vitals_Results(int vitals_results_id, String height, String weight, String systolic_bp, String diastolic_bp, String resting_pulse, String temperature, String patient_id) {
         this.vitals_results_id = vitals_results_id;
         this.height = height;
         this.weight = weight;
@@ -40,51 +40,51 @@ public class Vitals_Results {
         this.patient_id = patient_id;
     }
 
-    public double getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public double getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 
-    public int getSystolic_bp() {
+    public String getSystolic_bp() {
         return systolic_bp;
     }
 
-    public void setSystolic_bp(int systolic_bp) {
+    public void setSystolic_bp(String systolic_bp) {
         this.systolic_bp = systolic_bp;
     }
 
-    public int getDiastolic_bp() {
+    public String getDiastolic_bp() {
         return diastolic_bp;
     }
 
-    public void setDiastolic_bp(int diastolic_bp) {
+    public void setDiastolic_bp(String diastolic_bp) {
         this.diastolic_bp = diastolic_bp;
     }
 
-    public double getResting_pulse() {
+    public String getResting_pulse() {
         return resting_pulse;
     }
 
-    public void setResting_pulse(double resting_pulse) {
+    public void setResting_pulse(String resting_pulse) {
         this.resting_pulse = resting_pulse;
     }
 
-    public double getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
 

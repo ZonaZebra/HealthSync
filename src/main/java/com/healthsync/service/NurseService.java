@@ -5,20 +5,19 @@ import com.healthsync.dao.VitalsResultsDao;
 import com.healthsync.entities.Questionnaire_Results;
 import com.healthsync.entities.Vitals_Results;
 
-import java.util.Date;
-
 public class NurseService {
 
     private final QuestionnaireResultsDao questionnaireResultsDao = new QuestionnaireResultsDao();
     private final VitalsResultsDao vitalsResultsDao = new VitalsResultsDao();
 
-    public Questionnaire_Results createQuestionnaireResultEntry(String name, Date date, char sex, String administered_by) {
+    public Questionnaire_Results createQuestionnaireResultEntry(String name, String date, char sex, String administered_by, String patient_ID) {
         Questionnaire_Results questionnaire_results = new Questionnaire_Results(
                 -1,
                 name,
                 date,
                 sex,
-                administered_by
+                administered_by,
+                patient_ID
         );
 
         int questionnaire_id = questionnaireResultsDao.createQuestionnaireResult(questionnaire_results);
@@ -30,7 +29,8 @@ public class NurseService {
         return questionnaire_results;
     }
 
-    public Vitals_Results createVitalsResults(double height, double weight, int systolic_bp, int diastolic_bp, double resting_pulse, double temperature, String patient_id) {
+    public Vitals_Results createVitalsResults(String height, String weight, String systolic_bp, String diastolic_bp,
+                                              String resting_pulse, String temperature, String patient_id) {
         Vitals_Results vitals_results = new Vitals_Results(
                 -1,
                 height,
