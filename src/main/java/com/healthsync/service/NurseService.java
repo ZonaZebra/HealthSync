@@ -1,7 +1,9 @@
 package com.healthsync.service;
 
+import com.healthsync.dao.AppointmentsDao;
 import com.healthsync.dao.QuestionnaireResultsDao;
 import com.healthsync.dao.VitalsResultsDao;
+import com.healthsync.entities.Appointments;
 import com.healthsync.entities.Questionnaire_Results;
 import com.healthsync.entities.Vitals_Results;
 
@@ -9,6 +11,7 @@ public class NurseService {
 
     private final QuestionnaireResultsDao questionnaireResultsDao = new QuestionnaireResultsDao();
     private final VitalsResultsDao vitalsResultsDao = new VitalsResultsDao();
+    private final AppointmentsDao appointmentsDao = new AppointmentsDao();
 
     public Questionnaire_Results createQuestionnaireResultEntry(String name, String date, char sex, String administered_by, String patient_ID) {
         Questionnaire_Results questionnaire_results = new Questionnaire_Results(
@@ -49,5 +52,25 @@ public class NurseService {
         vitals_results.setVitals_results_id(vitals_results_id);
         System.out.println(vitals_results);
         return vitals_results;
+    }
+
+    public Appointments createAppointment(String patient_id, String doctor_id, Date date, int questionnaire_id, int vitals_results_id, int physical_test_id) {
+        Appointments appointment = new Appointments(
+                -1,
+                patient_id,
+                doctor_id,
+                date,
+                questionnaire_id,
+                vitals_results_id,
+                physical_test_id
+        );
+
+        int appointment_id = appointmentsDao.createAppointment(appointment);
+        if (appointment_id == -1) {
+            return null;
+        }
+        appointment.setAppointment_id(appointment_id);
+        System.out.println(appointment);
+        return appointment;
     }
 }

@@ -2,6 +2,8 @@ package com.healthsync.ui;
 
 import com.healthsync.entities.Patient;
 import com.healthsync.entities.User;
+import com.healthsync.dao.AppointmentsDao;
+import com.healthsync.entities.*;
 import com.healthsync.service.NurseService;
 import com.healthsync.service.PatientHistoryService;
 import javafx.geometry.Insets;
@@ -18,11 +20,11 @@ import java.util.Date;
 
 public class NurseScene extends BaseScene {
 
-    public NurseScene(Patient patient, User staff) {
-        super(createContent(patient, staff));
+    public NurseScene(Patient patient, User nurse) {
+        super(createContent(patient, nurse));
     }
 
-    private static Region createContent(Patient patient, User staff) {
+    private static Region createContent(Patient patient, User nurse) {
         // Common styling stuff
         String BorderLayout = """
                 -fx-border-color: black;
@@ -49,6 +51,9 @@ public class NurseScene extends BaseScene {
 
 
         // --------------------- vitals entry --------------------------------------
+        NurseService nurseService = new NurseService();
+        Appointments appointments = nurseService.createAppointment(patient.getUserId(), nurse.getUserId(), new Date(), -1, -1, -1);
+
 
         GridPane vitalsEntryContainer = new GridPane();
         vitalsEntryContainer.setVgap(15);
@@ -74,8 +79,8 @@ public class NurseScene extends BaseScene {
 
         heightContainer.getChildren().addAll(heightLabel, heightText);
 
-        VBox weigtheContainer = new VBox();
-        weigtheContainer.setPadding(new Insets(15, 10, 0, 10));
+        VBox weightContainerContainer = new VBox();
+        weightContainerContainer.setPadding(new Insets(15, 10, 0, 10));
 
         Label weightLabel = new Label("   Weight:");
         weightLabel.setOpacity(.50);
@@ -85,7 +90,7 @@ public class NurseScene extends BaseScene {
                 "-fx-border-radius: 30; -fx-border-style: solid;" +
                 "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
 
-        weigtheContainer.getChildren().addAll(weightLabel, weightText);
+        weightContainerContainer.getChildren().addAll(weightLabel, weightText);
 
         VBox bodyTempContainer = new VBox();
         bodyTempContainer.setPadding(new Insets(15, 10, 0, 10));
@@ -141,7 +146,7 @@ public class NurseScene extends BaseScene {
 
         GridPane vitalsContainer = new GridPane();
         vitalsContainer.add(heightContainer, 0, 0);
-        vitalsContainer.add(weigtheContainer, 1, 0);
+        vitalsContainer.add(weightContainerContainer, 1, 0);
 
         vitalsContainer.add(bodyTempContainer, 0, 1);
         vitalsContainer.add(bloodPressureContainer, 1, 1);
@@ -156,7 +161,17 @@ public class NurseScene extends BaseScene {
         vitalsEntryContainer.add(vitalsEntryLabel, 0, 0);
         vitalsEntryContainer.add(vitalsContainer, 0, 1);
 
-
+        Button vitalsSubmitButton = new Button("Submit");
+        vitalsSubmitButton.setOnAction(e -> {
+            double height = Double.parseDouble(heightText.getText());
+            double weight = Double.parseDouble(weightText.getText());
+            double temperature = Double.parseDouble(bodyTempText.getText());
+            int pulseRate = Integer.parseInt(pulseRateText.getText());
+            int bloodPressure = Integer.parseInt(bloodPressureText.getText());
+            String patientId = patient.getUserId();
+            Vitals_Results vitals_results = nurseService.createVitalsResults(height, weight, bloodPressure, bloodPressure, pulseRate, temperature, patientId);
+        });
+        vitalsEntryContainer.add(vitalsSubmitButton, 0, 2);
 
         // --------------------- questionnaire entry --------------------------------
 
@@ -246,6 +261,17 @@ public class NurseScene extends BaseScene {
 
         questionnaireContainer.add(questionnaireLabel, 0, 0);
         questionnaireContainer.add(questionnaire, 0, 1);
+
+        Button questionnaireSubmitButton = new Button("Submit");
+        questionnaireSubmitButton.setOnAction(e -> {
+            String name = nameText.getText();
+            Date date = new Date();
+            char sex = genderGroup.getSelectedToggle().equals(male) ? 'M' : 'F';
+            String administered_by = nurse.getUserId();
+            Questionnaire_Results result = nurseService.createQuestionnaireResultEntry(name, date, sex, administered_by);
+        });
+
+        questionnaireContainer.add(questionnaireSubmitButton, 0, 2);
 
 
         // -------------------- Patient History ---------------------------

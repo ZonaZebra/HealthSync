@@ -30,9 +30,10 @@ import java.util.Stack;
 
 public class PatientScene extends BaseScene {
     private static final PatientDao patientDao = new PatientDao();
-    private static final AppointmentsDao appointmentsDao = new AppointmentsDao();
+    public static final AppointmentsDao appointmentsDao = new AppointmentsDao();
     private static final UserDao userDao = new UserDao();
     private static final MessagesDao messagesDao = new MessagesDao();
+
     public PatientScene(User user, Stage stage) {
         super(createContent(user, stage));
     }
@@ -53,7 +54,7 @@ public class PatientScene extends BaseScene {
         HBox LeftPanel = new HBox();
         content.setLeft(LeftPanel);
 
-        VBox PatientInformation  = new VBox();
+        VBox PatientInformation = new VBox();
         PatientInformation.setPrefWidth(250);
         PatientInformation.setMinWidth(250);
         PatientInformation.setStyle("-fx-background-color:white;");
@@ -64,7 +65,7 @@ public class PatientScene extends BaseScene {
         ptInfoBox.setStyle("-fx-background-color:#7C8EB0");
         //PatientInformation.getChildren().add(ptInfoBox);
         ptInfoBox.setAlignment(Pos.CENTER);
-        PatientInformation.setPadding(new Insets(0,10,0,10));
+        PatientInformation.setPadding(new Insets(0, 10, 0, 10));
         VBox LeftPanelContent = new VBox(ptInfoBox, PatientInformation);
 
         //Name Field
@@ -75,7 +76,7 @@ public class PatientScene extends BaseScene {
         ptName.setStyle("-fx-font-size: 11px");
         HBox ptNameBox = new HBox(ptName);
         PatientInformation.getChildren().add(ptNameBox);
-        ptNameBox.setPadding(new Insets(0,0,10,0));
+        ptNameBox.setPadding(new Insets(0, 0, 10, 0));
         ptNameBox.setAlignment(Pos.BASELINE_RIGHT);
 
         //DOB Field
@@ -87,57 +88,57 @@ public class PatientScene extends BaseScene {
         ptDOB.setStyle("-fx-font-size: 11px");
         HBox ptDOBBox = new HBox(ptDOB);
         PatientInformation.getChildren().add(ptDOBBox);
-        ptDOBBox.setPadding(new Insets(0,0,10,0));
+        ptDOBBox.setPadding(new Insets(0, 0, 10, 0));
         ptDOBBox.setAlignment(Pos.BASELINE_RIGHT);
 
         //Phone Field
         Label Phone = new Label("Phone Number");
         Phone.setStyle("-fx-font-size: 12px; -fx-font-weight: bold");
         PatientInformation.getChildren().add(Phone);
-        String ptphone = patient.getContactInformation().toString().substring(0,9);
+        String ptphone = patient.getContactInformation().toString().substring(0, 9);
         Label ptPhone = new Label(ptphone);
         ptPhone.setStyle("-fx-font-size: 11px");
         HBox ptPhoneBox = new HBox(ptPhone);
         PatientInformation.getChildren().add(ptPhoneBox);
-        ptPhoneBox.setPadding(new Insets(0,0,10,0));
+        ptPhoneBox.setPadding(new Insets(0, 0, 10, 0));
         ptPhoneBox.setAlignment(Pos.BASELINE_RIGHT);
 
         //Email Field
         Label Email = new Label("Email Address");
         Email.setStyle("-fx-font-size: 12px; -fx-font-weight: bold");
         PatientInformation.getChildren().add(Email);
-        String ptemail = patient.getContactInformation().substring(11,(patient.getContactInformation().toString().length()));
+        String ptemail = patient.getContactInformation().substring(11, (patient.getContactInformation().toString().length()));
         Label ptEmail = new Label(ptemail);
         ptEmail.setStyle("-fx-font-size: 11px");
         HBox ptEmailBox = new HBox(ptEmail);
         PatientInformation.getChildren().add(ptEmailBox);
-        ptEmailBox.setPadding(new Insets(0,0,10,0));
+        ptEmailBox.setPadding(new Insets(0, 0, 10, 0));
         ptEmailBox.setAlignment(Pos.BASELINE_RIGHT);
 
         //Insurance Field
         Label Insurance = new Label("Insurance");
         Insurance.setStyle("-fx-font-size: 12px; -fx-font-weight: bold");
         PatientInformation.getChildren().add(Insurance);
-        String ptinsurance = patient.getInsuranceInformation().substring(0,(patient.getInsuranceInformation().indexOf(',')))
-                + "\n" + patient.getInsuranceInformation().substring((patient.getInsuranceInformation().indexOf(',')+1),patient.getInsuranceInformation().length());
+        String ptinsurance = patient.getInsuranceInformation().substring(0, (patient.getInsuranceInformation().indexOf(',')))
+                + "\n" + patient.getInsuranceInformation().substring((patient.getInsuranceInformation().indexOf(',') + 1), patient.getInsuranceInformation().length());
         Label ptInsurance = new Label(ptinsurance);
         ptInsurance.setStyle("-fx-font-size: 11px");
         HBox ptInsuranceBox = new HBox(ptInsurance);
         PatientInformation.getChildren().add(ptInsuranceBox);
-        ptInsuranceBox.setPadding(new Insets(0,0,10,0));
+        ptInsuranceBox.setPadding(new Insets(0, 0, 10, 0));
         ptInsuranceBox.setAlignment(Pos.BASELINE_RIGHT);
 
         //Pharmacy Field
         Label Pharmacy = new Label("Pharmacy");
         Pharmacy.setStyle("-fx-font-size: 12px; -fx-font-weight: bold");
         PatientInformation.getChildren().add(Pharmacy);
-        String ptpharm = patient.getPharmacyInformation().substring(0,(patient.getPharmacyInformation().indexOf(',')))
-                + "\n" + patient.getPharmacyInformation().substring((patient.getPharmacyInformation().indexOf(',')+1),patient.getPharmacyInformation().length());
+        String ptpharm = patient.getPharmacyInformation().substring(0, (patient.getPharmacyInformation().indexOf(',')))
+                + "\n" + patient.getPharmacyInformation().substring((patient.getPharmacyInformation().indexOf(',') + 1), patient.getPharmacyInformation().length());
         Label ptPharmacy = new Label(ptpharm);
         ptPharmacy.setStyle("-fx-font-size: 11px");
         HBox ptPharmacyBox = new HBox(ptPharmacy);
         PatientInformation.getChildren().add(ptPharmacyBox);
-        ptPharmacyBox.setPadding(new Insets(0,0,10,0));
+        ptPharmacyBox.setPadding(new Insets(0, 0, 10, 0));
         ptPharmacyBox.setAlignment(Pos.BASELINE_RIGHT);
 
 //        StackPane EditInfo = new StackPane();
@@ -215,7 +216,7 @@ public class PatientScene extends BaseScene {
 
         // Panel Header
         HBox CenterPanel = new HBox();
-        VBox Appointments  = new VBox();
+        VBox Appointments = new VBox();
         Appointments.setStyle("-fx-background-color:white");
         content.setCenter(CenterPanel);
         Appointments.setMinWidth(350);
@@ -230,17 +231,16 @@ public class PatientScene extends BaseScene {
         Label apptHist = new Label("Appointment History");
         apptHist.setStyle("-fx-font-size: 14px; -fx-font-weight: bolder");
 
-        if (PTappts.isEmpty()){
+        if (PTappts.isEmpty()) {
             Label empty = new Label("No upcoming appointments.");
             Appointments.getChildren().add(empty);
             empty.setAlignment(Pos.TOP_CENTER);
-        }
-        else{
+        } else {
             GridPane upcAppts = new GridPane();
             upcAppts.setVgap(10);
             upcAppts.setHgap(20);
             upcAppts.setAlignment(Pos.CENTER);
-            for (int i = 0; i < PTappts.size(); i++){
+            for (int i = 0; i < PTappts.size(); i++) {
                 String apptDateString = (dateFormat.format(PTappts.get(i).getAppointment_date()));
                 Label apptDate = new Label(apptDateString);
                 upcAppts.add(apptDate, 0, i);
@@ -278,7 +278,7 @@ public class PatientScene extends BaseScene {
         List<Messages> PTMsgsOUT = messagesDao.getMessagesBySenderId(user.getUserId());
 
         HBox RightPanel = new HBox();
-        VBox Messages  = new VBox();
+        VBox Messages = new VBox();
         Messages.setMinWidth(500);
         Messages.setStyle("-fx-background-color:white");
         RightPanel.setAlignment(Pos.TOP_LEFT);
@@ -296,12 +296,11 @@ public class PatientScene extends BaseScene {
         inbox.setStyle("-fx-font-size: 14px; -fx-font-weight: bolder");
         Messages.getChildren().add(inbox);
 
-        if (PTMsgsIN.isEmpty()){
+        if (PTMsgsIN.isEmpty()) {
             Label empty1 = new Label("No new messages.");
             Messages.getChildren().add(empty1);
             empty1.setAlignment(Pos.CENTER);
-        }
-        else {
+        } else {
             GridPane msgsIN = new GridPane();
             msgsIN.setPadding(new Insets(0, 0, 0, 20));
             msgsIN.setVgap(10);
@@ -329,12 +328,11 @@ public class PatientScene extends BaseScene {
         inbox.setStyle("-fx-font-size: 14px; -fx-font-weight: bolder");
         Messages.getChildren().add(sent);
 
-        if (PTMsgsOUT.isEmpty()){
+        if (PTMsgsOUT.isEmpty()) {
             Label empty2 = new Label("No messages sent.");
             Messages.getChildren().add(empty2);
             empty2.setAlignment(Pos.CENTER);
-        }
-        else {
+        } else {
             GridPane msgsOUT = new GridPane();
             msgsOUT.setPadding(new Insets(0, 0, 0, 20));
             msgsOUT.setVgap(10);
@@ -357,8 +355,8 @@ public class PatientScene extends BaseScene {
         }
         StackPane SendMess = new StackPane();
         Button SendMessButton = new Button("Send New Message");
-        SendMessButton.setOnAction(event ->{
-            Stage popupwindow=new Stage();
+        SendMessButton.setOnAction(event -> {
+            Stage popupwindow = new Stage();
             popupwindow.setMinWidth(650);
             popupwindow.initModality(Modality.APPLICATION_MODAL);
             popupwindow.setTitle("Send New Message");
@@ -388,7 +386,7 @@ public class PatientScene extends BaseScene {
             form.add(Body, 0, 2);
             form.add(BodyField, 1, 2);
 
-            Button Send= new Button("Send");
+            Button Send = new Button("Send");
             Send.setAlignment(Pos.CENTER_RIGHT);
             Send.setOnAction(e -> {
                 messagesDao.createMessage(new Messages(
@@ -405,13 +403,13 @@ public class PatientScene extends BaseScene {
             });
 
 
-            VBox layout= new VBox(20);
-            layout.setPadding(new Insets(0,20,0,20));
+            VBox layout = new VBox(20);
+            layout.setPadding(new Insets(0, 20, 0, 20));
             layout.getChildren().addAll(form, Send);
 
             layout.setAlignment(Pos.CENTER);
 
-            Scene scene1= new Scene(layout, 300, 450);
+            Scene scene1 = new Scene(layout, 300, 450);
             popupwindow.setScene(scene1);
             popupwindow.showAndWait();
         });
