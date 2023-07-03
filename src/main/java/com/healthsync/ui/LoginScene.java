@@ -63,10 +63,12 @@ public class LoginScene extends BaseScene {
                 String role = authenticatedUser.getRole();
                 switch (role) {
                     case "Patient" -> {
-                        PatientScene patientScene = new PatientScene();
+                        PatientScene patientScene = new PatientScene(authenticatedUser, stage);
+                        stage.setMinWidth(1157);
+                        stage.setMinWidth(1160);
                         stage.setScene(patientScene);
+                        stage.centerOnScreen();
                         stage.setTitle("HealthSync - Patient");
-
                     }
                     case "Doctor" -> {
                         FindPatientScene findPatientScene = new FindPatientScene(authenticatedUser, stage);
