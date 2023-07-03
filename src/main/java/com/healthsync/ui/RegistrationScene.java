@@ -167,7 +167,7 @@ public class RegistrationScene extends BaseScene {
             if (patient != null) {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
-                alert.setHeaderText(null);
+                alert.setHeaderText(patient.getUserId());
                 alert.setContentText("Patient registered successfully!");
             } else {
                 alert = new Alert(Alert.AlertType.ERROR);
