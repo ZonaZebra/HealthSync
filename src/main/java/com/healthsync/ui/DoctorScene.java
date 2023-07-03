@@ -6,6 +6,7 @@ import com.healthsync.entities.Physical_Test_Findings;
 import com.healthsync.entities.Prescriptions;
 import com.healthsync.entities.User;
 import com.healthsync.service.DoctorService;
+import com.healthsync.service.PatientHistoryService;
 import com.healthsync.service.RegistrationService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -186,31 +187,59 @@ public class DoctorScene extends BaseScene {
             // Disable the button immediately after it is clicked
             saveButtonFindings.setDisable(true);
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Save Test Findings??", ButtonType.YES, ButtonType.NO);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Save Test Findings?", ButtonType.YES, ButtonType.NO);
 
+            // I know I know... tons of ifs but for the sake of niceness... it works
             Optional<ButtonType> answer = alert.showAndWait();
             if (Objects.equals(answer.get().getText(), "Yes")) {
                 String issues = "";
                 if (lungIssue.isSelected()) {
-                    issues += lungIssue.getText() + ", ";
+                    issues += lungIssue.getText();
+                    if(abdominalIssue.isSelected() || headIssue.isSelected() || brainIssue.isSelected() ||
+                            heartIssue.isSelected() || extremitiesIssue.isSelected()){
+                        issues += ", ";
+                    }
                 }
                 if (abdominalIssue.isSelected()) {
-                    issues += abdominalIssue.getText() + ", ";
+                    issues += abdominalIssue.getText();
+                    if(headIssue.isSelected() || brainIssue.isSelected() || heartIssue.isSelected() ||
+                            extremitiesIssue.isSelected()){
+                        issues += ", ";
+                    }
                 }
                 if (headIssue.isSelected()) {
-                    issues += headIssue.getText() + ", ";
+                    issues += headIssue.getText();
+                    if(brainIssue.isSelected() || heartIssue.isSelected() || extremitiesIssue.isSelected()){
+                        issues += ", ";
+                    }
                 }
                 if (brainIssue.isSelected()) {
-                    issues += brainIssue.getText() + ", ";
+                    issues += brainIssue.getText();
+                    if(heartIssue.isSelected() || extremitiesIssue.isSelected()){
+                        issues += ", ";
+                    }
                 }
                 if (heartIssue.isSelected()) {
-                    issues += heartIssue.getText() + ", ";
+                    issues += heartIssue.getText();
+                    if(extremitiesIssue.isSelected()){
+                        issues += ", ";
+                    }
                 }
                 if (extremitiesIssue.isSelected()) {
-                    issues += extremitiesIssue.getText() + ", ";
+                    issues += extremitiesIssue.getText();
                 }
 
-                String comments = writtenComments.getText();
+                if(!lungIssue.isSelected() && !abdominalIssue.isSelected() && !headIssue.isSelected() &&
+                        !brainIssue.isSelected() && !heartIssue.isSelected() && !extremitiesIssue.isSelected()){
+                    issues += "None";
+                }
+
+                String comments = "";
+                if(!Objects.equals(writtenComments.getText(), "")){
+                    comments += writtenComments.getText();
+                }else{
+                    comments += "None";
+                }
 
                 String adminBy = doctor.getUserId();
                 String patientID = patient.getUserId();
@@ -265,7 +294,7 @@ public class DoctorScene extends BaseScene {
                 "-fx-border-radius: 30; -fx-border-style: solid;" +
                 "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
 
-        Label frequencyLabel = new Label("   Frequency:");
+        Label frequencyLabel = new Label("   Frequency (hours):");
         frequencyLabel.setOpacity(.50);
         TextField frequencyText = new TextField();
         frequencyText.setPrefWidth(217.5);
@@ -385,9 +414,11 @@ public class DoctorScene extends BaseScene {
         historyContent.setStyle("-fx-background-color: #FFFFFF;");
 
         // Add History here
-        for (int i = 0; i < 10; i++) {
-            historyContent.getChildren().addAll(new Text("- History item #" + (i + 1)));
-        }
+//        for (int i = 0; i < 10; i++) {
+//            historyContent.getChildren().addAll(new Text("- History item #" + (i + 1)));
+//        }
+        PatientHistoryService patientHistoryService = new PatientHistoryService();
+        historyContent.getChildren().add(patientHistoryService.getPatientHistory(patient.getUserId()));
 
         VBox scrollBarContainer = new VBox();
         scrollBarContainer.setPadding(new Insets(15, 15, 15, 25));

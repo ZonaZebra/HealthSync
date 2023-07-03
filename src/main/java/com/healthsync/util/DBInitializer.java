@@ -104,7 +104,8 @@ public class DBInitializer {
                     "name VARCHAR NOT NULL, " +
                     "date DATE NOT NULL, " +
                     "sex CHAR(1), " +
-                    "administered_by VARCHAR REFERENCES users(user_id)" +
+                    "administered_by VARCHAR REFERENCES users(user_id), " +
+                    "patient_id VARCHAR REFERENCES users(user_id)" +
                     ")";
             stmt.execute(createQuestionnaireResultsTable);
 
@@ -116,7 +117,8 @@ public class DBInitializer {
                     "systolic_bp INT NOT NULL, " +
                     "diastolic_bp INT NOT NULL, " +
                     "resting_pulse FLOAT NOT NULL, " +
-                    "temperature FLOAT NOT NULL" +
+                    "temperature FLOAT NOT NULL, " +
+                    "patient_id VARCHAR REFERENCES users(user_id)" +
                     ")";
             stmt.execute(createVitalsResultsTable);
 
