@@ -119,7 +119,12 @@ public class RegistrationScene extends BaseScene {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String password = passwordField.getText();
-            Date birthday = java.sql.Date.valueOf(birthdayField.getValue());
+            
+            Date birthday = null;
+            if(!(birthdayField.getValue() == null)){
+                birthday = java.sql.Date.valueOf(birthdayField.getValue());
+            }
+
             String email = emailField.getText();
             String phone = phoneField.getText();
             String contactInformation = phone + "," + email;
