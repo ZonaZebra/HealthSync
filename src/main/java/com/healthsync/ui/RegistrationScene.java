@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static com.healthsync.service.RegistrationService.isEmailValid;
 import static com.healthsync.service.RegistrationService.isPhoneNumberValid;
@@ -61,30 +62,35 @@ public class RegistrationScene extends BaseScene {
         form.add(passwordLabel, 0, 2);
         form.add(passwordField, 1, 2);
 
+        Label passwordLabel2 = new Label("Confirm Password:");
+        PasswordField passwordField2 = new PasswordField();
+        form.add(passwordLabel2, 0, 3);
+        form.add(passwordField2, 1, 3);
+
         // Birthday
         Label birthdayLabel = new Label("Birthday:");
         DatePicker birthdayField = new DatePicker();
-        form.add(birthdayLabel, 0, 3);
-        form.add(birthdayField, 1, 3);
+        form.add(birthdayLabel, 0, 4);
+        form.add(birthdayField, 1, 4);
 
         // Email
         Label emailLabel = new Label("Email:");
         TextField emailField = new TextField();
-        form.add(emailLabel, 0, 4);
-        form.add(emailField, 1, 4);
+        form.add(emailLabel, 0, 5);
+        form.add(emailField, 1, 5);
         // Phone
         Label phoneLabel = new Label("Phone:");
         TextField phoneField = new TextField();
-        form.add(phoneLabel, 0, 5);
-        form.add(phoneField, 1, 5);
+        form.add(phoneLabel, 0, 6);
+        form.add(phoneField, 1, 6);
 
         // Insurance Information
         Label insuranceCompanyLabel = new Label("Insurance Company:");
         ComboBox<String> insuranceCompanyField = new ComboBox<>(
                 FXCollections.observableArrayList(registrationService.getInsuranceCompanies().keySet()));
         insuranceCompanyField.getSelectionModel().selectFirst();
-        form.add(insuranceCompanyLabel, 0, 6);
-        form.add(insuranceCompanyField, 1, 6);
+        form.add(insuranceCompanyLabel, 0, 7);
+        form.add(insuranceCompanyField, 1, 7);
 
         Label insurancePolicyLabel = new Label("Insurance Policy:");
         ComboBox<String> insurancePolicyField = new ComboBox<>();
@@ -96,8 +102,8 @@ public class RegistrationScene extends BaseScene {
         insuranceCompanyField.getSelectionModel().selectedItemProperty().addListener(companyChangeListener);
         // Update the policy ComboBox for the initially selected company
         companyChangeListener.changed(null, null, insuranceCompanyField.getSelectionModel().getSelectedItem());
-        form.add(insurancePolicyLabel, 0, 7);
-        form.add(insurancePolicyField, 1, 7);
+        form.add(insurancePolicyLabel, 0, 8);
+        form.add(insurancePolicyField, 1, 8);
 
 
         // Pharmacy
@@ -106,8 +112,8 @@ public class RegistrationScene extends BaseScene {
         for (Pharmacy pharmacy : registrationService.getPharmacies()) {
             pharmacyChoiceBox.getItems().add(pharmacy.getName() + "," + pharmacy.getCrossStreets());
         }
-        form.add(pharmacyLabel, 0, 8);
-        form.add(pharmacyChoiceBox, 1, 8);
+        form.add(pharmacyLabel, 0, 9);
+        form.add(pharmacyChoiceBox, 1, 9);
 
 
         content.getChildren().add(form);
@@ -128,12 +134,36 @@ public class RegistrationScene extends BaseScene {
 
             // Validation
             if (firstName.isEmpty() || lastName.isEmpty() || password.isEmpty() ||
+                    Objects.equals(passwordField2.getText(), "") ||
                     email.isEmpty() || phone.isEmpty() || birthdayField.getValue() == null) {
                 // Show an error dialog
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill out all the fields.");
+                alert.showAndWait();
+                return;
+            }
+
+            if(!Objects.equals(passwordField.getText(), passwordField2.getText())){
+                // Show an error dialog
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Passwords do not match, please re-enter password.");
+                passwordField2.clear();
+                passwordField.clear();
+                alert.showAndWait();
+                return;
+            }
+            if(passwordField.getText().length() <5){
+                // Show an error dialog
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Password is too short, password must be 5 characters or more");
+                passwordField2.clear();
+                passwordField.clear();
                 alert.showAndWait();
                 return;
             }
