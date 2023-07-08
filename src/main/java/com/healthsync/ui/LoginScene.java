@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class LoginScene extends BaseScene {
 
     private static final UserService userService = new UserService();
@@ -56,10 +58,22 @@ public class LoginScene extends BaseScene {
             String userID = userIDField.getText();
             String password = passwordField.getText();
             User authenticatedUser = userService.authenticate(userID, password);
+
             if (authenticatedUser == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid UserID or Password!", ButtonType.OK);
-                userIDField.clear();
-                passwordField.clear();
+                Alert alert;
+                if(Objects.equals(userIDField.getText(), "")){
+                    alert = new Alert(Alert.AlertType.ERROR, "Missing UserID, Please Try Again!", ButtonType.OK);
+                    passwordField.clear();
+                }else if(Objects.equals(passwordField.getText(), "")){
+                    alert = new Alert(Alert.AlertType.ERROR, "Please Enter a Password.", ButtonType.OK);
+                }else{
+                    // Will alert if both fields populated but user not found or its invalid
+                    alert = new Alert(Alert.AlertType.ERROR, "Invalid UserID or Password, Please Try Again!", ButtonType.OK);
+                    userIDField.clear();
+                    passwordField.clear();
+
+                }
+
                 alert.show();
             } else {
                 String role = authenticatedUser.getRole();
