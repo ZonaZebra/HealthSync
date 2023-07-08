@@ -8,25 +8,22 @@ import com.healthsync.entities.Appointments;
 import com.healthsync.entities.Messages;
 import com.healthsync.entities.Patient;
 import com.healthsync.entities.User;
-import javafx.beans.value.ObservableValue;
+import com.healthsync.service.UserService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Stack;
+import java.util.Objects;
+import java.util.Optional;
 
 public class PatientScene extends BaseScene {
     private static final PatientDao patientDao = new PatientDao();
@@ -355,6 +352,7 @@ public class PatientScene extends BaseScene {
         }
         StackPane SendMess = new StackPane();
         Button SendMessButton = new Button("Send New Message");
+
         SendMessButton.setOnAction(event -> {
             Stage popupwindow = new Stage();
             popupwindow.setMinWidth(650);
@@ -387,19 +385,56 @@ public class PatientScene extends BaseScene {
             form.add(BodyField, 1, 2);
 
             Button Send = new Button("Send");
+
             Send.setAlignment(Pos.CENTER_RIGHT);
             Send.setOnAction(e -> {
-                messagesDao.createMessage(new Messages(
-                        0,
-                        patient.getUserId(),
-                        ToField.getText(),
-                        (new Date()),
-                        SubjectField.getText(),
-                        BodyField.getText()));
+                Alert alert;
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Message Sent!", ButtonType.OK);
+                // Add user Validation
+                UserService userService = new UserService();
+                User recipient = userService.getUserById(ToField.getText());
+
+                if(recipient == null){
+                    alert = new Alert(Alert.AlertType.INFORMATION, "Please enter a valid Recipient ID!", ButtonType.OK);
+                }else if(!Objects.equals(recipient.getRole(), "Nurse") && !Objects.equals(recipient.getRole(), "Doctor")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, "Please enter a valid Nurse or Doctor ID!", ButtonType.OK);
+                }else{
+                    // Add message validation
+
+                    if(Objects.equals(SubjectField.getText(), "") && Objects.equals(BodyField.getText(), "")){
+                        alert = new Alert(Alert.AlertType.INFORMATION, "Please enter a subject line, and a message to be sent!", ButtonType.OK);
+                    }else if(Objects.equals(SubjectField.getText(), "")){
+                        alert = new Alert(Alert.AlertType.INFORMATION, "Please enter a subject line!", ButtonType.OK);
+                    }else if(Objects.equals(BodyField.getText(), "")){
+                        alert = new Alert(Alert.AlertType.INFORMATION, "Please enter a message to be sent!", ButtonType.OK);
+                    }else{
+                        messagesDao.createMessage(new Messages(
+                                0,
+                                patient.getUserId(),
+                                ToField.getText(),
+                                (new Date()),
+                                SubjectField.getText(),
+                                BodyField.getText()));
+
+                        alert = new Alert(Alert.AlertType.INFORMATION, "Message Sent!", ButtonType.OK);
+                        popupwindow.close();
+                    }
+                }
                 alert.show();
-                popupwindow.close();
+            });
+
+            popupwindow.onCloseRequestProperty().setValue(ev->{
+                if(!Objects.equals(SubjectField.getText(), "") && !Objects.equals(BodyField.getText(), "")){
+                    Alert alertClose = new Alert(Alert.AlertType.CONFIRMATION, "Close without sending Message?", ButtonType.YES, ButtonType.NO);
+                    Optional<ButtonType> answer = alertClose.showAndWait();
+                    if (Objects.equals(answer.get().getText(), "Yes")) {
+                        popupwindow.close();
+                    }else{
+                        ev.consume();
+                    }
+                }else{
+                    popupwindow.close();
+                }
             });
 
 
