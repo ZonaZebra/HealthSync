@@ -50,7 +50,6 @@ public class NurseService {
             return null;
         }
         vitals_results.setVitals_results_id(vitals_results_id);
-        System.out.println(vitals_results);
         return vitals_results;
     }
 
@@ -70,7 +69,6 @@ public class NurseService {
             return null;
         }
         appointment.setAppointment_id(appointment_id);
-        System.out.println(appointment);
         return appointment;
     }
 }
