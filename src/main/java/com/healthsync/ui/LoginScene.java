@@ -58,6 +58,8 @@ public class LoginScene extends BaseScene {
             User authenticatedUser = userService.authenticate(userID, password);
             if (authenticatedUser == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid UserID or Password!", ButtonType.OK);
+                userIDField.clear();
+                passwordField.clear();
                 alert.show();
             } else {
                 String role = authenticatedUser.getRole();
