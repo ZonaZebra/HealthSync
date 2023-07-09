@@ -17,12 +17,13 @@ public class QuestionnaireResultsDao {
                 return -1;
             }
 
-            String sql = "INSERT INTO questionnaire_results (name, date, sex, administered_by) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO questionnaire_results (name, date, sex, administered_by, patient_id) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, result.getName());
             stmt.setDate(2, new java.sql.Date(result.getDate().getTime()));
             stmt.setString(3, String.valueOf(result.getSex()));
             stmt.setString(4, result.getAdministered_by());
+            stmt.setString(5, result.getPatient_id());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -65,7 +66,8 @@ public class QuestionnaireResultsDao {
                         rs.getString("name"),
                         date,
                         rs.getString("sex").charAt(0),
-                        rs.getString("administered_by")
+                        rs.getString("administered_by"),
+                        rs.getString("patient_id")
                 ));
             }
         } catch (SQLException e) {
