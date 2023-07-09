@@ -9,14 +9,17 @@ public class Questionnaire_Results {
     private char sex;
     private String administered_by; // this will reference userID from User table
 
+    private String patient_id; // this will reference userID from User table
+
     // Constructors
 
-    public Questionnaire_Results(int questionnaire_id, String name, Date date, char sex, String administered_by) {
+    public Questionnaire_Results(int questionnaire_id, String name, Date date, char sex, String administered_by, String patient_id) {
         this.questionnaire_id = questionnaire_id;
         this.name = name;
         this.date = date;
         this.sex = sex;
         this.administered_by = administered_by;
+        this.patient_id = patient_id;
     }
 
     public int getQuestionnaire_id() {
@@ -51,6 +54,14 @@ public class Questionnaire_Results {
         return administered_by;
     }
 
+    public String getPatient_id() {
+        return patient_id;
+    }
+
+    public void setPatient_id(String patient_id) {
+        this.patient_id = patient_id;
+    }
+
     public void setAdministered_by(String administered_by) {
         this.administered_by = administered_by;
     }
@@ -65,6 +76,7 @@ public class Questionnaire_Results {
                 ", date=" + date + '\'' +
                 ", sex=" + sex +
                 ", administered_by=" + administered_by +
+                ", patient_id=" + patient_id +
                 '}';
     }
 
