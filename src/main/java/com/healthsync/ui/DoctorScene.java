@@ -246,6 +246,13 @@ public class DoctorScene extends BaseScene {
                 doctorService.createPhysicalTestFindingsEntry(issues, comments, patientID, adminBy);
 
                 alert = new Alert(Alert.AlertType.INFORMATION, "Test Findings Submitted");
+                writtenComments.clear();
+                lungIssue.setSelected(false);
+                abdominalIssue.setSelected(false);
+                headIssue.setSelected(false);
+                brainIssue.setSelected(false);
+                heartIssue.setSelected(false);
+                extremitiesIssue.setSelected(false);
                 changeButton.fire();
                 alert.show();
             } else {
