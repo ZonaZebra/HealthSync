@@ -5,6 +5,7 @@ import java.util.Date;
 public class Questionnaire_Results {
     private int questionnaire_id; // primary key
     private String name;
+    private String issues;
     private Date date;
     private char sex;
     private String administered_by; // this will reference userID from User table
@@ -13,13 +14,14 @@ public class Questionnaire_Results {
 
     // Constructors
 
-    public Questionnaire_Results(int questionnaire_id, String name, Date date, char sex, String administered_by, String patient_id) {
+    public Questionnaire_Results(int questionnaire_id, String name, String issues, Date date, char sex, String administered_by, String patient_id) {
         this.questionnaire_id = questionnaire_id;
         this.name = name;
         this.date = date;
         this.sex = sex;
         this.administered_by = administered_by;
         this.patient_id = patient_id;
+        this.issues = issues;
     }
 
     public int getQuestionnaire_id() {
@@ -28,6 +30,14 @@ public class Questionnaire_Results {
 
     public String getName() {
         return name;
+    }
+
+    public String getIssues() {
+        return issues;
+    }
+
+    public void setIssues(String issues) {
+        this.issues = issues;
     }
 
     public void setName(String name) {
