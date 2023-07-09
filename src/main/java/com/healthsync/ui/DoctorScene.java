@@ -1,8 +1,6 @@
 package com.healthsync.ui;
 
-import com.healthsync.dao.PhysicalTestFindingsDao;
 import com.healthsync.entities.Patient;
-import com.healthsync.entities.Physical_Test_Findings;
 import com.healthsync.entities.Prescriptions;
 import com.healthsync.entities.User;
 import com.healthsync.service.DoctorService;
@@ -28,8 +26,6 @@ public class DoctorScene extends BaseScene {
     }
 
     //TODO: Needs to save or clear test findings, needs to send or clear prescription, needs to pull patient history
-    private static final PhysicalTestFindingsDao testFindingsDao = new PhysicalTestFindingsDao();
-
 
     private static Region createContent(Patient patient, User doctor) {
 
@@ -246,7 +242,7 @@ public class DoctorScene extends BaseScene {
 
                 // This will work for testing, but need to figure out how to always make the test ID unique
                 DoctorService doctorService = new DoctorService();
-                Physical_Test_Findings testFindings = doctorService.createPhysicalTestFindingsEntry(issues, comments, patientID, adminBy);
+                doctorService.createPhysicalTestFindingsEntry(issues, comments, patientID, adminBy);
 
                 alert = new Alert(Alert.AlertType.INFORMATION, "Test Findings Submitted");
                 alert.show();
@@ -363,7 +359,6 @@ public class DoctorScene extends BaseScene {
         saveButtonPrescription.setOnAction(e -> {
             Alert alert;
             if (!Objects.equals(prescriptionNameText.getText(), "") && !Objects.equals(dosageText.getText(), "") && !Objects.equals(frequencyText.getText(), "")) {
-                Physical_Test_Findings physical_test_findings;
                 alert = new Alert(Alert.AlertType.CONFIRMATION, "Submit Prescription to Pharmacy?", ButtonType.YES, ButtonType.NO);
 
                 Optional<ButtonType> answer = alert.showAndWait();
