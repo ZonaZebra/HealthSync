@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 
 public class NurseScene extends BaseScene {
@@ -164,17 +165,39 @@ public class NurseScene extends BaseScene {
         vitalsContainer.setVgap(10);
 
         GridPane buttonContainerVitals = new GridPane();
+        buttonContainerVitals.setHgap(310);
         Button vitalsSubmitButton = new Button("Submit");
-        vitalsSubmitButton.setPrefSize(680,10);
+        vitalsSubmitButton.setPrefSize(180,10);
         vitalsSubmitButton.setStyle("-fx-font-size: 15px; -fx-background-radius: 15;");
-        buttonContainerVitals.setAlignment(Pos.CENTER);
-        buttonContainerVitals.add(vitalsSubmitButton,0,0);
-        buttonContainerVitals.setPadding(new Insets(30,0,0,0));
 
         vitalsEntryContainer.add(vitalsEntryLabel, 0, 0);
         vitalsEntryContainer.add(vitalsContainer, 0, 1);
         vitalsEntryContainer.add(buttonContainerVitals, 0, 2);
         Button changeButton = new Button();
+
+        Button clearButton1 = new Button("Clear");
+        clearButton1.setPrefSize(180,10);
+        clearButton1.setStyle("-fx-font-size: 15px; -fx-background-radius: 15;");
+
+        buttonContainerVitals.setAlignment(Pos.CENTER);
+        buttonContainerVitals.add(clearButton1,0,0);
+        buttonContainerVitals.add(vitalsSubmitButton,1,0);
+        buttonContainerVitals.setPadding(new Insets(30,0,0,0));
+
+        clearButton1.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "All Vitals will be cleared, continue?", ButtonType.YES, ButtonType.NO);
+
+            Optional<ButtonType> answer = alert.showAndWait();
+            if (Objects.equals(answer.get().getText(), "Yes")) {
+                heightText.clear();
+                weightText.clear();
+                bodyTempText.clear();
+                pulseRateText.clear();
+                bloodPressureText2.clear();
+                bloodPressureText.clear();
+
+            }
+        });
 
         vitalsSubmitButton.setOnAction(e -> {
             Alert alert;
@@ -302,13 +325,40 @@ public class NurseScene extends BaseScene {
         contentContainer.add(checkboxesContainer,0,2);
 
         GridPane buttonContainer = new GridPane();
+        buttonContainer.setHgap(250);
         Button questionnaireSubmitButton = new Button("Submit");
-        questionnaireSubmitButton.setPrefSize(650,10);
+        questionnaireSubmitButton.setPrefSize(180,10);
         questionnaireSubmitButton.setStyle("-fx-font-size: 15px; -fx-background-radius: 15;");
-        buttonContainer.add(questionnaireSubmitButton,0,0);
+
+        Button clearButton = new Button("Clear");
+        clearButton.setPrefSize(180,10);
+        clearButton.setStyle("-fx-font-size: 15px; -fx-background-radius: 15;");
+
+        buttonContainer.add(clearButton,0,0);
+        buttonContainer.add(questionnaireSubmitButton,1,0);
+
         buttonContainer.setAlignment(Pos.CENTER);
 
         contentContainer.add(buttonContainer,0,3);
+
+        clearButton.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Questionnaire will be cleared, continue?", ButtonType.YES, ButtonType.NO);
+
+            Optional<ButtonType> answer = alert.showAndWait();
+            if (Objects.equals(answer.get().getText(), "Yes")) {
+                stomachPain.setSelected(false);
+                backPain.setSelected(false);
+                jointPain.setSelected(false);
+                nausea.setSelected(false);
+                dizziness.setSelected(false);
+                headaches.setSelected(false);
+                constipation.setSelected(false);
+                cramping.setSelected(false);
+                male.setSelected(false);
+                female.setSelected(false);
+
+            }
+        });
 
         questionnaireSubmitButton.setOnAction(e -> {
             Alert alert;
