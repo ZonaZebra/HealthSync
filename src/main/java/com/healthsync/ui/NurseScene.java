@@ -174,6 +174,7 @@ public class NurseScene extends BaseScene {
         vitalsEntryContainer.add(vitalsEntryLabel, 0, 0);
         vitalsEntryContainer.add(vitalsContainer, 0, 1);
         vitalsEntryContainer.add(buttonContainerVitals, 0, 2);
+        Button changeButton = new Button();
 
         vitalsSubmitButton.setOnAction(e -> {
             Alert alert;
@@ -185,15 +186,26 @@ public class NurseScene extends BaseScene {
                 return;
             }
 
-            double height = Double.parseDouble(heightText.getText());
-            double weight = Double.parseDouble(weightText.getText());
-            double temperature = Double.parseDouble(bodyTempText.getText());
+            int height = Integer.parseInt(heightText.getText());
+            int weight = Integer.parseInt(weightText.getText());
+            int temperature = Integer.parseInt(bodyTempText.getText());
             int pulseRate = Integer.parseInt(pulseRateText.getText());
             int systolicBp = Integer.parseInt(bloodPressureText.getText());
             int diastolicBp = Integer.parseInt(bloodPressureText2.getText());
             String patientId = patient.getUserId();
 
             nurseService.createVitalsResults(height, weight, systolicBp, diastolicBp, pulseRate, temperature, patientId);
+
+            alert = new Alert(Alert.AlertType.INFORMATION, "Vitals Submitted");
+            heightText.clear();
+            weightText.clear();
+            bodyTempText.clear();
+            pulseRateText.clear();
+            bloodPressureText2.clear();
+            bloodPressureText.clear();
+            vitalsSubmitButton.setDisable(true);
+            changeButton.fire();
+            alert.show();
 
         });
 
@@ -282,7 +294,6 @@ public class NurseScene extends BaseScene {
         checkboxesContainer.add(backPain, 1, 0);
         checkboxesContainer.add(jointPain, 2, 0);
         checkboxesContainer.add(nausea, 3, 0);
-
         checkboxesContainer.add(dizziness, 0, 1);
         checkboxesContainer.add(headaches, 1, 1);
         checkboxesContainer.add(constipation, 2, 1);
@@ -308,12 +319,86 @@ public class NurseScene extends BaseScene {
                 return;
             }
 
+            String issues = "";
+            if (stomachPain.isSelected()) {
+                issues += "Stomach Pain";
+                if(backPain.isSelected() || jointPain.isSelected() || nausea.isSelected() ||
+                    dizziness.isSelected() || headaches.isSelected() || constipation.isSelected() ||
+                    cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+            if (backPain.isSelected()) {
+                issues += "Back Pain";
+                if(jointPain.isSelected() || nausea.isSelected() || dizziness.isSelected() ||
+                        headaches.isSelected() || constipation.isSelected() || cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (jointPain.isSelected()) {
+                issues += "Joint Pain";
+                if(nausea.isSelected() || dizziness.isSelected() || headaches.isSelected() ||
+                        constipation.isSelected() || cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (nausea.isSelected()) {
+                issues += "Nausea";
+                if(dizziness.isSelected() || headaches.isSelected() || constipation.isSelected() ||
+                        cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (dizziness.isSelected()) {
+                issues += "Dizziness";
+                if(headaches.isSelected() || constipation.isSelected() || cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+            if (headaches.isSelected()) {
+                issues += "Headaches";
+                if(constipation.isSelected() || cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (constipation.isSelected()) {
+                issues += "Constipation";
+                if(cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (cramping.isSelected()) {
+                issues += "Cramping";
+            }
+
             String name = nameText.getText();
             Date date = new Date();
             char sex = Objects.equals(genderGroup.getSelectedToggle(), male) ? 'M' : 'F';
 
             String administered_by = nurse.getUserId();
-            nurseService.createQuestionnaireResultEntry(name, date, sex, administered_by, patient.getUserId());
+            nurseService.createQuestionnaireResultEntry(name, issues,date, sex, administered_by, patient.getUserId());
+
+            alert = new Alert(Alert.AlertType.INFORMATION, "Questionnaire Submitted");
+
+            stomachPain.setSelected(false);
+            backPain.setSelected(false);
+            jointPain.setSelected(false);
+            nausea.setSelected(false);
+            dizziness.setSelected(false);
+            headaches.setSelected(false);
+            constipation.setSelected(false);
+            cramping.setSelected(false);
+            male.setSelected(false);
+            female.setSelected(false);
+            changeButton.fire();
+            questionnaireSubmitButton.setDisable(true);
+
+            alert.show();
         });
 
         questionnaireContainer.add(contentContainer, 0, 1);
@@ -334,6 +419,11 @@ public class NurseScene extends BaseScene {
 
         PatientHistoryService patientHistoryService = new PatientHistoryService();
         historyContent.getChildren().add(patientHistoryService.getPatientHistory(patient.getUserId()));
+
+        changeButton.setOnAction(ev ->{
+            historyContent.getChildren().clear();
+            historyContent.getChildren().add(patientHistoryService.getPatientHistory(patient.getUserId()));
+        });
 
         VBox scrollBarContainer = new VBox();
         scrollBarContainer.setPadding(new Insets(15, 15, 15, 25));

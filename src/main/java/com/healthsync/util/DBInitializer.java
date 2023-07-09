@@ -102,6 +102,7 @@ public class DBInitializer {
             String createQuestionnaireResultsTable = "CREATE TABLE IF NOT EXISTS questionnaire_results (" +
                     "questionnaire_id SERIAL PRIMARY KEY CHECK (questionnaire_id >= 10000), " +
                     "name VARCHAR NOT NULL, " +
+                    "issues VARCHAR NOT NULL, " +
                     "date DATE NOT NULL, " +
                     "sex CHAR(1), " +
                     "administered_by VARCHAR REFERENCES users(user_id), " +
@@ -112,12 +113,12 @@ public class DBInitializer {
             // Vitals_Results table
             String createVitalsResultsTable = "CREATE TABLE IF NOT EXISTS vitals_results (" +
                     "vitals_results_id SERIAL PRIMARY KEY CHECK (vitals_results_id >= 10000), " +
-                    "height FLOAT NOT NULL, " +
-                    "weight FLOAT NOT NULL, " +
+                    "height INT NOT NULL, " +
+                    "weight INT NOT NULL, " +
                     "systolic_bp INT NOT NULL, " +
                     "diastolic_bp INT NOT NULL, " +
-                    "resting_pulse FLOAT NOT NULL, " +
-                    "temperature FLOAT NOT NULL, " +
+                    "resting_pulse INT NOT NULL, " +
+                    "temperature INT NOT NULL, " +
                     "patient_id VARCHAR REFERENCES users(user_id)" +
                     ")";
             stmt.execute(createVitalsResultsTable);

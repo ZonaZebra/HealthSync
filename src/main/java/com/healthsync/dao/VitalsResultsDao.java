@@ -60,12 +60,12 @@ public class VitalsResultsDao {
             if (rs.next()) {
                 return new Vitals_Results(
                         rs.getInt("vitals_results_id"),
-                        rs.getDouble("height"),
-                        rs.getDouble("weight"),
+                        rs.getInt("height"),
+                        rs.getInt("weight"),
                         rs.getInt("systolic_bp"),
                         rs.getInt("diastolic_bp"),
-                        rs.getDouble("resting_pulse"),
-                        rs.getDouble("temperature"),
+                        rs.getInt("resting_pulse"),
+                        rs.getInt("temperature"),
                         rs.getString("patient_id")
                 );
             }
@@ -140,12 +140,12 @@ public class VitalsResultsDao {
             while (rs.next()) {
                 vitalsResultsList.add(new Vitals_Results(
                         rs.getInt("vitals_results_id"),
-                        rs.getDouble("height"),
-                        rs.getDouble("weight"),
+                        rs.getInt("height"),
+                        rs.getInt("weight"),
                         rs.getInt("systolic_bp"),
                         rs.getInt("diastolic_bp"),
-                        rs.getDouble("resting_pulse"),
-                        rs.getDouble("temperature"),
+                        rs.getInt("resting_pulse"),
+                        rs.getInt("temperature"),
                         rs.getString("patient_id")
                 ));
             }
