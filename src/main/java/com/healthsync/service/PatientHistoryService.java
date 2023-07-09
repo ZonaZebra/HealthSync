@@ -53,7 +53,6 @@ public class PatientHistoryService {
         for (Questionnaire_Results questionnaire_results : questionnaireResultsList) {
             test.getChildren().add(new Text("   - Questionnaire ID: " + questionnaire_results.getQuestionnaire_id()));
             test.getChildren().add(new Text("         - Sex: " + questionnaire_results.getSex()));
-            test.getChildren().add(new Text("         - Height: " + questionnaire_results.getSex()));
             test.getChildren().add(new Text("         - Reported Issues: " + questionnaire_results.getIssues()));
             test.getChildren().add(new Text(""));
         }
@@ -89,8 +88,8 @@ public class PatientHistoryService {
         for (Prescriptions prescription : prescriptionsList) {
             test.getChildren().add(new Text("   - Prescription ID: " + prescription.getPrescription_id()));
             test.getChildren().add(new Text("         - Prescription Name: " + prescription.getProduct()));
-            test.getChildren().add(new Text("         - Dosage (mg): " + prescription.getDosage_in_mg()));
-            test.getChildren().add(new Text("         - Frequency (hours): " + prescription.getFrequency()));
+            test.getChildren().add(new Text("         - Dosage: " + prescription.getDosage_in_mg() + "mg"));
+            test.getChildren().add(new Text("         - Frequency: " + prescription.getFrequency() + "hr(s)"));
             test.getChildren().add(new Text("         - Additional Instructions: " + prescription.getInstructions()));
             test.getChildren().add(new Text(""));
         }
