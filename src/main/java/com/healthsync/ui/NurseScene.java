@@ -1,17 +1,24 @@
 package com.healthsync.ui;
 
-import com.healthsync.dao.AppointmentsDao;
-import com.healthsync.entities.*;
+import com.healthsync.entities.Appointments;
+import com.healthsync.entities.Patient;
+import com.healthsync.entities.User;
 import com.healthsync.service.NurseService;
 import com.healthsync.service.PatientHistoryService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 
 public class NurseScene extends BaseScene {
@@ -65,7 +72,7 @@ public class NurseScene extends BaseScene {
         VBox heightContainer = new VBox();
         heightContainer.setPadding(new Insets(15, 10, 0, 10));
 
-        Label heightLabel = new Label("   Height:");
+        Label heightLabel = new Label("   Height (in):");
         heightLabel.setOpacity(.50);
         TextField heightText = new TextField();
         heightText.setPrefWidth(450);
@@ -78,7 +85,7 @@ public class NurseScene extends BaseScene {
         VBox weightContainerContainer = new VBox();
         weightContainerContainer.setPadding(new Insets(15, 10, 0, 10));
 
-        Label weightLabel = new Label("   Weight:");
+        Label weightLabel = new Label("   Weight (lbs):");
         weightLabel.setOpacity(.50);
         TextField weightText = new TextField();
         weightText.setPrefWidth(450);
@@ -91,7 +98,7 @@ public class NurseScene extends BaseScene {
         VBox bodyTempContainer = new VBox();
         bodyTempContainer.setPadding(new Insets(15, 10, 0, 10));
 
-        Label bodyTempLabel = new Label("   Body Temperature:");
+        Label bodyTempLabel = new Label("   Body Temperature (F): ");
         bodyTempLabel.setOpacity(.50);
         TextField bodyTempText = new TextField();
         bodyTempText.setPrefWidth(450);
@@ -104,7 +111,7 @@ public class NurseScene extends BaseScene {
         VBox bloodPressureContainer = new VBox();
         bloodPressureContainer.setPadding(new Insets(15, 10, 0, 10));
 
-        Label bloodPressureLabel = new Label("   Blood Pressure:");
+        Label bloodPressureLabel = new Label("   Systolic Blood Pressure (mmHg):");
         bloodPressureLabel.setOpacity(.50);
         TextField bloodPressureText = new TextField();
         bloodPressureText.setPrefWidth(450);
@@ -114,10 +121,23 @@ public class NurseScene extends BaseScene {
 
         bloodPressureContainer.getChildren().addAll(bloodPressureLabel, bloodPressureText);
 
+        VBox bloodPressureContainer2 = new VBox();
+        bloodPressureContainer2.setPadding(new Insets(15, 10, 0, 10));
+
+        Label bloodPressureLabel2 = new Label("   Diastolic Blood Pressure (mmHg):");
+        bloodPressureLabel2.setOpacity(.50);
+        TextField bloodPressureText2 = new TextField();
+        bloodPressureText2.setPrefWidth(450);
+        bloodPressureText2.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
+                "-fx-border-radius: 30; -fx-border-style: solid;" +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+
+        bloodPressureContainer2.getChildren().addAll(bloodPressureLabel2, bloodPressureText2);
+
         VBox pulseRateContainer = new VBox();
         pulseRateContainer.setPadding(new Insets(15, 10, 0, 10));
 
-        Label pulseRateLabel = new Label("   Pulse Rate:");
+        Label pulseRateLabel = new Label("   Pulse Rate (bpm):");
         pulseRateLabel.setOpacity(.50);
         TextField pulseRateText = new TextField();
         pulseRateText.setPrefWidth(450);
@@ -130,114 +150,159 @@ public class NurseScene extends BaseScene {
         VBox bloodOxygenContainer = new VBox();
         bloodOxygenContainer.setPadding(new Insets(15, 10, 0, 10));
 
-        Label bloodOxygenLabel = new Label("   Prescription Name:");
-        bloodOxygenLabel.setOpacity(.50);
-        TextField bloodOxygenText = new TextField();
-        bloodOxygenText.setPrefWidth(450);
-        bloodOxygenText.setStyle("-fx-font-size: 15px; -fx-border-color: #1F2B6C; -fx-border-width: 1; " +
-                "-fx-border-radius: 30; -fx-border-style: solid;" +
-                "-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
-
-        bloodOxygenContainer.getChildren().addAll(bloodOxygenLabel, bloodOxygenText);
-
         GridPane vitalsContainer = new GridPane();
+
         vitalsContainer.add(heightContainer, 0, 0);
         vitalsContainer.add(weightContainerContainer, 1, 0);
 
         vitalsContainer.add(bodyTempContainer, 0, 1);
-        vitalsContainer.add(bloodPressureContainer, 1, 1);
+        vitalsContainer.add(pulseRateContainer, 1, 1);
 
-        vitalsContainer.add(pulseRateContainer, 0, 2);
-        vitalsContainer.add(bloodOxygenContainer, 1, 2);
+        vitalsContainer.add(bloodPressureContainer, 0, 2);
+        vitalsContainer.add(bloodPressureContainer2, 1, 2);
 
         vitalsContainer.setAlignment(Pos.CENTER);
         vitalsContainer.setVgap(10);
 
+        GridPane buttonContainerVitals = new GridPane();
+        buttonContainerVitals.setHgap(310);
+        Button vitalsSubmitButton = new Button("Submit");
+        vitalsSubmitButton.setPrefSize(180,10);
+        vitalsSubmitButton.setStyle("-fx-font-size: 15px; -fx-background-radius: 15;");
 
         vitalsEntryContainer.add(vitalsEntryLabel, 0, 0);
         vitalsEntryContainer.add(vitalsContainer, 0, 1);
+        vitalsEntryContainer.add(buttonContainerVitals, 0, 2);
+        Button changeButton = new Button();
 
-        Button vitalsSubmitButton = new Button("Submit");
-        vitalsSubmitButton.setOnAction(e -> {
-            double height = Double.parseDouble(heightText.getText());
-            double weight = Double.parseDouble(weightText.getText());
-            double temperature = Double.parseDouble(bodyTempText.getText());
-            int pulseRate = Integer.parseInt(pulseRateText.getText());
-            int bloodPressure = Integer.parseInt(bloodPressureText.getText());
-            String patientId = patient.getUserId();
-            Vitals_Results vitals_results = nurseService.createVitalsResults(height, weight, bloodPressure, bloodPressure, pulseRate, temperature, patientId);
+        Button clearButton1 = new Button("Clear");
+        clearButton1.setPrefSize(180,10);
+        clearButton1.setStyle("-fx-font-size: 15px; -fx-background-radius: 15;");
+
+        buttonContainerVitals.setAlignment(Pos.CENTER);
+        buttonContainerVitals.add(clearButton1,0,0);
+        buttonContainerVitals.add(vitalsSubmitButton,1,0);
+        buttonContainerVitals.setPadding(new Insets(30,0,0,0));
+
+        clearButton1.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "All Vitals will be cleared, continue?", ButtonType.YES, ButtonType.NO);
+
+            Optional<ButtonType> answer = alert.showAndWait();
+            if (Objects.equals(answer.get().getText(), "Yes")) {
+                heightText.clear();
+                weightText.clear();
+                bodyTempText.clear();
+                pulseRateText.clear();
+                bloodPressureText2.clear();
+                bloodPressureText.clear();
+
+            }
         });
 
-        vitalsEntryContainer.add(vitalsSubmitButton, 0, 2);
+        vitalsSubmitButton.setOnAction(e -> {
+            Alert alert;
 
+            if(Objects.equals(heightText.getText(), "") || Objects.equals(weightText.getText(), "") || Objects.equals(bodyTempText.getText(), "") ||
+            Objects.equals(pulseRateText.getText(), "") || Objects.equals(bloodPressureText.getText(), "") || Objects.equals(bloodPressureText2.getText(), "")) {
+                alert = new Alert(Alert.AlertType.ERROR, "Missing entry, Please Try Again!", ButtonType.OK);
+                alert.showAndWait();
+                return;
+            }
+
+            int height = Integer.parseInt(heightText.getText());
+            int weight = Integer.parseInt(weightText.getText());
+            int temperature = Integer.parseInt(bodyTempText.getText());
+            int pulseRate = Integer.parseInt(pulseRateText.getText());
+            int systolicBp = Integer.parseInt(bloodPressureText.getText());
+            int diastolicBp = Integer.parseInt(bloodPressureText2.getText());
+            String patientId = patient.getUserId();
+
+            nurseService.createVitalsResults(height, weight, systolicBp, diastolicBp, pulseRate, temperature, patientId);
+
+            alert = new Alert(Alert.AlertType.INFORMATION, "Vitals Submitted");
+            heightText.clear();
+            weightText.clear();
+            bodyTempText.clear();
+            pulseRateText.clear();
+            bloodPressureText2.clear();
+            bloodPressureText.clear();
+            vitalsSubmitButton.setDisable(true);
+            changeButton.fire();
+            alert.show();
+
+        });
 
         // --------------------- questionnaire entry --------------------------------
-
 
         GridPane questionnaireContainer = new GridPane();
         questionnaireContainer.setPadding(new Insets(0, 0, 20, 0));
         questionnaireContainer.setPrefSize(700, 400);
         questionnaireContainer.setStyle(BorderLayout);
 
+
+        GridPane contentContainer = new GridPane();
+        contentContainer.setPrefSize(700,300);
+        contentContainer.setAlignment(Pos.TOP_CENTER);
+        contentContainer.setStyle(BorderLayout);
+        contentContainer.setVgap(30);
+        contentContainer.setStyle("-fx-font-size: 17px");
+        contentContainer.setPadding(new Insets(30,0,0,0));
+
         Label questionnaireLabel = new Label("Questionnaire");
         questionnaireLabel.setAlignment(Pos.CENTER);
         questionnaireLabel.setPrefWidth(700);
         questionnaireLabel.setStyle(labelLayout);
 
-        GridPane questionnaire = new GridPane();
-        questionnaire.setVgap(5);
-        questionnaire.setHgap(10);
-        questionnaire.setAlignment(Pos.CENTER);
-        questionnaire.setPrefWidth(900);
+        questionnaireContainer.add(questionnaireLabel, 0, 0);
+
+        HBox questionnaireTopContent = new HBox();
+        questionnaireTopContent.setSpacing(30);
+        questionnaireTopContent.setPrefWidth(700);
+        questionnaireTopContent.setAlignment(Pos.CENTER);
 
         HBox nameContainer = new HBox();
-        nameContainer.setPadding(new Insets(15, 10, 0, 10));
-
         Label nameLabel = new Label("Name:  ");
         nameLabel.setOpacity(.50);
         Text nameText = new Text(patient.getFirstName() + " " + patient.getLastName());
-        nameContainer.setStyle("-fx-font-size: 15px; -fx-background-color: #FFFFFF; ");
 
         nameContainer.getChildren().addAll(nameLabel, nameText);
 
-        HBox ageContainer = new HBox();
-        ageContainer.setPadding(new Insets(15, 10, 0, 10));
+        HBox dobContainer = new HBox();
+        Label dobLabel = new Label("Date of Birth:  ");
+        dobLabel.setOpacity(.50);
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Text dateOfBirth = new Text(dateFormat.format(patient.getBirthday()));
 
-        Label ageLabel = new Label("Age:  ");
-        ageLabel.setOpacity(.50);
-        Text ageText = new Text("age");
-        ageContainer.setStyle("-fx-font-size: 15px; -fx-background-color: #FFFFFF; ");
+        dobContainer.getChildren().addAll(dobLabel, dateOfBirth);
 
-        ageContainer.getChildren().addAll(ageLabel, ageText);
-
-        Label sexLabel = new Label("Sex:");
+        HBox genderContainer = new HBox();
+        Label sexLabel = new Label("Sex:   ");
         sexLabel.setOpacity(.50);
 
         ToggleGroup genderGroup = new ToggleGroup();
-        RadioButton male = new RadioButton("M");
+        RadioButton male = new RadioButton("M   ");
         RadioButton female = new RadioButton("F");
-
         male.setToggleGroup(genderGroup);
         female.setToggleGroup(genderGroup);
+        genderContainer.getChildren().addAll(sexLabel,male, female );
 
-        GridPane genderBox = new GridPane();
-        genderBox.setHgap(5); // Horizontal spacing
-        genderBox.add(sexLabel, 0, 0);
-        genderBox.add(male, 1, 0);
-        genderBox.add(female, 2, 0);
+        // All the things on top: name, dob, gender selection
+        questionnaireTopContent.getChildren().addAll(nameContainer, dobContainer, genderContainer);
 
-
-        questionnaire.add(genderBox, 2, 1);
-
-        questionnaire.add(nameContainer, 0, 1);
-        questionnaire.add(ageContainer, 1, 1);
-        questionnaire.setStyle("-fx-font-size: 15px; -fx-background-color: #FFFFFF; ");
-
-
+        contentContainer.add(questionnaireTopContent, 0,0);
+        VBox textContainer = new VBox();
+        textContainer.setPrefWidth(700);
         Label problemQuestion = new Label("Which of the following problems are you experiencing?");
-        problemQuestion.setWrapText(true);
-        questionnaire.add(problemQuestion, 0, 2, 3, 1);
-        problemQuestion.setTranslateX(50);
+
+        textContainer.getChildren().addAll(problemQuestion);
+        textContainer.setAlignment(Pos.CENTER);
+        contentContainer.add(textContainer,0,1);
+
+        GridPane checkboxesContainer = new GridPane();
+        checkboxesContainer.setPrefWidth(700);
+        checkboxesContainer.setVgap(50);
+        checkboxesContainer.setHgap(30);
+        checkboxesContainer.setAlignment(Pos.CENTER);
 
         CheckBox stomachPain = new CheckBox("Stomach Pain");
         CheckBox backPain = new CheckBox("Back Pain");
@@ -248,29 +313,145 @@ public class NurseScene extends BaseScene {
         CheckBox constipation = new CheckBox("Constipation");
         CheckBox cramping = new CheckBox("Cramping");
 
-        questionnaire.add(stomachPain, 0, 3);
-        questionnaire.add(backPain, 1, 3);
-        questionnaire.add(jointPain, 2, 3);
-        questionnaire.add(nausea, 0, 4);
-        questionnaire.add(dizziness, 1, 4);
-        questionnaire.add(headaches, 2, 4);
-        questionnaire.add(constipation, 0, 5);
-        questionnaire.add(cramping, 1, 5);
+        checkboxesContainer.add(stomachPain, 0, 0);
+        checkboxesContainer.add(backPain, 1, 0);
+        checkboxesContainer.add(jointPain, 2, 0);
+        checkboxesContainer.add(nausea, 3, 0);
+        checkboxesContainer.add(dizziness, 0, 1);
+        checkboxesContainer.add(headaches, 1, 1);
+        checkboxesContainer.add(constipation, 2, 1);
+        checkboxesContainer.add(cramping, 3, 1);
 
-        questionnaireContainer.add(questionnaireLabel, 0, 0);
-        questionnaireContainer.add(questionnaire, 0, 1);
+        contentContainer.add(checkboxesContainer,0,2);
 
+        GridPane buttonContainer = new GridPane();
+        buttonContainer.setHgap(250);
         Button questionnaireSubmitButton = new Button("Submit");
+        questionnaireSubmitButton.setPrefSize(180,10);
+        questionnaireSubmitButton.setStyle("-fx-font-size: 15px; -fx-background-radius: 15;");
+
+        Button clearButton = new Button("Clear");
+        clearButton.setPrefSize(180,10);
+        clearButton.setStyle("-fx-font-size: 15px; -fx-background-radius: 15;");
+
+        buttonContainer.add(clearButton,0,0);
+        buttonContainer.add(questionnaireSubmitButton,1,0);
+
+        buttonContainer.setAlignment(Pos.CENTER);
+
+        contentContainer.add(buttonContainer,0,3);
+
+        clearButton.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Questionnaire will be cleared, continue?", ButtonType.YES, ButtonType.NO);
+
+            Optional<ButtonType> answer = alert.showAndWait();
+            if (Objects.equals(answer.get().getText(), "Yes")) {
+                stomachPain.setSelected(false);
+                backPain.setSelected(false);
+                jointPain.setSelected(false);
+                nausea.setSelected(false);
+                dizziness.setSelected(false);
+                headaches.setSelected(false);
+                constipation.setSelected(false);
+                cramping.setSelected(false);
+                male.setSelected(false);
+                female.setSelected(false);
+
+            }
+        });
+
         questionnaireSubmitButton.setOnAction(e -> {
+            Alert alert;
+
+            if(genderGroup.getSelectedToggle() == null) {
+                alert = new Alert(Alert.AlertType.ERROR, "Missing Sex entry, Please Select.", ButtonType.OK);
+                alert.showAndWait();
+                return;
+            }
+
+            String issues = "";
+            if (stomachPain.isSelected()) {
+                issues += "Stomach Pain";
+                if(backPain.isSelected() || jointPain.isSelected() || nausea.isSelected() ||
+                    dizziness.isSelected() || headaches.isSelected() || constipation.isSelected() ||
+                    cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+            if (backPain.isSelected()) {
+                issues += "Back Pain";
+                if(jointPain.isSelected() || nausea.isSelected() || dizziness.isSelected() ||
+                        headaches.isSelected() || constipation.isSelected() || cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (jointPain.isSelected()) {
+                issues += "Joint Pain";
+                if(nausea.isSelected() || dizziness.isSelected() || headaches.isSelected() ||
+                        constipation.isSelected() || cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (nausea.isSelected()) {
+                issues += "Nausea";
+                if(dizziness.isSelected() || headaches.isSelected() || constipation.isSelected() ||
+                        cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (dizziness.isSelected()) {
+                issues += "Dizziness";
+                if(headaches.isSelected() || constipation.isSelected() || cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+            if (headaches.isSelected()) {
+                issues += "Headaches";
+                if(constipation.isSelected() || cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (constipation.isSelected()) {
+                issues += "Constipation";
+                if(cramping.isSelected()){
+                    issues += ", ";
+                }
+            }
+
+            if (cramping.isSelected()) {
+                issues += "Cramping";
+            }
+
             String name = nameText.getText();
             Date date = new Date();
             char sex = Objects.equals(genderGroup.getSelectedToggle(), male) ? 'M' : 'F';
+
             String administered_by = nurse.getUserId();
-            Questionnaire_Results result = nurseService.createQuestionnaireResultEntry(name, date, sex, administered_by);
+            nurseService.createQuestionnaireResultEntry(name, issues,date, sex, administered_by, patient.getUserId());
+
+            alert = new Alert(Alert.AlertType.INFORMATION, "Questionnaire Submitted");
+
+            stomachPain.setSelected(false);
+            backPain.setSelected(false);
+            jointPain.setSelected(false);
+            nausea.setSelected(false);
+            dizziness.setSelected(false);
+            headaches.setSelected(false);
+            constipation.setSelected(false);
+            cramping.setSelected(false);
+            male.setSelected(false);
+            female.setSelected(false);
+            changeButton.fire();
+            questionnaireSubmitButton.setDisable(true);
+
+            alert.show();
         });
 
-        questionnaireContainer.add(questionnaireSubmitButton, 0, 2);
-
+        questionnaireContainer.add(contentContainer, 0, 1);
 
         // -------------------- Patient History ---------------------------
 
@@ -288,6 +469,11 @@ public class NurseScene extends BaseScene {
 
         PatientHistoryService patientHistoryService = new PatientHistoryService();
         historyContent.getChildren().add(patientHistoryService.getPatientHistory(patient.getUserId()));
+
+        changeButton.setOnAction(ev ->{
+            historyContent.getChildren().clear();
+            historyContent.getChildren().add(patientHistoryService.getPatientHistory(patient.getUserId()));
+        });
 
         VBox scrollBarContainer = new VBox();
         scrollBarContainer.setPadding(new Insets(15, 15, 15, 25));

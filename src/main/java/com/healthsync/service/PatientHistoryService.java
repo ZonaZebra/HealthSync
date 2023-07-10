@@ -38,11 +38,7 @@ public class PatientHistoryService {
             test.getChildren().add(new Text("   - Test Finding ID: " + physical_test_findings.getPhysical_test_id()));
             test.getChildren().add(new Text("         - Reported Issues: " + physical_test_findings.getIssues()));
             test.getChildren().add(new Text("         - Additional Notes: " + physical_test_findings.getNotes()));
-        }
-        for (Physical_Test_Findings physical_test_findings : testFindingsList) {
-            test.getChildren().add(new Text("   - Test Finding ID: " + physical_test_findings.getPhysical_test_id()));
-            test.getChildren().add(new Text("         - Reported Issues: " + physical_test_findings.getIssues()));
-            test.getChildren().add(new Text("         - Additional Notes: " + physical_test_findings.getNotes()));
+            test.getChildren().add(new Text(""));
         }
         if (testFindingsList.size() != 0) {
             test.getChildren().add(new Text());
@@ -55,7 +51,10 @@ public class PatientHistoryService {
             test.getChildren().add(questionnaireLabel);
         }
         for (Questionnaire_Results questionnaire_results : questionnaireResultsList) {
-            test.getChildren().add(new Text("   -" + questionnaire_results.getQuestionnaire_id()));
+            test.getChildren().add(new Text("   - Questionnaire ID: " + questionnaire_results.getQuestionnaire_id()));
+            test.getChildren().add(new Text("         - Sex: " + questionnaire_results.getSex()));
+            test.getChildren().add(new Text("         - Reported Issues: " + questionnaire_results.getIssues()));
+            test.getChildren().add(new Text(""));
         }
         if (questionnaireResultsList.size() != 0) {
             test.getChildren().add(new Text());
@@ -63,18 +62,18 @@ public class PatientHistoryService {
 
         // Then add Vitals results
         Text vitalsResultsLabel = new Text("Vitals Results:");
-        vitalsResultsLabel.setStyle("-fx-font-weight: bold;");
+        vitalsResultsLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
         if (vitalsResultsList.size() != 0) {
             test.getChildren().add(vitalsResultsLabel);
         }
         for (Vitals_Results vitalsResults : vitalsResultsList) {
             test.getChildren().add(new Text("   - Vitals ID: " + vitalsResults.getVitals_results_id()));
-            test.getChildren().add(new Text("         - Height: " + vitalsResults.getHeight()));
-            test.getChildren().add(new Text("         - Weight: " + vitalsResults.getWeight()));
-            test.getChildren().add(new Text("         - Systolic Blood Pressure: " + vitalsResults.getSystolic_bp()));
-            test.getChildren().add(new Text("         - Diastolic Blood Pressure: " + vitalsResults.getDiastolic_bp()));
-            test.getChildren().add(new Text("         - Resting Pulse Rate: " + vitalsResults.getResting_pulse()));
-            test.getChildren().add(new Text("         - Body Temperature: " + vitalsResults.getTemperature()));
+            test.getChildren().add(new Text("         - Height: " + vitalsResults.getHeight()+ " in"));
+            test.getChildren().add(new Text("         - Weight: " + vitalsResults.getWeight() + " lbs"));
+            test.getChildren().add(new Text("         - Blood Pressure: " + vitalsResults.getSystolic_bp()+"/"+vitalsResults.getDiastolic_bp() + " mmHg"));
+            test.getChildren().add(new Text("         - Resting Pulse Rate: " + vitalsResults.getResting_pulse()+" bpm"));
+            test.getChildren().add(new Text("         - Body Temperature: " + vitalsResults.getTemperature() + "° F"));
+            test.getChildren().add(new Text(""));
         }
         if (vitalsResultsList.size() != 0) {
             test.getChildren().add(new Text());
@@ -89,9 +88,10 @@ public class PatientHistoryService {
         for (Prescriptions prescription : prescriptionsList) {
             test.getChildren().add(new Text("   - Prescription ID: " + prescription.getPrescription_id()));
             test.getChildren().add(new Text("         - Prescription Name: " + prescription.getProduct()));
-            test.getChildren().add(new Text("         - Dosage (mg): " + prescription.getDosage_in_mg()));
-            test.getChildren().add(new Text("         - Frequency (hours): " + prescription.getFrequency()));
+            test.getChildren().add(new Text("         - Dosage: " + prescription.getDosage_in_mg() + "mg"));
+            test.getChildren().add(new Text("         - Frequency: " + prescription.getFrequency() + "hr(s)"));
             test.getChildren().add(new Text("         - Additional Instructions: " + prescription.getInstructions()));
+            test.getChildren().add(new Text(""));
         }
         if (prescriptionsList.size() != 0) {
             test.getChildren().add(new Text());

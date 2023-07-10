@@ -15,13 +15,15 @@ public class NurseService {
     private final VitalsResultsDao vitalsResultsDao = new VitalsResultsDao();
     private final AppointmentsDao appointmentsDao = new AppointmentsDao();
 
-    public Questionnaire_Results createQuestionnaireResultEntry(String name, Date date, char sex, String administered_by) {
+    public Questionnaire_Results createQuestionnaireResultEntry(String name, String issues, Date date, char sex, String administered_by, String patient_id) {
         Questionnaire_Results questionnaire_results = new Questionnaire_Results(
                 -1,
                 name,
+                issues,
                 date,
                 sex,
-                administered_by
+                administered_by,
+                patient_id
         );
 
         int questionnaire_id = questionnaireResultsDao.createQuestionnaireResult(questionnaire_results);
@@ -29,11 +31,10 @@ public class NurseService {
             return null;
         }
         questionnaire_results.setQuestionnaire_id(questionnaire_id);
-        System.out.println(questionnaire_results);
         return questionnaire_results;
     }
 
-    public Vitals_Results createVitalsResults(double height, double weight, int systolic_bp, int diastolic_bp, double resting_pulse, double temperature, String patient_id) {
+    public Vitals_Results createVitalsResults(int height, int weight, int systolic_bp, int diastolic_bp, int resting_pulse, int temperature, String patient_id) {
         Vitals_Results vitals_results = new Vitals_Results(
                 -1,
                 height,

@@ -16,7 +16,7 @@ import java.util.Objects;
 public class BaseScene extends Scene {
 
     public BaseScene(Region content) {
-        super(new VBox(), 800, 600);
+        super(new VBox(), 1700, 1000);
 
         VBox root = (VBox) getRoot();
         root.setBackground(new Background(new BackgroundFill(Color.web("#BFD2F8"), CornerRadii.EMPTY, Insets.EMPTY)));

@@ -1,8 +1,6 @@
 package com.healthsync.ui;
 
-import com.healthsync.dao.PhysicalTestFindingsDao;
 import com.healthsync.entities.Patient;
-import com.healthsync.entities.Physical_Test_Findings;
 import com.healthsync.entities.Prescriptions;
 import com.healthsync.entities.User;
 import com.healthsync.service.DoctorService;
@@ -28,8 +26,6 @@ public class DoctorScene extends BaseScene {
     }
 
     //TODO: Needs to save or clear test findings, needs to send or clear prescription, needs to pull patient history
-    private static final PhysicalTestFindingsDao testFindingsDao = new PhysicalTestFindingsDao();
-
 
     private static Region createContent(Patient patient, User doctor) {
 
@@ -165,6 +161,7 @@ public class DoctorScene extends BaseScene {
         physicalTestFindingsContainer.add(checks, 0, 2);
         physicalTestFindingsContainer.add(additionalComments, 0, 3);
         physicalTestFindingsContainer.add(buttonsContainerFindings, 0, 4);
+        Button changeButton = new Button();
 
         // Confirm clearing of entries and then clear them
         clearButtonFindings.setOnAction(e -> {
@@ -246,9 +243,17 @@ public class DoctorScene extends BaseScene {
 
                 // This will work for testing, but need to figure out how to always make the test ID unique
                 DoctorService doctorService = new DoctorService();
-                Physical_Test_Findings testFindings = doctorService.createPhysicalTestFindingsEntry(issues, comments, patientID, adminBy);
+                doctorService.createPhysicalTestFindingsEntry(issues, comments, patientID, adminBy);
 
                 alert = new Alert(Alert.AlertType.INFORMATION, "Test Findings Submitted");
+                writtenComments.clear();
+                lungIssue.setSelected(false);
+                abdominalIssue.setSelected(false);
+                headIssue.setSelected(false);
+                brainIssue.setSelected(false);
+                heartIssue.setSelected(false);
+                extremitiesIssue.setSelected(false);
+                changeButton.fire();
                 alert.show();
             } else {
                 // If the user decided not to proceed, re-enable the button
@@ -363,7 +368,6 @@ public class DoctorScene extends BaseScene {
         saveButtonPrescription.setOnAction(e -> {
             Alert alert;
             if (!Objects.equals(prescriptionNameText.getText(), "") && !Objects.equals(dosageText.getText(), "") && !Objects.equals(frequencyText.getText(), "")) {
-                Physical_Test_Findings physical_test_findings;
                 alert = new Alert(Alert.AlertType.CONFIRMATION, "Submit Prescription to Pharmacy?", ButtonType.YES, ButtonType.NO);
 
                 Optional<ButtonType> answer = alert.showAndWait();
@@ -390,6 +394,7 @@ public class DoctorScene extends BaseScene {
                     prescriptionNotesText.clear();
 
                     alert = new Alert(Alert.AlertType.INFORMATION, "Prescription Submitted");
+                    changeButton.fire();
                     alert.show();
                 }
 
@@ -413,12 +418,13 @@ public class DoctorScene extends BaseScene {
         VBox historyContent = new VBox();
         historyContent.setStyle("-fx-background-color: #FFFFFF;");
 
-        // Add History here
-//        for (int i = 0; i < 10; i++) {
-//            historyContent.getChildren().addAll(new Text("- History item #" + (i + 1)));
-//        }
         PatientHistoryService patientHistoryService = new PatientHistoryService();
         historyContent.getChildren().add(patientHistoryService.getPatientHistory(patient.getUserId()));
+
+        changeButton.setOnAction(ev ->{
+            historyContent.getChildren().clear();
+            historyContent.getChildren().add(patientHistoryService.getPatientHistory(patient.getUserId()));
+        });
 
         VBox scrollBarContainer = new VBox();
         scrollBarContainer.setPadding(new Insets(15, 15, 15, 25));
